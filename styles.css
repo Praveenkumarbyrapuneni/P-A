@@ -1664,6 +1664,16 @@ h1 span {
     min-height: auto;
   }
 
+  /* These three outer sections carry huge fixed heights (500dvh/1300dvh/
+     145dvh) — that's scroll-scrubbing distance for the desktop pinned
+     canvas, reserved as pure blank space now that their content is static
+     and compact on mobile. Let each section size to its actual content. */
+  .sequence-story,
+  .story-bridge,
+  .world-story {
+    min-height: auto;
+  }
+
   .hero-stage {
     display: flex;
     flex-direction: column;
