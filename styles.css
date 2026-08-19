@@ -917,10 +917,11 @@ h1 span:last-child::after {
     linear-gradient(0deg, rgba(247, 250, 255, 0.42) 0%, rgba(247, 250, 255, 0) 24%);
 }
 
-/* Full-bleed visual — no box, no margins; fills the entire stage. */
+/* Full-bleed visual — fills the stage; small inset trims how far the
+   1280x720 source frames get upscaled, for clarity. */
 .world-visual {
   position: absolute;
-  inset: 0;
+  inset: 2.5%;
   z-index: 1;
   overflow: hidden;
   background: var(--mist);

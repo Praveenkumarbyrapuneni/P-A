@@ -609,7 +609,9 @@ function createWorld() {
 
   function resize() {
     const rect = canvasEl.getBoundingClientRect();
-    const pr = Math.min(window.devicePixelRatio || 1, 2);
+    // ponytail: source frames cap at 1280x720, so a 2x retina backing store
+    // just upscales the blur further with no real detail gained — cap at 1x.
+    const pr = Math.min(window.devicePixelRatio || 1, 1);
     width = Math.max(1, Math.round(rect.width * pr));
     height = Math.max(1, Math.round(rect.height * pr));
     if (canvasEl.width !== width || canvasEl.height !== height) {

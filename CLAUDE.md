@@ -4,7 +4,9 @@
 
 We are rebuilding RackTrack page by page inside this `P-A` folder.
 
-**Chapters 1-3 are built, wired, and accepted on `main`.** Chapters 4-8 (the rack story) are mid-rebuild on branch **`feat/continuous-world`** — see "Continuous-World Rebuild" below before touching anything in that part of the page. Chapter 9 (Final CTA) is not yet built — static bookend reusing the hero image, same pattern as Chapter 1, no video needed.
+**Chapters 1-3 are built, wired, and accepted on `main`.** Chapters 4-8 (the rack story), the continuous-world rebuild, are **merged into `main` and accepted** — see "Continuous-World Rebuild" below for what's actually in it. `feat/continuous-world` is now identical to `main` (fast-forward merge) and can be deleted whenever, nothing lives only on it anymore. Chapter 9 (Final CTA) is not yet built — static bookend reusing the hero image, same pattern as Chapter 1, no video needed.
+
+**Live deployment:** the site is deployed via AWS Amplify Hosting, connected to the private GitHub repo `Praveenkumarbyrapuneni/P-A`, auto-building on every push to `main`. Amplify app details: app id `d1qibxn0njvfa1`, URL `https://main.d1qibxn0njvfa1.amplifyapp.com`, AWS account `984126996103` ("Vsoln" — this is Praveen's **personal** AWS account, not a client account, see `[[reference_vsoln_aws_account]]` in memory). Build settings: no build command (static site), output directory `/`. `enableAutoBuild` had to be manually turned on after the first console-connected deploy — it defaulted off, so the merge didn't auto-deploy until that was fixed and a manual `start-job` was triggered.
 
 The existing `/Users/praveen/Desktop/Racktrack_Website` folder is the content and business reference only (real copy, claims, and a few directly-reusable light-palette images have come from its `docs/RackTrack-Website-Content.md` and `assets/` folder). Use its data and claims, but build the new experience here.
 
@@ -26,7 +28,14 @@ The existing `/Users/praveen/Desktop/Racktrack_Website` folder is the content an
    - `.world-particles` — a canvas-based ambient field (`createParticles()` in `main.js`): drifting scan-blue motes with faint constellation links between nearby ones (network-topology nod, stays on-topic) and gentle cursor-attraction. This is deliberately **not** drawn on the rack frames — it's atmosphere in the surrounding space.
    - Reduced-motion and mobile fallbacks were updated to match (static stacked layout, particles/scrim hidden under reduced-motion).
 
-**Not yet done / next up:** the user has not yet reviewed the full-bleed + bold-text + particles redesign (session ended right after it shipped) — **first thing next session: ask if they've looked at it and what they think** before building anything further. Batches 2-4 from the original plan (Three.js living layer, reactive geometry, Ch9 CTA) are effectively superseded by the pivot away from Three.js — don't resume them on the old plan's terms without re-confirming direction with the user first.
+4. **Blur fix (accepted this session).** The full-bleed redesign exposed a real image-quality regression: Ch4-8 frames were extracted at 960x540 for the old boxed-panel layout, then the full-bleed canvas stretched them across the whole viewport — worse, the canvas backing store used `min(devicePixelRatio, 2)`, so on Retina screens a source frame got upscaled ~2.7x with no real detail to back it up. Fixed in two steps:
+   - Re-extracted all five Ch4-8 frame folders (`rack-open-frames-webp`, `cable-truth-frames-webp`, `reconciliation-frames-webp`, `scale-frames-webp`, `outcomes-frames-webp`) at native 1280x720 instead of 960x540, from the original source mp4s, same frame counts. Note: the original hand-tuned variable-fps extraction schedule (denser during fast motion) wasn't saved anywhere, so this re-extraction uses uniform spacing matched to the original frame count per chapter instead — a reasonable approximation, not a perfect reproduction.
+   - `main.js`'s world-canvas `resize()` now caps `devicePixelRatio` at **1** instead of 2 (source frames are the resolution bottleneck, so a 2x backing store was pure wasted upscale, not real sharpness) — search `ponytail:` in `main.js` for the comment marking this.
+   - `.world-visual` given a small `inset: 2.5%` (was `inset: 0`) to trim the upscale ratio a little further, per explicit user request ("decrease enlargement a little, not much smaller").
+   - `ctx.imageSmoothingQuality = "high"` also set on the world canvas context (minor assist, not the main fix).
+   - **User has verified this fix locally and accepted it** — this is what's now merged into `main` and deployed.
+
+**Next up:** Chapter 9 (Final CTA) is still not built — static bookend, hero-style, no video, reusing `assets/Verified Rack Object.jpeg`. That's the next real work item. Batches 2-4 from the original continuous-world plan (Three.js living layer, reactive geometry) are superseded by the pivot away from Three.js and should not be resumed without a fresh direction check with the user.
 
 **Critical workflow rule for this branch, learned the hard way this session:** do **not** use claude-in-chrome (or Playwright) to self-verify visual changes. The user explicitly revoked that permission after it burned significant time on scroll-automation issues (`scroll-behavior: smooth` fights programmatic `scrollTo`) without producing useful verification. Make the change, describe exactly what to look at and where, and wait for the user to check the local preview themselves and report back. See `[[feedback_no_browser_automation]]` in memory.
 
@@ -67,8 +76,9 @@ Chapter-by-chapter narrative detail, real copy sources, and full asset briefs (s
 
 - `http://127.0.0.1:5174/`
 - Server may not be running in a fresh session — restart with: `python3 -m http.server 5174` from the `P-A` folder.
-- Currently on branch `feat/continuous-world` (not `main`) — confirm with `git branch --show-current` before assuming which version of Chapters 4-8 is live.
-- `index.html` uses cache-busting `?v=world-redesign-1` query strings on `styles.css` and `main.js`. When editing those files further, bump the version string (or ask the user to hard-refresh / Cmd+Shift+R) — a plain reload can silently serve stale cached JS/CSS and make a real change look like it did nothing.
+- `feat/continuous-world` and `main` are identical as of this session (merged) — either branch is fine to be on.
+- `index.html` uses cache-busting `?v=world-redesign-3` query strings on `styles.css` and `main.js`. When editing those files further, bump the version string (or ask the user to hard-refresh / Cmd+Shift+R) — a plain reload can silently serve stale cached JS/CSS and make a real change look like it did nothing.
+- Live/deployed version: `https://main.d1qibxn0njvfa1.amplifyapp.com` — auto-deploys on push to `main` (see "Live deployment" above).
 
 Important user instructions:
 
