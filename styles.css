@@ -153,7 +153,9 @@ body.is-sequencing .site-header {
 
 .hero-shell {
   position: relative;
-  min-height: 125dvh;
+  /* ponytail: 2 beats (100dvh each) + ~35dvh buffer before the hero photo
+     fades and hands off to the scan sequence, same buffer ratio as before. */
+  min-height: 235dvh;
   overflow: visible;
   isolation: isolate;
 }
@@ -161,7 +163,7 @@ body.is-sequencing .site-header {
 .hero-stage {
   position: relative;
   display: grid;
-  min-height: 125dvh;
+  min-height: 235dvh;
   overflow: visible;
   isolation: isolate;
 }
@@ -199,15 +201,94 @@ body.is-sequencing .site-header {
   grid-area: 1 / 1;
   position: relative;
   z-index: 2;
+  padding: 0 clamp(18px, 4vw, 64px);
+}
+
+.hero-beat {
   display: flex;
   min-height: 100dvh;
   flex-direction: column;
   justify-content: center;
-  padding: 108px clamp(18px, 4vw, 64px) 154px;
+}
+
+.hero-beat-primary {
+  padding: 108px 0 154px;
+}
+
+.hero-beat-about {
+  padding: 64px 0;
 }
 
 .hero-content {
   width: min(680px, 52vw);
+}
+
+.hero-about-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: min(580px, 46vw);
+}
+
+.hero-beat-about h2 {
+  max-width: 14ch;
+  margin: 0 0 18px;
+  color: var(--ink);
+  font-size: clamp(30px, 3.2vw, 44px);
+  font-weight: 640;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+
+.hero-about-copy {
+  max-width: 42ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(17px, 1.35vw, 20px);
+  line-height: 1.5;
+}
+
+/* Restored capture-to-structured-record panel — opaque card so it stays
+   crisp and legible over the hero photo instead of the light cloud ground
+   it originally sat on. */
+.truth-figure {
+  margin: 0;
+}
+
+.truth-figure-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--steel);
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+}
+
+.truth-figure-head figcaption {
+  font-family: var(--font-ui);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.truth-figure-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.truth-figure-frame {
+  border: 1px solid var(--steel);
+  background: var(--white);
+  box-shadow: 0 24px 60px rgba(16, 32, 51, 0.14);
+  padding: 20px 28px;
+}
+
+.truth-figure-frame svg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .eyebrow {
@@ -238,19 +319,6 @@ h1 {
 
 h1 span {
   display: block;
-}
-
-h1 span:last-child::after {
-  content: "";
-  display: inline-block;
-  width: 0.055em;
-  height: 0.72em;
-  margin-left: 0.08em;
-  border-radius: 999px;
-  background: linear-gradient(180deg, var(--blue), var(--scan));
-  box-shadow: 0 0 18px rgba(125, 189, 255, 0.5);
-  transform: translateY(0.08em);
-  animation: cursor-pulse 1.45s steps(2, end) infinite;
 }
 
 .hero-copy {
@@ -1046,18 +1114,6 @@ h1 span:last-child::after {
   line-height: 1.55;
 }
 
-@keyframes cursor-pulse {
-  0%,
-  46% {
-    opacity: 0.95;
-  }
-
-  47%,
-  100% {
-    opacity: 0.08;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1200,11 +1256,23 @@ h1 span:last-child::after {
   }
 
   .hero-copy-layer {
-    min-height: auto;
     padding: 0 18px 28px;
   }
 
+  .hero-beat {
+    min-height: auto;
+    padding: 0;
+  }
+
+  .hero-beat-about {
+    margin-top: 40px;
+  }
+
   .hero-content {
+    width: 100%;
+  }
+
+  .hero-about-grid {
     width: 100%;
   }
 
@@ -1458,87 +1526,3 @@ h1 span:last-child::after {
   }
 }
 
-/* What RackTrack Is */
-.truth-shell {
-  padding: 96px 6vw;
-  background: var(--cloud);
-}
-.truth-grid {
-  max-width: 1280px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: start;
-}
-.truth-copy .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin: 0 0 16px;
-}
-.truth-copy h2 {
-  font-family: var(--font-ui);
-  font-size: clamp(28px, 3vw, 40px);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  margin: 0 0 20px;
-}
-.truth-body {
-  font-size: 17px;
-  line-height: 1.6;
-  color: var(--muted);
-  margin: 0 0 28px;
-  max-width: 52ch;
-}
-.truth-quote {
-  font-size: 18px;
-  line-height: 1.4;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  border-left: 2px solid var(--blue);
-  padding-left: 20px;
-  margin: 0;
-}
-.truth-figure {
-  margin: 0;
-}
-.truth-figure-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--steel);
-  padding-bottom: 10px;
-  margin-bottom: 16px;
-}
-.truth-figure-head figcaption {
-  font-family: var(--font-ui);
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--ink);
-}
-.truth-figure-tag {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-}
-.truth-figure-frame {
-  border: 1px solid var(--steel);
-  background: var(--white);
-  padding: 20px 28px;
-}
-.truth-figure-frame svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-@media (max-width: 900px) {
-  .truth-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-}

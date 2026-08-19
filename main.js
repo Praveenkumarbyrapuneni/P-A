@@ -231,10 +231,16 @@ function updateHeroMediaState() {
     return;
   }
 
-  const rect = sequence.getBoundingClientRect();
-  const opacity = clamp(rect.top / 80);
-  const reveal = 1 - opacity;
+  // ponytail: fade keyed off the hero shell's own scroll-out, not the scan
+  // sequence below it — "What RackTrack Is" now sits between them, and the
+  // old rect.top-on-sequence trigger never fired while scrolling that section,
+  // leaving the fixed hero photo painted over it the whole way through.
+  const heroRect = heroStage.getBoundingClientRect();
+  const opacity = clamp(heroRect.bottom / 80);
   heroStage.style.setProperty("--hero-media-opacity", opacity.toFixed(3));
+
+  const rect = sequence.getBoundingClientRect();
+  const reveal = 1 - clamp(rect.top / 80);
   sequence.style.setProperty("--handoff-visibility", reveal.toFixed(3));
 }
 
