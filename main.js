@@ -1,0 +1,636 @@
+const heroStage = document.querySelector(".hero-stage");
+const sequence = document.querySelector("[data-frame-sequence]");
+const canvas = document.querySelector(".sequence-canvas");
+const sequenceNotes = sequence
+  ? Array.from(sequence.querySelectorAll("[data-sequence-note]"))
+  : [];
+const storyBridge = document.querySelector("[data-story-bridge]");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const desktopHero = window.matchMedia("(min-width: 981px)");
+
+const totalFrames = 240;
+const handoffEnd = 0.015;
+const framePath = (index) =>
+  `assets/phone-scan-2-frames-webp/frame-${String(index).padStart(4, "0")}.webp`;
+
+const frames = new Array(totalFrames + 1);
+const loaded = new Set();
+
+let context;
+let canvasWidth = 0;
+let canvasHeight = 0;
+let activeFrame = 1;
+let renderedFrame = 0;
+let needsResize = true;
+let ready = false;
+
+const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
+const smooth = (start, end, value) => {
+  const progress = clamp((value - start) / (end - start));
+  return progress * progress * (3 - 2 * progress);
+};
+
+function schedule(callback) {
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(callback, { timeout: 700 });
+    return;
+  }
+
+  window.setTimeout(() => callback(), 70);
+}
+
+function whenNearViewport(element, callback) {
+  if (!element) {
+    return;
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    callback();
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        observer.disconnect();
+        callback();
+      }
+    },
+    { rootMargin: "1000px 0px" }
+  );
+  observer.observe(element);
+}
+
+function elementProgress(element) {
+  if (!element) {
+    return 0;
+  }
+
+  const rect = element.getBoundingClientRect();
+  const travel = Math.max(rect.height - window.innerHeight, 1);
+  return clamp(-rect.top / travel);
+}
+
+function loadFrame(index) {
+  if (index < 1 || index > totalFrames || frames[index]) {
+    return frames[index];
+  }
+
+  const image = new Image();
+  image.decoding = "async";
+  image.src = framePath(index);
+  image.onload = () => {
+    loaded.add(index);
+    if (!ready && index === 1) {
+      ready = true;
+      sequence.classList.add("is-ready");
+      drawFrame(index);
+    }
+  };
+  frames[index] = image;
+  return image;
+}
+
+function preloadInitialFrames() {
+  loadFrame(1);
+
+  for (let index = 2; index <= 36; index += 1) {
+    loadFrame(index);
+  }
+}
+
+function preloadRemainingFrames() {
+  let index = 37;
+
+  const loadBatch = (deadline) => {
+    let count = 0;
+    while (
+      index <= totalFrames &&
+      count < 10 &&
+      (!deadline || deadline.timeRemaining() > 6)
+    ) {
+      loadFrame(index);
+      index += 1;
+      count += 1;
+    }
+
+    if (index <= totalFrames) {
+      schedule(loadBatch);
+    }
+  };
+
+  schedule(loadBatch);
+}
+
+function resizeCanvas() {
+  if (!canvas || !context) {
+    return;
+  }
+
+  const rect = canvas.getBoundingClientRect();
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  canvasWidth = Math.max(1, Math.round(rect.width * pixelRatio));
+  canvasHeight = Math.max(1, Math.round(rect.height * pixelRatio));
+
+  if (canvas.width !== canvasWidth || canvas.height !== canvasHeight) {
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+  }
+
+  needsResize = false;
+}
+
+function nearestLoadedFrame(target) {
+  if (loaded.has(target)) {
+    return target;
+  }
+
+  for (let offset = 1; offset < totalFrames; offset += 1) {
+    const previous = target - offset;
+    const next = target + offset;
+
+    if (previous >= 1 && loaded.has(previous)) {
+      return previous;
+    }
+
+    if (next <= totalFrames && loaded.has(next)) {
+      return next;
+    }
+  }
+
+  return 1;
+}
+
+function drawCover(targetContext, targetWidth, targetHeight, image) {
+  const imageRatio = image.naturalWidth / image.naturalHeight;
+  const canvasRatio = targetWidth / targetHeight;
+  let drawWidth = targetWidth;
+  let drawHeight = targetHeight;
+  let drawX = 0;
+  let drawY = 0;
+
+  if (imageRatio > canvasRatio) {
+    drawHeight = targetHeight;
+    drawWidth = drawHeight * imageRatio;
+    drawX = (targetWidth - drawWidth) / 2;
+  } else {
+    drawWidth = targetWidth;
+    drawHeight = drawWidth / imageRatio;
+    drawY = (targetHeight - drawHeight) / 2;
+  }
+
+  targetContext.clearRect(0, 0, targetWidth, targetHeight);
+  targetContext.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+}
+
+function drawFrame(index) {
+  if (!context || !canvasWidth || !canvasHeight) {
+    return;
+  }
+
+  const frameIndex = nearestLoadedFrame(index);
+  const image = frames[frameIndex];
+  if (!image || !image.complete || !image.naturalWidth) {
+    return;
+  }
+
+  drawCover(context, canvasWidth, canvasHeight, image);
+  renderedFrame = frameIndex;
+}
+
+function sequenceProgress() {
+  if (!sequence) {
+    return 0;
+  }
+
+  const rect = sequence.getBoundingClientRect();
+  const travel = Math.max(rect.height - window.innerHeight, 1);
+  return clamp(-rect.top / travel);
+}
+
+function updateHeroMediaState() {
+  if (!heroStage || !sequence) {
+    return;
+  }
+
+  if (reduceMotion.matches || !desktopHero.matches) {
+    heroStage.style.setProperty("--hero-media-opacity", "1");
+    sequence.style.setProperty("--handoff-visibility", "1");
+    return;
+  }
+
+  const rect = sequence.getBoundingClientRect();
+  const opacity = clamp(rect.top / 80);
+  const reveal = 1 - opacity;
+  heroStage.style.setProperty("--hero-media-opacity", opacity.toFixed(3));
+  sequence.style.setProperty("--handoff-visibility", reveal.toFixed(3));
+}
+
+function updateHandoff(progress) {
+  const sequenceOpacity = smooth(0, 0.05, progress);
+  const bridgeOpacity = 1 - smooth(0, 0.05, progress);
+
+  sequence.style.setProperty("--bridge-opacity", bridgeOpacity.toFixed(3));
+  sequence.style.setProperty("--sequence-opacity", sequenceOpacity.toFixed(3));
+}
+
+function animationProgress(progress) {
+  return clamp((progress - handoffEnd) / (1 - handoffEnd));
+}
+
+function updateSequenceNarrative(progress) {
+  if (!sequence || !sequenceNotes.length) {
+    return;
+  }
+
+  const progressAfterHandoff = animationProgress(progress);
+
+  if (reduceMotion.matches) {
+    sequence.style.setProperty("--narrative-opacity", "1");
+    sequence.style.setProperty("--narrative-y", "0px");
+    sequence.style.setProperty("--sequence-note-progress", "1");
+    sequenceNotes.forEach((note, index) => {
+      note.classList.toggle("is-active", index === 0);
+    });
+    return;
+  }
+
+  const activeIndex = Math.min(
+    sequenceNotes.length - 1,
+    Math.floor(clamp(progressAfterHandoff * sequenceNotes.length, 0, sequenceNotes.length - 0.001))
+  );
+  const opacity = smooth(0.035, 0.09, progress) * (1 - smooth(0.96, 1, progress));
+
+  sequence.style.setProperty("--narrative-opacity", opacity.toFixed(3));
+  sequence.style.setProperty("--narrative-y", `${((1 - opacity) * 18).toFixed(2)}px`);
+  sequence.style.setProperty("--sequence-note-progress", progressAfterHandoff.toFixed(3));
+  sequenceNotes.forEach((note, index) => {
+    note.classList.toggle("is-active", index === activeIndex);
+  });
+}
+
+function updateStoryBridge() {
+  if (!storyBridge) {
+    return;
+  }
+
+  const progress = reduceMotion.matches ? 0.72 : elementProgress(storyBridge);
+  const copyOpacity = smooth(0.02, 0.16, progress) * (1 - smooth(0.9, 1, progress));
+  const sourceOpacity = smooth(0.02, 0.16, progress);
+  const threadScale = smooth(0.24, 0.58, progress);
+  const layerOpacity = smooth(0.48, 0.72, progress);
+
+  storyBridge.style.setProperty("--bridge-progress", progress.toFixed(3));
+  storyBridge.style.setProperty("--bridge-copy-opacity", copyOpacity.toFixed(3));
+  storyBridge.style.setProperty("--bridge-copy-y", `${((1 - copyOpacity) * 28).toFixed(2)}px`);
+  storyBridge.style.setProperty("--bridge-source-opacity", sourceOpacity.toFixed(3));
+  storyBridge.style.setProperty("--bridge-thread-scale", threadScale.toFixed(3));
+  storyBridge.style.setProperty("--bridge-thread-opacity", (threadScale * 0.9).toFixed(3));
+  storyBridge.style.setProperty("--bridge-layer-opacity", layerOpacity.toFixed(3));
+  storyBridge.style.setProperty("--bridge-source-x", `${((1 - progress) * -24).toFixed(2)}px`);
+  storyBridge.style.setProperty("--bridge-output-x", `${((1 - layerOpacity) * 28).toFixed(2)}px`);
+  storyBridge.style.setProperty("--bridge-layers-y", `${((1 - layerOpacity) * 22).toFixed(2)}px`);
+}
+
+// Split-layout pinned sequences (Chapter 4 onward): text column + sparse frame
+// sequence column. Frame counts are intentionally low (~1 frame per 8-10
+// scroll-frames), so unlike the dense 240-frame phone-scan canvas above,
+// this draws the two nearest frames and crossfades between them by
+// fractional scroll progress instead of hard-snapping — that's what keeps
+// a sparse sequence from reading as choppy.
+function createPinnedSequence({ root, totalFrames: total, framePath: path }) {
+  if (!root) {
+    return null;
+  }
+
+  const canvasEl = root.querySelector("[data-frame-canvas]");
+  const posterEl = root.querySelector("[data-frame-poster]");
+  const notes = Array.from(root.querySelectorAll("[data-note]"));
+
+  if (!canvasEl) {
+    return null;
+  }
+
+  const ctx = canvasEl.getContext("2d", { alpha: false });
+  const frameImages = new Array(total + 1);
+  const loadedSet = new Set();
+  let width = 0;
+  let height = 0;
+  let instanceNeedsResize = true;
+  let rendered = 0;
+  let instanceReady = false;
+  let smoothedProgress = null;
+
+  function load(index) {
+    if (index < 1 || index > total || frameImages[index]) {
+      return frameImages[index];
+    }
+
+    const image = new Image();
+    image.decoding = "async";
+    image.src = path(index);
+    image.onload = () => {
+      loadedSet.add(index);
+      if (!instanceReady && index === 1) {
+        instanceReady = true;
+        root.classList.add("is-ready");
+        draw(1);
+      }
+    };
+    frameImages[index] = image;
+    return image;
+  }
+
+  // These sequences are deliberately small (~3-5MB total, unlike the dense
+  // 240-frame phone-scan set) specifically so they can be loaded eagerly
+  // instead of trickled in via requestIdleCallback. Idle-callback batching
+  // was causing the real "brakes" feeling: it gets starved by the
+  // continuous rAF render loop, so fast scrolling could outrun what had
+  // loaded and the animation would stall on one frame, then jump once a
+  // batch finally landed. Loading everything up front removes that stall.
+  function preloadAll() {
+    for (let index = 1; index <= total; index += 1) {
+      load(index);
+    }
+  }
+
+  function resize() {
+    const rect = canvasEl.getBoundingClientRect();
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    width = Math.max(1, Math.round(rect.width * pixelRatio));
+    height = Math.max(1, Math.round(rect.height * pixelRatio));
+
+    if (canvasEl.width !== width || canvasEl.height !== height) {
+      canvasEl.width = width;
+      canvasEl.height = height;
+    }
+
+    instanceNeedsResize = false;
+  }
+
+  function nearestLoaded(target) {
+    if (loadedSet.has(target)) {
+      return target;
+    }
+
+    for (let offset = 1; offset < total; offset += 1) {
+      const previous = target - offset;
+      const next = target + offset;
+
+      if (previous >= 1 && loadedSet.has(previous)) {
+        return previous;
+      }
+
+      if (next <= total && loadedSet.has(next)) {
+        return next;
+      }
+    }
+
+    return 1;
+  }
+
+  function paint(image, alpha, clear) {
+    const imageRatio = image.naturalWidth / image.naturalHeight;
+    const canvasRatio = width / height;
+    let drawWidth = width;
+    let drawHeight = height;
+    let drawX = 0;
+    let drawY = 0;
+
+    if (imageRatio > canvasRatio) {
+      drawHeight = height;
+      drawWidth = drawHeight * imageRatio;
+      drawX = (width - drawWidth) / 2;
+    } else {
+      drawWidth = width;
+      drawHeight = drawWidth / imageRatio;
+      drawY = (height - drawHeight) / 2;
+    }
+
+    if (clear) {
+      ctx.clearRect(0, 0, width, height);
+    }
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+    ctx.globalAlpha = 1;
+  }
+
+  function draw(targetFloat) {
+    if (!ctx || !width || !height) {
+      return;
+    }
+
+    const lowTarget = clamp(Math.floor(targetFloat), 1, total);
+    const highTarget = clamp(lowTarget + 1, 1, total);
+    const frac = clamp(targetFloat - lowTarget);
+
+    const low = nearestLoaded(lowTarget);
+    const lowImage = frameImages[low];
+    if (!lowImage || !lowImage.complete || !lowImage.naturalWidth) {
+      return;
+    }
+
+    paint(lowImage, 1, true);
+
+    if (frac > 0.02) {
+      const high = nearestLoaded(highTarget);
+      if (high !== low) {
+        const highImage = frameImages[high];
+        if (highImage && highImage.complete && highImage.naturalWidth) {
+          paint(highImage, frac, false);
+        }
+      }
+    }
+
+    rendered = targetFloat;
+  }
+
+  function updateNotes(progress) {
+    if (!notes.length) {
+      return;
+    }
+
+    if (reduceMotion.matches) {
+      root.style.setProperty("--note-opacity", "1");
+      root.style.setProperty("--note-y", "0px");
+      root.style.setProperty("--note-progress", "1");
+      notes.forEach((note, index) => note.classList.toggle("is-active", index === 0));
+      return;
+    }
+
+    // Notes activate at explicit scroll-progress thresholds (data-at) tied to
+    // real clip boundaries, not equal thirds - keeps the text in sync with
+    // what the animation is actually showing at that point.
+    let activeIndex = 0;
+    notes.forEach((note, index) => {
+      const at = parseFloat(note.dataset.at || "0");
+      if (progress >= at) {
+        activeIndex = index;
+      }
+    });
+
+    const opacity = smooth(0.02, 0.08, progress) * (1 - smooth(0.96, 1, progress));
+    root.style.setProperty("--note-opacity", opacity.toFixed(3));
+    root.style.setProperty("--note-y", `${((1 - opacity) * 18).toFixed(2)}px`);
+    root.style.setProperty("--note-progress", progress.toFixed(3));
+    notes.forEach((note, index) => note.classList.toggle("is-active", index === activeIndex));
+  }
+
+  function update() {
+    const wasResized = instanceNeedsResize;
+    if (instanceNeedsResize) {
+      resize();
+    }
+
+    // Raw scroll position moves in whatever-sized jumps the input device
+    // gives it (wheel ticks, trackpad momentum), and with only ~1
+    // frame per 8-10 scroll-frames, mapping that 1:1 to the frame target
+    // reads as jerky even with crossfade blending - blending softens the
+    // image transition, not the timing of when it happens. Easing the
+    // progress value itself toward the raw target each tick is what
+    // produces the actual "butter smooth" feel.
+    let progress;
+    if (reduceMotion.matches) {
+      progress = 0.86;
+      smoothedProgress = progress;
+    } else {
+      const rawProgress = elementProgress(root);
+      smoothedProgress = smoothedProgress === null
+        ? rawProgress
+        : smoothedProgress + (rawProgress - smoothedProgress) * 0.16;
+      progress = smoothedProgress;
+    }
+
+    updateNotes(progress);
+
+    const frameOpacity = reduceMotion.matches ? 1 : smooth(0, 0.05, progress);
+    root.style.setProperty("--frame-opacity", frameOpacity.toFixed(3));
+
+    const targetFloat = clamp(1 + progress * (total - 1), 1, total);
+    if (Math.abs(targetFloat - rendered) > 0.01 || wasResized) {
+      draw(targetFloat);
+    }
+  }
+
+  function markNeedsResize() {
+    instanceNeedsResize = true;
+  }
+
+  if (posterEl) {
+    posterEl.src = path(1);
+  }
+
+  resize();
+  draw(1);
+
+  whenNearViewport(root, preloadAll);
+
+  return { root, update, markNeedsResize };
+}
+
+const rackPinned = createPinnedSequence({
+  root: document.querySelector("[data-rack-sequence]"),
+  totalFrames: 131,
+  framePath: (index) => `assets/rack-open-frames-webp/frame-${String(index).padStart(4, "0")}.webp`,
+});
+
+const cablePinned = createPinnedSequence({
+  root: document.querySelector("[data-cable-sequence]"),
+  totalFrames: 76,
+  framePath: (index) => `assets/cable-truth-frames-webp/frame-${String(index).padStart(4, "0")}.webp`,
+});
+
+const reconciliationPinned = createPinnedSequence({
+  root: document.querySelector("[data-reconciliation-sequence]"),
+  totalFrames: 52,
+  framePath: (index) => `assets/reconciliation-frames-webp/frame-${String(index).padStart(4, "0")}.webp`,
+});
+
+const scalePinned = createPinnedSequence({
+  root: document.querySelector("[data-scale-sequence]"),
+  totalFrames: 54,
+  framePath: (index) => `assets/scale-frames-webp/frame-${String(index).padStart(4, "0")}.webp`,
+});
+
+const outcomesPinned = createPinnedSequence({
+  root: document.querySelector("[data-outcomes-sequence]"),
+  totalFrames: 57,
+  framePath: (index) => `assets/outcomes-frames-webp/frame-${String(index).padStart(4, "0")}.webp`,
+});
+
+const pinnedSequences = [
+  rackPinned,
+  cablePinned,
+  reconciliationPinned,
+  scalePinned,
+  outcomesPinned,
+].filter(Boolean);
+
+function updateHeaderState() {
+  if (!sequence) {
+    return;
+  }
+
+  const sequenceRect = sequence.getBoundingClientRect();
+  const bridgeRect = storyBridge ? storyBridge.getBoundingClientRect() : null;
+  const sequenceActive =
+    sequenceRect.top < window.innerHeight * 0.22 && sequenceRect.bottom > window.innerHeight * 0.42;
+  const bridgeActive = bridgeRect
+    ? bridgeRect.top < window.innerHeight * 0.18 && bridgeRect.bottom > window.innerHeight * 0.5
+    : false;
+  const pinnedActive = pinnedSequences.some(({ root }) => {
+    const rect = root.getBoundingClientRect();
+    return rect.top < window.innerHeight * 0.22 && rect.bottom > window.innerHeight * 0.42;
+  });
+
+  document.body.classList.toggle("is-sequencing", sequenceActive || bridgeActive || pinnedActive);
+}
+
+function renderLoop() {
+  const resized = needsResize;
+  if (needsResize) {
+    resizeCanvas();
+  }
+
+  updateHeaderState();
+  updateHeroMediaState();
+  updateStoryBridge();
+  pinnedSequences.forEach((seq) => seq.update());
+
+  const progress = sequenceProgress();
+  updateSequenceNarrative(progress);
+
+  if (reduceMotion.matches) {
+    activeFrame = Math.round(totalFrames * 0.62);
+    sequence.style.setProperty("--handoff-visibility", "1");
+    sequence.style.setProperty("--bridge-opacity", "0");
+    sequence.style.setProperty("--sequence-opacity", "1");
+  } else {
+    updateHandoff(progress);
+    activeFrame = clamp(Math.round(1 + animationProgress(progress) * (totalFrames - 1)), 1, totalFrames);
+  }
+
+  const loadedFrame = nearestLoadedFrame(activeFrame);
+  if (loadedFrame !== renderedFrame || resized) {
+    drawFrame(activeFrame);
+  }
+
+  window.requestAnimationFrame(renderLoop);
+}
+
+if (sequence && canvas) {
+  context = canvas.getContext("2d", { alpha: false });
+  resizeCanvas();
+  renderLoop();
+  whenNearViewport(sequence, () => {
+    preloadInitialFrames();
+    preloadRemainingFrames();
+  });
+
+  window.addEventListener("resize", () => {
+    needsResize = true;
+    pinnedSequences.forEach((seq) => seq.markNeedsResize());
+  }, { passive: true });
+}
+
+updateStoryBridge();
