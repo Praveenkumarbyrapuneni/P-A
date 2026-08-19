@@ -651,6 +651,7 @@ function createWorld() {
     smoothed = smoothed === null ? raw : smoothed + (raw - smoothed) * 0.16;
     const { layers, active } = resolveWorld(smoothed, boundaries, frameCounts);
     root.style.setProperty("--world-opacity", smooth(0, 0.03, smoothed).toFixed(3));
+    root.style.setProperty("--world-progress", smoothed.toFixed(4));
     drawPlan(layers);
     updateNotes(active);
   }
