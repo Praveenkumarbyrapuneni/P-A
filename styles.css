@@ -1114,6 +1114,383 @@ h1 span {
   line-height: 1.55;
 }
 
+/* Proof tour — ported from the old site's floor-plan walkthrough. */
+.proof-tour {
+  padding: 96px 6vw 120px;
+  background: var(--cloud);
+}
+
+.proof-tour-head {
+  max-width: 900px;
+  margin: 0 auto 44px;
+  text-align: center;
+}
+
+.proof-tour-head h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(30px, 3.6vw, 48px);
+  font-weight: 640;
+  letter-spacing: -0.015em;
+  line-height: 1.08;
+}
+
+.app-frame {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: var(--white);
+  border: 1px solid var(--steel);
+  border-radius: 10px;
+  box-shadow:
+    inset 0 1px 0 var(--white),
+    0 1px 2px rgba(16, 24, 40, 0.05),
+    0 10px 18px -8px rgba(16, 24, 40, 0.14),
+    0 34px 56px -18px rgba(16, 24, 40, 0.18);
+  overflow: hidden;
+}
+
+.app-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: linear-gradient(var(--white), var(--mist));
+  border-bottom: 1px solid var(--steel);
+  min-width: 0;
+}
+
+.app-dots {
+  display: flex;
+  gap: 5px;
+  flex: none;
+}
+
+.app-dots i {
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  background: var(--steel);
+  display: block;
+}
+
+.app-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.app-brand img {
+  width: 16px;
+  height: 16px;
+}
+
+.app-path {
+  flex: 1 1 0;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: var(--cloud);
+  border: 1px solid var(--steel);
+  border-radius: 5px;
+  padding: 4px 10px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tour-crumb {
+  display: none;
+}
+
+.tour-crumb.is-active {
+  display: inline;
+}
+
+.app-count {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--blue);
+  white-space: nowrap;
+}
+
+.tour-stage {
+  position: relative;
+  background: var(--white);
+}
+
+.tour-stage svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.tour-view {
+  display: none;
+}
+
+.tour-view.is-active {
+  display: block;
+  animation: tourIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes tourIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Pinned to the exact spot on the drawing each step is about — mascot +
+   leader line + tooltip move together via --point-x/--point-y, set per
+   step in main.js from coordinates read off the SVG's own highlight boxes. */
+.tour-point {
+  position: absolute;
+  left: var(--point-x, 50%);
+  top: var(--point-y, 50%);
+  z-index: 5;
+  pointer-events: none;
+  transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1), top 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tour-point.is-hidden {
+  display: none;
+}
+
+.tour-point-line {
+  position: absolute;
+  left: -1px;
+  bottom: 0;
+  width: 2px;
+  height: 26px;
+  background: var(--blue);
+}
+
+.tour-point-line::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--blue);
+  box-shadow: 0 0 0 4px rgba(36, 87, 214, 0.18);
+  transform: translate(-50%, 50%);
+}
+
+.tour-bot {
+  position: absolute;
+  left: 6px;
+  bottom: 16px;
+  width: 60px;
+  pointer-events: none;
+}
+
+.tour-bot svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 10px 16px rgba(16, 32, 51, 0.16));
+}
+
+.tour-bot .bot-body {
+  animation: botFloat 4.2s ease-in-out infinite;
+  transform-origin: 74px 100px;
+}
+
+.tour-bot .bot-arm-l {
+  animation: botWave 4.2s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: right top;
+}
+
+.tour-bot .bot-arm-r {
+  animation: botPoint 2.6s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: left bottom;
+}
+
+.tour-bot .bot-shadow {
+  animation: botShadow 4.2s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes botFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes botWave {
+  0%, 100% { transform: rotate(0deg); }
+  42%, 58% { transform: rotate(-14deg); }
+}
+
+@keyframes botPoint {
+  0%, 100% { transform: rotate(var(--pt, 0deg)) translateX(0); }
+  45%, 62% { transform: rotate(calc(var(--pt, 0deg) - 9deg)) translateX(2px); }
+}
+
+@keyframes botShadow {
+  0%, 100% { transform: scaleX(1); opacity: 1; }
+  50% { transform: scaleX(0.84); opacity: 0.6; }
+}
+
+/* Sits beside the mascot instead of stacked high above it — keeps the whole
+   pointer/mascot/callout cluster within ~90px of the anchor point so it
+   can't run past the viewport edge or the app-frame's overflow:hidden,
+   whichever step's anchor happens to land near a scroll boundary. */
+.tour-callout {
+  position: absolute;
+  left: 70px;
+  bottom: 6px;
+  width: 280px;
+  padding: 16px 20px 14px;
+  background: var(--ink);
+  color: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 14px 30px rgba(16, 32, 51, 0.24);
+  pointer-events: auto;
+}
+
+.tour-callout-tail {
+  /* the single leader line is .tour-point-line — this legacy tail marker
+     from the source markup is kept in the DOM but unused, to avoid a
+     second redundant line. */
+  display: none;
+}
+
+.tour-callout-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.tour-callout-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.tour-callout-count {
+  margin-right: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--scan);
+}
+
+.tour-callout-back,
+.tour-callout-next {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.tour-callout-back {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  color: var(--white);
+  line-height: 1;
+}
+
+.tour-callout-back:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.tour-callout-back:disabled,
+.tour-callout-next:disabled {
+  opacity: 0.28;
+  cursor: default;
+}
+
+.tour-callout-next {
+  padding: 7px 18px;
+  background: var(--white);
+  color: var(--ink);
+  font-weight: 600;
+  border: 0;
+  border-radius: 6px;
+}
+
+.tour-callout-next:hover:not(:disabled) {
+  background: var(--mist);
+}
+
+.proof-tour-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  padding: 12px 22px;
+  border-top: 1px solid var(--steel);
+}
+
+.proof-tour-foot p {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.proof-tour-foot p:first-child {
+  color: var(--muted);
+}
+
+.proof-tour-foot p:last-child {
+  color: var(--blue);
+}
+
+@media (max-width: 900px) {
+  .proof-tour {
+    padding: 64px 18px 80px;
+  }
+
+  .tour-bot,
+  .tour-point-line {
+    display: none;
+  }
+
+  .app-dots {
+    display: none;
+  }
+
+  /* Per-step drawing coordinates don't translate cleanly to a heavily
+     scaled-down mobile view — drop the overlay and show the callout as a
+     plain block under the plan instead. */
+  .tour-point {
+    position: static;
+    transition: none;
+  }
+
+  .tour-callout {
+    position: static;
+    width: auto;
+    margin: 16px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

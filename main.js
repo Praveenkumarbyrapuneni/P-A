@@ -855,3 +855,71 @@ if (sequence && canvas) {
 }
 
 updateStoryBridge();
+
+// Proof tour — a click-driven walkthrough (floor plan → row → cabinet →
+// device → cable trace → reconciled record), ported from the old site.
+// ponytail: dropped that version's hotspot-click-to-drill-in and per-port
+// inspector — neither was actually wired to markup there (dead CSS/JS
+// referencing elements that don't exist), so this rebuilds only the parts
+// that really worked: crumb + counter + tooltip driven by Prev/Next.
+// Each step's tooltip text, plus the (x%, y%) of the exact thing it's
+// pointing at — read directly off the highlight box each SVG already
+// draws for that step (its coordinates / 1600x900 viewBox), not guessed.
+// Step 5 (reconciled record) has no single point of interest, so it's null
+// and the pointer/callout hide on that step, matching the reference site.
+const TOUR_STEPS = [
+  { tip: "Every cabinet on the floor, placed and counted from a single sweep. Open Row B - Cabinet 06.", x: 45.06, y: 41.78 },
+  { tip: "Row B holds 12 cabinets, all swept and counted. Open Cabinet 06 to see what's inside.", x: 39.25, y: 37.77 },
+  { tip: "Every device in B-06, read straight from the sweep - 42U, front elevation, door open. Open Switch 3 for its full spec sheet.", x: 40.63, y: 35.56 },
+  { tip: "A full device record from one frame of the sweep - model, ports, and mounting, no manual entry. Trace port Eth1/14 to its neighbor.", x: 49.59, y: 50.56 },
+  { tip: "Eth1/14 traced physically to SPINE-02 - a path CMDB never had to guess at. Reconcile it against the record.", x: 62.69, y: 42.0 },
+  { tip: "Swept reality checked against CMDB, with every delta flagged for review.", x: null, y: null },
+];
+
+function initProofTour() {
+  const root = document.querySelector("[data-proof-tour]");
+  if (!root) return;
+
+  const views = root.querySelectorAll(".tour-view");
+  const crumbs = root.querySelectorAll(".tour-crumb");
+  const count = root.querySelector("#tour-count");
+  const point = root.querySelector("#tour-point");
+  const action = root.querySelector("#tour-action");
+  const step = root.querySelector("#tour-cue-step");
+  const prev = root.querySelector("#tour-prev");
+  const next = root.querySelector("#tour-next");
+  const total = views.length;
+  const pad = (n) => (n < 10 ? "0" : "") + n;
+
+  let at = 0;
+
+  function show(i) {
+    at = Math.max(0, Math.min(total - 1, i));
+    [views, crumbs].forEach((set) => {
+      set.forEach((el, k) => el.classList.toggle("is-active", k === at));
+    });
+    const { tip, x, y } = TOUR_STEPS[at];
+    count.textContent = `${pad(at + 1)} / ${pad(total)}`;
+    action.textContent = tip;
+    step.textContent = `${at + 1} / ${total}`;
+    prev.disabled = at === 0;
+    next.disabled = at === total - 1;
+
+    point.classList.toggle("is-hidden", x === null);
+    if (x !== null) {
+      point.style.setProperty("--point-x", `${x}%`);
+      point.style.setProperty("--point-y", `${y}%`);
+    }
+  }
+
+  prev.addEventListener("click", () => show(at - 1));
+  next.addEventListener("click", () => show(at + 1));
+  root.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") show(at - 1);
+    if (event.key === "ArrowRight") show(at + 1);
+  });
+
+  show(0);
+}
+
+initProofTour();
