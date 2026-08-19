@@ -561,6 +561,8 @@ function createWorld() {
   if (!canvasEl) return null;
 
   const ctx = canvasEl.getContext("2d", { alpha: false });
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
   const frameCounts = WORLD_BEATS.map((b) => b.frames);
   const boundaries = buildBoundaries(frameCounts);
 
