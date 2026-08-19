@@ -1750,6 +1750,12 @@ h1 span {
     display: block;
     width: 100%;
     height: 44vh;
+    /* .sequence-story.is-ready .sequence-poster (2 classes, higher
+       specificity) fades this to opacity:0 once JS marks the sequence
+       ready — which happens almost immediately, canvas or not. That rule
+       still wins inside this media query since specificity beats source
+       order, so it has to be forced back on here. */
+    opacity: 1 !important;
   }
 
   .sequence-narrative {
