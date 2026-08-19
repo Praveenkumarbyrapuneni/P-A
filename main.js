@@ -1,3 +1,15 @@
+import { resolveWorld, buildBoundaries } from "./world-timeline.js";
+
+const WORLD_BEATS = [
+  { key: "perceive",   frames: 131, dir: "rack-open-frames-webp" },
+  { key: "connect",    frames: 76,  dir: "cable-truth-frames-webp" },
+  { key: "reconcile",  frames: 52,  dir: "reconciliation-frames-webp" },
+  { key: "scale",      frames: 54,  dir: "scale-frames-webp" },
+  { key: "outcomes",   frames: 57,  dir: "outcomes-frames-webp" },
+];
+const worldFramePath = (dir, i) =>
+  `assets/${dir}/frame-${String(i).padStart(4, "0")}.webp`;
+
 const heroStage = document.querySelector(".hero-stage");
 const sequence = document.querySelector("[data-frame-sequence]");
 const canvas = document.querySelector(".sequence-canvas");
@@ -528,43 +540,129 @@ function createPinnedSequence({ root, totalFrames: total, framePath: path }) {
   return { root, update, markNeedsResize };
 }
 
-const rackPinned = createPinnedSequence({
-  root: document.querySelector("[data-rack-sequence]"),
-  totalFrames: 131,
-  framePath: (index) => `assets/rack-open-frames-webp/frame-${String(index).padStart(4, "0")}.webp`,
-});
+// One continuous world: all five beats welded into a single pinned stage
+// driven by one scroll progress, crossfading across sequence boundaries so
+// the screen is never blank at a seam. Replaces the five separate
+// createPinnedSequence instances. (createPinnedSequence above is now unused;
+// it is removed in the Batch 2 main.js rework — kept this batch to keep the
+// diff surgical.)
+function createWorld() {
+  const root = document.querySelector("[data-world]");
+  if (!root) return null;
 
-const cablePinned = createPinnedSequence({
-  root: document.querySelector("[data-cable-sequence]"),
-  totalFrames: 76,
-  framePath: (index) => `assets/cable-truth-frames-webp/frame-${String(index).padStart(4, "0")}.webp`,
-});
+  const canvasEl = root.querySelector(".world-canvas");
+  const poster = root.querySelector(".world-poster");
+  const beatEls = Array.from(root.querySelectorAll(".world-beat"));
+  const notesByBeat = beatEls.map((el) => Array.from(el.querySelectorAll("[data-note]")));
+  if (!canvasEl) return null;
 
-const reconciliationPinned = createPinnedSequence({
-  root: document.querySelector("[data-reconciliation-sequence]"),
-  totalFrames: 52,
-  framePath: (index) => `assets/reconciliation-frames-webp/frame-${String(index).padStart(4, "0")}.webp`,
-});
+  const ctx = canvasEl.getContext("2d", { alpha: false });
+  const frameCounts = WORLD_BEATS.map((b) => b.frames);
+  const boundaries = buildBoundaries(frameCounts);
 
-const scalePinned = createPinnedSequence({
-  root: document.querySelector("[data-scale-sequence]"),
-  totalFrames: 54,
-  framePath: (index) => `assets/scale-frames-webp/frame-${String(index).padStart(4, "0")}.webp`,
-});
+  // one image cache per beat
+  const images = WORLD_BEATS.map((b) => new Array(b.frames + 1));
+  const loadedFrames = WORLD_BEATS.map(() => new Set());
 
-const outcomesPinned = createPinnedSequence({
-  root: document.querySelector("[data-outcomes-sequence]"),
-  totalFrames: 57,
-  framePath: (index) => `assets/outcomes-frames-webp/frame-${String(index).padStart(4, "0")}.webp`,
-});
+  let width = 0, height = 0, needsWorldResize = true, worldReady = false;
+  let smoothed = null;
 
-const pinnedSequences = [
-  rackPinned,
-  cablePinned,
-  reconciliationPinned,
-  scalePinned,
-  outcomesPinned,
-].filter(Boolean);
+  function load(beat, index) {
+    if (index < 1 || index > WORLD_BEATS[beat].frames || images[beat][index]) {
+      return images[beat][index];
+    }
+    const img = new Image();
+    img.decoding = "async";
+    img.src = worldFramePath(WORLD_BEATS[beat].dir, index);
+    img.onload = () => {
+      loadedFrames[beat].add(index);
+      if (!worldReady && beat === 0 && index === 1) {
+        worldReady = true;
+        root.classList.add("is-ready");
+      }
+    };
+    images[beat][index] = img;
+    return img;
+  }
+
+  function preloadAll() {
+    WORLD_BEATS.forEach((b, beat) => {
+      for (let i = 1; i <= b.frames; i += 1) load(beat, i);
+    });
+  }
+
+  function nearestLoaded(beat, target) {
+    if (loadedFrames[beat].has(target)) return target;
+    const max = WORLD_BEATS[beat].frames;
+    for (let off = 1; off < max; off += 1) {
+      if (target - off >= 1 && loadedFrames[beat].has(target - off)) return target - off;
+      if (target + off <= max && loadedFrames[beat].has(target + off)) return target + off;
+    }
+    return 1;
+  }
+
+  function resize() {
+    const rect = canvasEl.getBoundingClientRect();
+    const pr = Math.min(window.devicePixelRatio || 1, 2);
+    width = Math.max(1, Math.round(rect.width * pr));
+    height = Math.max(1, Math.round(rect.height * pr));
+    if (canvasEl.width !== width || canvasEl.height !== height) {
+      canvasEl.width = width; canvasEl.height = height;
+    }
+    needsWorldResize = false;
+  }
+
+  function paint(image, alpha, clear) {
+    const ir = image.naturalWidth / image.naturalHeight;
+    const cr = width / height;
+    let dw = width, dh = height, dx = 0, dy = 0;
+    if (ir > cr) { dh = height; dw = dh * ir; dx = (width - dw) / 2; }
+    else { dw = width; dh = dw / ir; dy = (height - dh) / 2; }
+    if (clear) ctx.clearRect(0, 0, width, height);
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(image, dx, dy, dw, dh);
+    ctx.globalAlpha = 1;
+  }
+
+  function drawPlan(layers) {
+    if (!ctx || !width || !height) return;
+    layers.forEach((layer, idx) => {
+      const src = nearestLoaded(layer.beat, Math.round(layer.frame));
+      const img = images[layer.beat][src];
+      if (!img || !img.complete || !img.naturalWidth) return;
+      paint(img, layer.alpha, idx === 0); // first layer clears, rest composite over
+    });
+  }
+
+  function updateNotes(active) {
+    beatEls.forEach((el, bi) => el.classList.toggle("is-current", bi === active.beat));
+    const notes = notesByBeat[active.beat];
+    notes.forEach((note, ni) => {
+      const at = parseFloat(note.dataset.at || "0");
+      const nextAt = ni + 1 < notes.length
+        ? parseFloat(notes[ni + 1].dataset.at || "1") : 1.01;
+      note.classList.toggle("is-active", active.local >= at && active.local < nextAt);
+    });
+  }
+
+  function update() {
+    if (needsWorldResize) resize();
+    const raw = reduceMotion.matches ? 0.5 : clamp(elementProgress(root));
+    smoothed = smoothed === null ? raw : smoothed + (raw - smoothed) * 0.16;
+    const { layers, active } = resolveWorld(smoothed, boundaries, frameCounts);
+    root.style.setProperty("--world-opacity", smooth(0, 0.03, smoothed).toFixed(3));
+    drawPlan(layers);
+    updateNotes(active);
+  }
+
+  if (poster) poster.src = worldFramePath(WORLD_BEATS[0].dir, 1);
+  resize();
+  whenNearViewport(root, preloadAll);
+  return { root, update, markNeedsResize: () => { needsWorldResize = true; } };
+}
+
+const world = createWorld();
+const worldSequences = [world].filter(Boolean);
 
 function updateHeaderState() {
   if (!sequence) {
@@ -578,7 +676,7 @@ function updateHeaderState() {
   const bridgeActive = bridgeRect
     ? bridgeRect.top < window.innerHeight * 0.18 && bridgeRect.bottom > window.innerHeight * 0.5
     : false;
-  const pinnedActive = pinnedSequences.some(({ root }) => {
+  const pinnedActive = worldSequences.some(({ root }) => {
     const rect = root.getBoundingClientRect();
     return rect.top < window.innerHeight * 0.22 && rect.bottom > window.innerHeight * 0.42;
   });
@@ -595,7 +693,7 @@ function renderLoop() {
   updateHeaderState();
   updateHeroMediaState();
   updateStoryBridge();
-  pinnedSequences.forEach((seq) => seq.update());
+  worldSequences.forEach((seq) => seq.update());
 
   const progress = sequenceProgress();
   updateSequenceNarrative(progress);
@@ -629,7 +727,7 @@ if (sequence && canvas) {
 
   window.addEventListener("resize", () => {
     needsResize = true;
-    pinnedSequences.forEach((seq) => seq.markNeedsResize());
+    worldSequences.forEach((seq) => seq.markNeedsResize());
   }, { passive: true });
 }
 
