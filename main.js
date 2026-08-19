@@ -669,6 +669,106 @@ function createWorld() {
 const world = createWorld();
 const worldSequences = [world].filter(Boolean);
 
+// Ambient particle field across the world stage — fills the space with life,
+// drifts, links nearby points (a quiet nod to network topology), and eases
+// toward the cursor. NOT drawn on the frames; it is the environment around
+// them. Light scan-blue on the light-glass ground.
+function createParticles(canvas) {
+  if (!canvas) return null;
+  const pctx = canvas.getContext("2d");
+  let pw = 0, ph = 0, pdpr = 1;
+  const pcursor = { x: 0.5, y: 0.5, active: false };
+  let parts = [];
+
+  function seed() {
+    const target = Math.round((pw * ph) / (pdpr * pdpr) / 20000);
+    const n = Math.max(46, Math.min(120, target));
+    parts = [];
+    for (let i = 0; i < n; i += 1) {
+      parts.push({
+        x: Math.random() * pw,
+        y: Math.random() * ph,
+        vx: (Math.random() - 0.5) * 0.14 * pdpr,
+        vy: (Math.random() - 0.5) * 0.14 * pdpr,
+        r: (Math.random() * 1.6 + 0.8) * pdpr,
+        a: Math.random() * 0.4 + 0.2,
+      });
+    }
+  }
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    pdpr = Math.min(window.devicePixelRatio || 1, 2);
+    pw = Math.max(1, Math.round(rect.width * pdpr));
+    ph = Math.max(1, Math.round(rect.height * pdpr));
+    if (canvas.width !== pw || canvas.height !== ph) {
+      canvas.width = pw;
+      canvas.height = ph;
+    }
+    seed();
+  }
+
+  function update() {
+    if (reduceMotion.matches || !pctx || !pw || !ph) return;
+    pctx.clearRect(0, 0, pw, ph);
+    const cx = pcursor.x * pw;
+    const cy = pcursor.y * ph;
+    const link = 128 * pdpr;
+    const reach = 210 * pdpr;
+    for (let i = 0; i < parts.length; i += 1) {
+      const p = parts[i];
+      if (pcursor.active) {
+        const dx = cx - p.x;
+        const dy = cy - p.y;
+        if (dx * dx + dy * dy < reach * reach) {
+          p.vx += dx * 0.00002;
+          p.vy += dy * 0.00002;
+        }
+      }
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vx *= 0.994;
+      p.vy *= 0.994;
+      if (p.x < -12) p.x = pw + 12;
+      if (p.x > pw + 12) p.x = -12;
+      if (p.y < -12) p.y = ph + 12;
+      if (p.y > ph + 12) p.y = -12;
+      pctx.beginPath();
+      pctx.fillStyle = `rgba(125, 189, 255, ${p.a})`;
+      pctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      pctx.fill();
+    }
+    pctx.lineWidth = pdpr;
+    for (let i = 0; i < parts.length; i += 1) {
+      for (let j = i + 1; j < parts.length; j += 1) {
+        const a = parts[i];
+        const b = parts[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const d = Math.hypot(dx, dy);
+        if (d < link) {
+          pctx.strokeStyle = `rgba(125, 189, 255, ${(1 - d / link) * 0.12})`;
+          pctx.beginPath();
+          pctx.moveTo(a.x, a.y);
+          pctx.lineTo(b.x, b.y);
+          pctx.stroke();
+        }
+      }
+    }
+  }
+
+  function setCursor(nx, ny) {
+    pcursor.x = nx;
+    pcursor.y = ny;
+    pcursor.active = true;
+  }
+
+  resize();
+  return { update, resize, setCursor };
+}
+
+const particles = createParticles(document.querySelector(".world-particles"));
+
 function updateHeaderState() {
   if (!sequence) {
     return;
@@ -699,6 +799,7 @@ function renderLoop() {
   updateHeroMediaState();
   updateStoryBridge();
   worldSequences.forEach((seq) => seq.update());
+  if (particles) particles.update();
 
   const progress = sequenceProgress();
   updateSequenceNarrative(progress);
@@ -733,6 +834,13 @@ if (sequence && canvas) {
   window.addEventListener("resize", () => {
     needsResize = true;
     worldSequences.forEach((seq) => seq.markNeedsResize());
+    if (particles) particles.resize();
+  }, { passive: true });
+
+  window.addEventListener("mousemove", (event) => {
+    if (particles) {
+      particles.setCursor(event.clientX / window.innerWidth, event.clientY / window.innerHeight);
+    }
   }, { passive: true });
 }
 

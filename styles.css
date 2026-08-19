@@ -888,28 +888,42 @@ h1 span:last-child::after {
 .world-pin {
   position: sticky;
   top: 0;
-  display: grid;
-  grid-template-columns: minmax(300px, 38%) 1fr;
-  align-items: center;
-  gap: clamp(28px, 5vw, 72px);
+  height: 100dvh;
   width: 100%;
-  min-height: 100dvh;
-  padding: 0 clamp(24px, 6vw, 96px);
   overflow: hidden;
   background:
-    radial-gradient(circle at 82% 30%, rgba(125, 189, 255, 0.16), transparent 32vw),
-    linear-gradient(180deg, rgba(247, 250, 255, 0.98), #ffffff 42%, var(--mist) 100%);
+    radial-gradient(120% 90% at 88% 16%, rgba(125, 189, 255, 0.22), transparent 60%),
+    linear-gradient(118deg, var(--cloud) 0%, var(--mist) 44%, #dcebfb 100%);
 }
 
-.world-visual {
-  position: relative;
+/* Ambient particle field — fills the whole stage, drifts, reacts to cursor. */
+.world-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  max-height: 76dvh;
-  border-radius: var(--radius-md);
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Legibility wash over the text side; fades to reveal the frame on the right. */
+.world-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(247, 250, 255, 0.94) 0%, rgba(247, 250, 255, 0.6) 27%, rgba(247, 250, 255, 0) 54%),
+    linear-gradient(0deg, rgba(247, 250, 255, 0.42) 0%, rgba(247, 250, 255, 0) 24%);
+}
+
+/* Full-bleed visual — no box, no margins; fills the entire stage. */
+.world-visual {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   overflow: hidden;
-  box-shadow: 0 30px 90px rgba(16, 32, 51, 0.14);
-  background: #eef3fa;
+  background: var(--mist);
 }
 
 .world-poster,
@@ -940,23 +954,27 @@ h1 span:last-child::after {
 }
 
 .world-narrative {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 420px;
-  min-height: 260px;
+  position: absolute;
+  z-index: 4;
+  left: clamp(28px, 6.5vw, 128px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(48vw, 640px);
+  min-height: 46dvh;
 }
 
+/* Vertical accent rail beside the text; grows through the whole story. */
 .world-narrative::before {
   content: "";
   position: absolute;
-  top: -18px;
-  left: 0;
-  height: 3px;
-  width: 100%;
-  background: linear-gradient(90deg, var(--blue), var(--scan), rgba(125, 189, 255, 0));
-  transform: scaleX(var(--world-progress, 0));
-  transform-origin: left center;
+  top: 6%;
+  left: -24px;
+  width: 3px;
+  height: 88%;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--blue), var(--scan) 62%, rgba(125, 189, 255, 0));
+  transform: scaleY(var(--world-progress, 0));
+  transform-origin: top center;
 }
 
 .world-beat {
@@ -976,42 +994,56 @@ h1 span:last-child::after {
   flex-direction: column;
   justify-content: center;
   opacity: 0;
-  transform: translate3d(0, 18px, 0);
-  transition: opacity 360ms ease, transform 420ms ease;
+  transform: translate3d(0, 28px, 0);
+  filter: blur(7px);
+  transition: opacity 520ms ease, transform 640ms cubic-bezier(0.22, 1, 0.36, 1), filter 520ms ease;
   pointer-events: none;
 }
 
 .world-note.is-active {
   opacity: 1;
   transform: translate3d(0, 0, 0);
+  filter: blur(0);
 }
 
 .world-note p {
-  margin: 0 0 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 22px;
   color: var(--blue);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
+.world-note p::before {
+  content: "";
+  width: 28px;
+  height: 2px;
+  background: var(--blue);
+}
+
 .world-note h2 {
-  max-width: 14ch;
+  max-width: 15ch;
   margin: 0;
   color: var(--ink);
-  font-size: 34px;
-  font-weight: 640;
-  line-height: 1.05;
+  font-size: clamp(42px, 5.4vw, 82px);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
 }
 
 .world-note span {
   display: block;
-  max-width: 36ch;
-  margin-top: 18px;
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.48;
+  max-width: 40ch;
+  margin-top: 26px;
+  color: var(--ink);
+  opacity: 0.72;
+  font-size: clamp(15px, 1.2vw, 18px);
+  line-height: 1.55;
 }
 
 @keyframes cursor-pulse {
@@ -1091,8 +1123,25 @@ h1 span:last-child::after {
     position: static;
   }
 
+  .world-particles,
+  .world-scrim {
+    display: none;
+  }
+
+  .world-visual {
+    position: static;
+    height: 58dvh;
+  }
+
   .world-canvas {
     opacity: 1;
+  }
+
+  .world-narrative {
+    position: static;
+    transform: none;
+    width: auto;
+    padding: 32px clamp(24px, 6vw, 96px);
   }
 
   .world-beat {
@@ -1104,6 +1153,7 @@ h1 span:last-child::after {
     position: static;
     opacity: 1;
     transform: none;
+    filter: none;
   }
 
   .story-bridge {
@@ -1213,29 +1263,29 @@ h1 span:last-child::after {
     font-size: 14px;
   }
 
-  .world-pin {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    padding: 96px 18px 40px;
-    gap: 24px;
-  }
-
   .world-narrative {
-    max-width: min(520px, calc(100vw - 36px));
+    left: 20px;
+    right: 20px;
+    top: auto;
+    bottom: 9dvh;
+    transform: none;
+    width: auto;
     min-height: 190px;
   }
 
-  .world-visual {
-    max-height: 46dvh;
+  .world-narrative::before {
+    top: 0;
+    height: 100%;
+    left: -14px;
   }
 
   .world-note h2 {
     max-width: 15ch;
-    font-size: 29px;
+    font-size: clamp(30px, 8.6vw, 46px);
   }
 
   .world-note span {
-    max-width: 42ch;
+    max-width: 100%;
     font-size: 14px;
   }
 
