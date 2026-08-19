@@ -1676,10 +1676,19 @@ h1 span {
     padding-top: 104px;
   }
 
+  /* ponytail: static image band behind just the headline, not the whole
+     stack — inset:0 + height:auto is an unresolved edge case (CSS 2.1
+     §10.6.4: an absolute box with both top and bottom set ignores
+     height:auto), so the photo was stretching to the full combined height
+     of both hero beats instead of staying a normal-sized band. An explicit
+     height sidesteps that; below it the page's own background shows, and
+     the "What RackTrack Is" beat sits on that instead of a stretched photo. */
   .hero-media {
     position: absolute;
-    inset: 0;
-    height: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64vh;
   }
 
   .hero-copy-layer {
