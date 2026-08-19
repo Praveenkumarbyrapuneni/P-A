@@ -287,14 +287,18 @@ function updateStoryBridge() {
   }
 
   const progress = reduceMotion.matches ? 0.72 : elementProgress(storyBridge);
-  const copyOpacity = smooth(0.02, 0.16, progress) * (1 - smooth(0.9, 1, progress));
-  const sourceOpacity = smooth(0.02, 0.16, progress);
+  // Anchor content (headline + first card) is present the instant the section
+  // is on screen — it only fades OUT at the very end as it hands to the world.
+  // This kills the blank light band at the scan -> bridge seam (was fading in
+  // over 2-16%, leaving the viewport empty right after the scan animation).
+  const copyOpacity = 1 - smooth(0.9, 1, progress);
+  const sourceOpacity = smooth(0, 0.08, progress);
   const threadScale = smooth(0.24, 0.58, progress);
   const layerOpacity = smooth(0.48, 0.72, progress);
 
   storyBridge.style.setProperty("--bridge-progress", progress.toFixed(3));
   storyBridge.style.setProperty("--bridge-copy-opacity", copyOpacity.toFixed(3));
-  storyBridge.style.setProperty("--bridge-copy-y", `${((1 - copyOpacity) * 28).toFixed(2)}px`);
+  storyBridge.style.setProperty("--bridge-copy-y", `${((1 - smooth(0, 0.06, progress)) * 12).toFixed(2)}px`);
   storyBridge.style.setProperty("--bridge-source-opacity", sourceOpacity.toFixed(3));
   storyBridge.style.setProperty("--bridge-thread-scale", threadScale.toFixed(3));
   storyBridge.style.setProperty("--bridge-thread-opacity", (threadScale * 0.9).toFixed(3));
