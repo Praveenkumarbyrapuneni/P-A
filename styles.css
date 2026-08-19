@@ -1467,6 +1467,33 @@ h1 span {
     padding: 64px 18px 80px;
   }
 
+  .proof-tour-head {
+    padding: 0 4px;
+  }
+
+  .app-frame {
+    border-radius: 8px;
+  }
+
+  .app-bar {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  .app-brand {
+    order: 1;
+  }
+
+  .app-count {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .app-path {
+    order: 3;
+    flex-basis: 100%;
+  }
+
   .tour-bot,
   .tour-point-line {
     display: none;
@@ -1488,6 +1515,29 @@ h1 span {
     position: static;
     width: auto;
     margin: 16px;
+  }
+
+  /* The floor-plan drawings are dense CAD-style diagrams with fixed-size
+     labels baked into the SVG — shrinking them to fit a phone width makes
+     every label illegible. Scroll horizontally at a legible size instead,
+     the same pattern as a wide data table on mobile. */
+  .tour-stage {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tour-view svg {
+    width: auto;
+    min-width: 760px;
+    height: auto;
+  }
+
+  .proof-tour-foot {
+    padding: 12px 16px;
+  }
+
+  .proof-tour-foot p {
+    font-size: 10px;
   }
 }
 
