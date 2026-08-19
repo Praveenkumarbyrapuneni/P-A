@@ -294,10 +294,11 @@ function updateStoryBridge() {
 
   const progress = reduceMotion.matches ? 0.72 : elementProgress(storyBridge);
   // Anchor content (headline + first card) is present the instant the section
-  // is on screen — it only fades OUT at the very end as it hands to the world.
-  // This kills the blank light band at the scan -> bridge seam (was fading in
-  // over 2-16%, leaving the viewport empty right after the scan animation).
-  const copyOpacity = 1 - smooth(0.9, 1, progress);
+  // is on screen and stays up for the whole section, same as the evidence
+  // cards — it used to fade out ahead of them near the end, leaving the
+  // cards on screen with no text; the world-story section covers this one
+  // on scroll anyway, so there's nothing to hand off to here.
+  const copyOpacity = 1;
   const sourceOpacity = smooth(0, 0.08, progress);
   const threadScale = smooth(0.24, 0.58, progress);
   const layerOpacity = smooth(0.48, 0.72, progress);
