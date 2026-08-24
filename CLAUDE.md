@@ -2,64 +2,66 @@
 
 ## Current Phase
 
-We are rebuilding RackTrack page by page inside this `P-A` folder.
+We are rebuilding RackTrack page by page inside this `P-A` folder, entirely on `main` now.
 
-**Chapters 1-3 are built, wired, and accepted on `main`.** Chapters 4-8 (the rack story), the continuous-world rebuild, are **merged into `main` and accepted** — see "Continuous-World Rebuild" below for what's actually in it. `feat/continuous-world` is now identical to `main` (fast-forward merge) and can be deleted whenever, nothing lives only on it anymore. Chapter 9 (Final CTA) is not yet built — static bookend reusing the hero image, same pattern as Chapter 1, no video needed.
+**Chapters 1-3, the continuous-world rack story (4-8), the floor-plan proof-tour walkthrough, and the site footer are all built, accepted, and live.** `feat/continuous-world` is 16 commits behind `main` and can be deleted — nothing lives only on it. `.worktrees/legacy-sections-port` (branch `worktree-legacy-sections-port`) is also stale (sits at `61de89d`, pre-dates most of the current build) and clean — safe to remove if unused. Chapter 9 (Final CTA) is the only homepage piece **not yet built** — static bookend reusing the hero image, same pattern as Chapter 1, no video needed.
 
 **Live deployment:** the site is deployed via AWS Amplify Hosting, connected to the private GitHub repo `Praveenkumarbyrapuneni/P-A`, auto-building on every push to `main`. Amplify app details: app id `d1qibxn0njvfa1`, URL `https://main.d1qibxn0njvfa1.amplifyapp.com`, AWS account `984126996103` ("Vsoln" — this is Praveen's **personal** AWS account, not a client account, see `[[reference_vsoln_aws_account]]` in memory). Build settings: no build command (static site), output directory `/`. `enableAutoBuild` had to be manually turned on after the first console-connected deploy — it defaulted off, so the merge didn't auto-deploy until that was fixed and a manual `start-job` was triggered.
 
 The existing `/Users/praveen/Desktop/Racktrack_Website` folder is the content and business reference only (real copy, claims, and a few directly-reusable light-palette images have come from its `docs/RackTrack-Website-Content.md` and `assets/` folder). Use its data and claims, but build the new experience here.
 
-## Continuous-World Rebuild (in progress — branch `feat/continuous-world`)
+## Continuous-World Rebuild (accepted, merged to `main`)
 
-`main`'s Chapters 4-8 (the original `split-story` five-section pattern) were accepted once but the user later judged the *overall experience* disconnected — five separate pinned sections handing off to each other created blank/dead-air gaps at every seam, and the frame-scrub-only interaction never felt "alive" (see design doc for the full diagnosis). Full context, spec, and plan:
+Historical note, kept for the two lessons still worth knowing — full narrative was here before this rewrite, see git history (`3e40a06` "session close-out") if the blow-by-blow is ever needed.
 
-- Design doc: `docs/superpowers/specs/2026-08-19-continuous-world-homepage-design.md`
-- Implementation plan: `docs/superpowers/plans/2026-08-19-continuous-world-homepage.md`
+- `main`'s original Chapters 4-8 (`split-story`, five separate pinned sections) felt disconnected — blank/dead-air gaps at every handoff seam. Rebuilt as **one** continuous `<section class="world-story" data-world>` driven by a single scroll-progress value; `world-timeline.js` (pure, node-tested in `tests/world-timeline.test.mjs`) computes a crossfade draw plan across all five frame sequences so there's never a blank frame at a beat boundary.
+- A Three.js "living layer" (3D rack texture, camera pull-back, HUD overlay with a scan beam) was built then **fully reverted** — user's verdict: "dirty," missed the point. Three.js/WebGL is not part of the current direction; don't reintroduce a frame overlay without asking first.
+- **General lesson for any pinned/sticky scroll section:** anchor content must be visible the instant the section is on screen — only fade content OUT at handoffs, never IN on entry, or you get a blank gap. This exact bug recurred at three different seams before it was recognized as one pattern (scan→bridge, world-story beat boundaries, and see the mobile section below for its cousin bug on the *outer* section height).
 
-**What's actually built on the branch right now** (as of the last session, all committed, working tree clean):
+Ambient particle field (`createParticles()` in `main.js`, drifting scan-blue motes over `.world-particles`) was **removed entirely** in a later session (not this one) — don't reintroduce it without asking.
 
-1. **Batch 1 — done.** The five separate `split-story` sections (Ch4-8) were welded into **one** continuous `<section class="world-story" data-world>` driven by a single scroll-progress value. `world-timeline.js` (pure, no DOM) computes a crossfade "draw plan" across all five frame sequences so there is never a blank frame at a beat boundary — proven by node asserts in `tests/world-timeline.test.mjs` (no-blank + monotonic-beat + crossfade-at-boundary invariants). `createWorld()` in `main.js` consumes it and draws directly to the on-page canvas. The scan→bridge handoff blank gap (a same-class bug, just at a different seam) was also fixed in `updateStoryBridge()`.
-2. **A Three.js "living layer" was built, then fully reverted.** Attempt: rack frame as a texture on a plane in a real 3D scene, camera pull-back/return arc, plus a reactive HUD overlay (scan beam, port-status dots, cursor focus ring) drawn ON TOP of the frames. **User's verdict: rejected — "dirty," a "blue scanning ray," missed the point entirely.** Fully reverted via `git reset --hard` to the pre-Three.js commit (`df0693c`). `world-scene.js`, `world-camera.js`, `vendor/three.module.js`, and the HUD wiring in `main.js` **no longer exist on the branch.** Three.js/WebGL is not part of the current direction — don't reintroduce a frame overlay approach without asking first.
-3. **Current direction (latest commit `6a07f19`): full-bleed layout + bold typography + ambient particles — no touching the frames.** The real problems the user identified were (a) dead/empty screen space around the visual and narrative, not a lack of an overlay gimmick, and (b) generic-looking text. Fix applied:
-   - `.world-visual` is now `position: absolute; inset: 0` — the frame sequence fills the *entire* viewport, no boxed panel, no margins.
-   - `.world-narrative` is an absolutely-positioned overlay (left-aligned, vertically centered) directly on top of the full-bleed visual, with a `.world-scrim` gradient wash underneath it for legibility instead of a solid background panel.
-   - Typography made deliberately bold/editorial: headline `clamp(42px, 5.4vw, 82px)`, tight `line-height: 0.98`, negative letter-spacing, a vertical accent rail (`.world-narrative::before`) that grows through the whole story via `--world-progress`, and a blur+rise reveal per beat instead of a plain fade/slide.
-   - `.world-particles` — a canvas-based ambient field (`createParticles()` in `main.js`): drifting scan-blue motes with faint constellation links between nearby ones (network-topology nod, stays on-topic) and gentle cursor-attraction. This is deliberately **not** drawn on the rack frames — it's atmosphere in the surrounding space.
-   - Reduced-motion and mobile fallbacks were updated to match (static stacked layout, particles/scrim hidden under reduced-motion).
+**Critical workflow rule, still in force:** do **not** use claude-in-chrome (or Playwright) to self-verify visual changes on this site. Make the change, describe exactly what to look at, and wait for the user to check and report back. One narrow exception happened this session: opening a *different* site (meter.com) purely to study a mobile design pattern, on explicit request — that was a one-off grant, not standing permission. See `[[feedback_no_browser_automation]]` in memory.
 
-4. **Blur fix (accepted this session).** The full-bleed redesign exposed a real image-quality regression: Ch4-8 frames were extracted at 960x540 for the old boxed-panel layout, then the full-bleed canvas stretched them across the whole viewport — worse, the canvas backing store used `min(devicePixelRatio, 2)`, so on Retina screens a source frame got upscaled ~2.7x with no real detail to back it up. Fixed in two steps:
-   - Re-extracted all five Ch4-8 frame folders (`rack-open-frames-webp`, `cable-truth-frames-webp`, `reconciliation-frames-webp`, `scale-frames-webp`, `outcomes-frames-webp`) at native 1280x720 instead of 960x540, from the original source mp4s, same frame counts. Note: the original hand-tuned variable-fps extraction schedule (denser during fast motion) wasn't saved anywhere, so this re-extraction uses uniform spacing matched to the original frame count per chapter instead — a reasonable approximation, not a perfect reproduction.
-   - `main.js`'s world-canvas `resize()` now caps `devicePixelRatio` at **1** instead of 2 (source frames are the resolution bottleneck, so a 2x backing store was pure wasted upscale, not real sharpness) — search `ponytail:` in `main.js` for the comment marking this.
-   - A small `inset: 2.5%` on `.world-visual` was tried and then explicitly reverted back to `inset: 0` (full-bleed) — the user wanted the retina-cap fix's clarity gain but rejected the layout shrink, full-bleed stays non-negotiable.
-   - `ctx.imageSmoothingQuality = "high"` also set on the world canvas context (minor assist, not the main fix).
-   - **User has verified this fix locally and accepted it** — this is what's now merged into `main` and deployed.
+## Build Progress (as of commit `789d438`, all on `main`)
 
-**Next up:** Chapter 9 (Final CTA) is still not built — static bookend, hero-style, no video, reusing `assets/Verified Rack Object.jpeg`. That's the next real work item. Batches 2-4 from the original continuous-world plan (Three.js living layer, reactive geometry) are superseded by the pivot away from Three.js and should not be resumed without a fresh direction check with the user.
-
-**Critical workflow rule for this branch, learned the hard way this session:** do **not** use claude-in-chrome (or Playwright) to self-verify visual changes. The user explicitly revoked that permission after it burned significant time on scroll-automation issues (`scroll-behavior: smooth` fights programmatic `scrollTo`) without producing useful verification. Make the change, describe exactly what to look at and where, and wait for the user to check the local preview themselves and report back. See `[[feedback_no_browser_automation]]` in memory.
-
-## Build Progress (Chapters 1-3, 9 — stable on `main`)
+Actual section order in `index.html`: `.hero-shell` → scan (`data-frame-sequence`) → `.story-bridge` → `.world-story` → `.proof-tour` → `.site-footer`. No Chapter 9 section exists yet.
 
 | # | Chapter | Status |
 |---|---|---|
-| 1 | Hero | Built & accepted. Static, `assets/Verified Rack Object.jpeg`. |
-| 2 | The Scan | Built & accepted. Full-bleed 240-frame scroll sequence, `assets/phone-scan-2-frames-webp/`. |
-| 3 | Post-Scan Bridge | Built & accepted. "Captured facts. Ready to verify." + three tilted evidence cards. |
-| 4-8 | Rack story (Perceive → Outcomes) | **Mid-rebuild on `feat/continuous-world`** — see "Continuous-World Rebuild" above. Do not treat as accepted/final; do not describe as five separate split-story chapters anymore. |
-| 9 | Final CTA | **Not built.** No video needed — reuse `assets/Verified Rack Object.jpeg`, static like the hero, CTA as live HTML/CSS. |
+| 1 | Hero | Built & accepted. Two scroll beats over one pinned photo (`.hero-media`, `position: fixed` on desktop): `.hero-beat-primary` (headline, no trailing periods, CTA, proof stats) then `.hero-beat-about` ("What RackTrack Is" + the capture-to-structured-record SVG panel, no connector dots). |
+| 2 | The Scan | Built & accepted. Full-bleed 240-frame scroll sequence, `assets/phone-scan-2-frames-webp/`. Note labels are plain text now ("Captured", not "01 — Captured"). |
+| 3 | Post-Scan Bridge | Built & accepted. Three evidence cards. |
+| 4-8 | Rack story (Perceive → Outcomes) | Built & accepted, merged to `main`. One continuous `.world-story` section — see "Continuous-World Rebuild" above. Note labels are plain text now too. |
+| — | Floor-plan proof tour | Built & accepted. `.proof-tour` — see "Proof Tour" section below. |
+| 9 | Final CTA | **Not built.** Next real work item. No video needed — reuse `assets/Verified Rack Object.jpeg`, static like the hero, CTA as live HTML/CSS. |
+| — | Footer | Built & accepted. `.site-footer` — see "Footer & Header Logo" section below. |
 
-Chapter-by-chapter narrative detail, real copy sources, and full asset briefs (start/end frame + Flow prompt) for every chapter live in `docs/03-homepage-storyboard.md` — that file is the single source of truth for chapter content, keep it that way rather than duplicating chapter descriptions here (an earlier version of this file had its own separate chapter list that drifted out of sync with the storyboard doc and caused a real contradiction bug; don't recreate that). Note: the storyboard doc still describes Ch4-8 in the old five-section framing — treat the "Continuous-World Rebuild" section above as authoritative for how they're actually implemented now; only the narrative/copy/asset-brief content in the storyboard doc is still current.
+Chapter-by-chapter narrative detail, real copy sources, and full asset briefs (start/end frame + Flow prompt) for every chapter live in `docs/03-homepage-storyboard.md` — that file is the single source of truth for chapter content, keep it that way rather than duplicating chapter descriptions here. Note: the storyboard doc still describes Ch4-8 in the old five-section framing — treat "Continuous-World Rebuild" above as authoritative for how they're actually implemented; only the narrative/copy/asset-brief content in the storyboard doc is still current.
 
 ## Site Architecture (as actually built)
 
-**Chapters 1-3 (`main` and the branch, unchanged):** Hero and Scan are standalone; Chapter 3 is `.story-bridge` / `.bridge-pin`.
+**Hero, Scan, Bridge:** unchanged in structure from earlier sessions — Hero and Scan are standalone; Bridge is `.story-bridge` / `.bridge-pin`.
 
-**Chapters 4-8, on `feat/continuous-world` (current, post Batch 1):** ONE `<section class="world-story" data-world>` → `.world-pin` (sticky, full-bleed) containing `.world-particles` (ambient canvas), `.world-scrim` (legibility wash), `.world-visual` (absolute, inset:0 — the frame canvas, full-bleed), and `.world-narrative` (absolute overlay, five `.world-beat[data-beat]` groups each with `.world-note[data-note][data-at]` articles). `world-timeline.js` (`resolveWorld`, `buildBoundaries`, pure functions, node-tested) computes which frame(s) to composite and at what crossfade alpha for a single 0-1 `worldProgress`; `createWorld()` in `main.js` draws that plan to the on-page canvas every frame and toggles `.is-current` / `.is-active` on the matching beat/note. `data-at` on each note is a 0-1 progress threshold tied to the real clip boundary it corresponds to, not an even split.
+**Rack story (world-story):** ONE `<section class="world-story" data-world>` → `.world-pin` (sticky, full-bleed) containing `.world-scrim` (legibility wash), `.world-visual` (absolute, inset:0 — the frame canvas, full-bleed), and `.world-narrative` (absolute overlay, five `.world-beat[data-beat]` groups each with `.world-note[data-note][data-at]` articles, plus a `.world-beat-poster` static `<img>` per beat used only on mobile — see Mobile section). `world-timeline.js` (`resolveWorld`, `buildBoundaries`, pure functions, node-tested) computes which frame(s) to composite and at what crossfade alpha for a single 0-1 `worldProgress`; `createWorld()` in `main.js` draws that plan to the on-page canvas every frame. `.world-particles` (ambient canvas) no longer exists — removed in a later session.
 
-**Chapters 4-8 on `main` (superseded, for reference only if diffing):** the old pattern was `<section class="split-story" data-X-sequence>` with five separate sticky pins and a `createPinnedSequence({root, totalFrames, framePath})` factory instantiated five times. This is what caused the blank-seam problem the rebuild fixes — don't resurrect it.
+**Proof tour:** `<section class="proof-tour" data-proof-tour>` → `.app-frame` (browser-chrome mockup: `.app-bar` with crumbs/count, `.tour-stage` with 6 `.tour-view[data-view]` SVGs — ported byte-for-byte from the old site's source with colors substituted to our CSS variables — `.tour-point` mascot+callout overlay positioned per step via `--point-x`/`--point-y` custom properties read from each SVG's own highlight-box coordinates). `initProofTour()` in `main.js` drives Prev/Next, crumb, counter, and pointer position. Real per-step tooltip text and end-of-tour Next-disable are a genuine fix over the old site's version, which had these as dead/unwired markup — don't assume "ported from the old site" means "fully working," verify the JS wiring.
 
-**JS (`main.js`), general:** `createPinnedSequence` (the old per-chapter factory) is retained only for reference/diff purposes in git history — it was removed from the branch's `main.js` for Chapters 4-8 usage. The phone-scan section (Chapter 2) is a separate, older, unrelated code path (dense 240-frame hard-snap, no blending) — intentionally untouched. Don't merge it into anything else unless asked.
+**Footer & header logo:** `.site-footer` — Platform/Company/Contact columns, links are `href="#"` placeholders (pages not built). `assets/logo.jpg` (white R on black) renders in the header via `filter: invert(1); mix-blend-mode: multiply` for a dark mark with no visible box; `assets/RackTrack-Logo.jpg` (full mark+wordmark lockup on a black tile) is used as-is in the footer.
+
+**JS (`main.js`), general:** `createPinnedSequence` (the old per-chapter factory) exists only in git history, not live code. The phone-scan section (Chapter 2) is a separate, older, unrelated code path (dense 240-frame hard-snap, no blending) — intentionally untouched. `main.js`/`styles.css` have occasionally been edited outside this conversation (another session, or a linter) between turns — always `git diff` before committing to see what actually changed, don't blindly assume only your own edits are present.
+
+## Mobile Responsive Pattern (established this session)
+
+Desktop sections use `position: sticky` pins driven by scroll-scrubbed canvas or absolutely-positioned overlapping cards. These do **not** compress gracefully into a phone viewport — the fix is never "shrink the effect," it's replacing it with plain static stacked content for `max-width: 980px` (or `900px` for proof-tour, `640px` for the smallest phones): pin becomes `position: static`, content that faded in via scroll becomes always-visible, image/canvas becomes one static `<img>` on top with text stacked below.
+
+Two gotchas that cost real debugging time, worth checking every time this pattern is applied to a new section:
+
+1. **Outer wrapper height.** The `-pin` element is only half the story — the outer `<section>` around it usually carries its own huge `min-height` (`.sequence-story` 500dvh, `.world-story` 1300dvh, `.story-bridge` 145dvh — all sized for desktop scroll distance). Fixing only the inner pin leaves a huge blank gap; both need `min-height: auto` on mobile.
+2. **`.is-ready`/`.is-active` opacity traps.** JS toggles classes like `.section.is-ready .child { opacity: 0 }` — a 2-class selector that beats a 1-class mobile override regardless of media query or source order (specificity, not order, decides which rule wins). If a static mobile fallback image was also a JS-driven fade target on desktop (e.g. `.sequence-poster` faded out once the canvas took over), its mobile override needs `opacity: 1 !important` or it silently stays invisible.
+
+Also: a sequence's frame-1/first-image is often a poor static poster for an animated reveal — it may show the intentional "before" composition (half-empty frame, subject off to one side). Check the actual image before using it as a permanent mobile fallback, not just trusting its desktop role as a brief loading placeholder (`.sequence-poster` was switched from `frame-0001.webp` to `frame-0120.webp` for exactly this reason).
+
+Floor-plan SVGs in proof-tour deliberately **shrink to fit** on mobile (`width: 100%`, inherited from the base `.tour-stage svg` rule) rather than requiring horizontal scroll — an earlier `min-width: 760px` + scroll approach was tried and reverted per feedback; small illegible labels + pinch-zoom beat a scrolling diagram.
 
 ## Known bugs fixed this build (context for next session)
 
@@ -76,14 +78,14 @@ Chapter-by-chapter narrative detail, real copy sources, and full asset briefs (s
 
 - `http://127.0.0.1:5174/`
 - Server may not be running in a fresh session — restart with: `python3 -m http.server 5174` from the `P-A` folder.
-- `feat/continuous-world` and `main` are identical as of this session (merged) — either branch is fine to be on.
-- `index.html` uses cache-busting `?v=world-redesign-3` query strings on `styles.css` and `main.js`. When editing those files further, bump the version string (or ask the user to hard-refresh / Cmd+Shift+R) — a plain reload can silently serve stale cached JS/CSS and make a real change look like it did nothing.
-- Live/deployed version: `https://main.d1qibxn0njvfa1.amplifyapp.com` — auto-deploys on push to `main` (see "Live deployment" above).
+- `feat/continuous-world` is stale/behind `main` (see "Current Phase") — stay on `main`.
+- `index.html` uses cache-busting `?v=world-redesign-N` query strings on `styles.css` and `main.js` (N is well past 28 now, always check the current value rather than assuming a number — it gets bumped on every CSS/JS edit this session, ~20+ times). When editing those files further, bump the version string (or ask the user to hard-refresh / Cmd+Shift+R) — a plain reload can silently serve stale cached JS/CSS and make a real change look like it did nothing.
+- Live/deployed version: `https://main.d1qibxn0njvfa1.amplifyapp.com` — auto-deploys on push to `main` (see "Live deployment" above). Verifiable via `aws amplify list-jobs --app-id d1qibxn0njvfa1 --branch-name main --profile personal --region us-east-1` if you need to confirm a push actually built successfully rather than assuming.
 
 Important user instructions:
 
 - Do **not** use Playwright unless the user explicitly asks for it again.
-- Do **not** use claude-in-chrome (or any browser-automation tool) to self-verify visual changes either — this permission was explicitly revoked this session. Make the change, tell the user exactly what to look at, and wait for them to check the local preview themselves. See `[[feedback_no_browser_automation]]` in memory.
+- Do **not** use claude-in-chrome (or any browser-automation tool) to self-verify visual changes either — this permission was explicitly revoked this session. Make the change, tell the user exactly what to look at, and wait for them to check the local preview themselves. See `[[feedback_no_browser_automation]]` in memory. (Researching a *different* site for design reference, on explicit request, is a separate one-off allowance — see "Continuous-World Rebuild" above.)
 
 ## Accepted First-Fold Direction
 
@@ -92,13 +94,13 @@ The first fold currently uses:
 - light infrastructure glass palette
 - `assets/Verified Rack Object.jpeg` as the hero visual
 - lightweight brand and demo navigation
-- minimal blue cursor/caret animation on the hero headline
+- no cursor/caret animation on the hero headline (removed — was a blinking-terminal-caret effect, user asked it gone)
 - left-side copy and proof numbers
 
-Accepted opening copy:
+Accepted opening copy (no trailing periods on the headline — removed per feedback):
 
 - Eyebrow: `Physical infrastructure intelligence for data centers`
-- Headline: `One phone sweep. Verified rack truth.`
+- Headline: `One phone sweep` / `Verified rack truth`
 - Supporting line: `Inventory, ports, cables, topology, and audit evidence reconciled from physical rack reality.`
 - Primary CTA: `Get a demo`
 
@@ -117,6 +119,8 @@ Do not revive the old direction:
 - no boxed/margined visual panel with dead space around it for the rack story — the fix in place is full-bleed (visual fills the whole viewport)
 
 The user likes the current image quality and brand impression; the homepage experience is a high-quality motion-driven scroll story, similar in craft level to sites like Meter without copying them. Meter/Igloo-style "aliveness" was clarified this session to mean: the whole screen is used (no empty space, no small boxed content in a sea of blank background) and text has real editorial presence (large, distinctive, not a generic small left-column block) — not necessarily 3D/WebGL effects. Depth/3D is not off the table long-term, but the immediate lesson was that dead space and weak typography were the actual complaint, not "not enough animation."
+
+Meter's *mobile* pattern was studied concretely in a later session (with explicit one-off browser research permission) and applied: static product image on top, single-column text below, generous stacking, no compressed desktop scroll effects — see "Mobile Responsive Pattern" above.
 
 ## Fixed Color Direction
 
