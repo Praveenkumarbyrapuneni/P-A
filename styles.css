@@ -16,6 +16,65 @@
   --font-mono: "Geist Mono", "SFMono-Regular", Consolas, monospace;
 }
 
+/* Self-hosted so every browser renders identical text metrics — previously
+   these names were declared but never loaded, so each browser fell back to
+   a different system font and wrapped the same copy differently. */
+@font-face {
+  font-family: "Satoshi";
+  src: url("assets/fonts/Satoshi-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("assets/fonts/Satoshi-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("assets/fonts/Satoshi-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("assets/fonts/Satoshi-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("assets/fonts/Satoshi-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("assets/fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("assets/fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -188,10 +247,11 @@ h1 {
   max-width: 680px;
   margin: 0;
   color: var(--ink);
+  font-family: "Times New Roman", Times, Georgia, serif;
   font-size: clamp(50px, 4.82vw, 78px);
-  font-weight: 640;
+  font-weight: 600;
   letter-spacing: 0;
-  line-height: 0.98;
+  line-height: 1.1;
 }
 
 .sequence-intro h1 {
