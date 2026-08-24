@@ -197,14 +197,14 @@ h1 {
 .sequence-intro h1 {
   background: linear-gradient(
     100deg,
-    var(--ink) 0%,
-    var(--ink) 28%,
-    color-mix(in srgb, var(--ink) 35%, var(--white) 65%) 50%,
-    var(--ink) 72%,
-    var(--ink) 100%
+    #000 0%,
+    #000 42%,
+    #ffffff 50%,
+    #000 58%,
+    #000 100%
   );
-  background-size: 280% 100%;
-  background-position: 200% 0;
+  background-size: 200% 100%;
+  background-position: 150% 0;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -213,16 +213,16 @@ h1 {
 
 @media (prefers-reduced-motion: no-preference) {
   .sequence-intro h1 {
-    animation: hero-shimmer 6s linear infinite;
+    animation: hero-shimmer 1.4s linear 1 forwards;
   }
 }
 
 @keyframes hero-shimmer {
   from {
-    background-position: 200% 0;
+    background-position: 150% 0;
   }
   to {
-    background-position: -120% 0;
+    background-position: -50% 0;
   }
 }
 
