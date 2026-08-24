@@ -10,7 +10,6 @@ const WORLD_BEATS = [
 const worldFramePath = (dir, i) =>
   `assets/${dir}/frame-${String(i).padStart(4, "0")}.webp`;
 
-const heroStage = document.querySelector(".hero-stage");
 const sequence = document.querySelector("[data-frame-sequence]");
 const canvas = document.querySelector(".sequence-canvas");
 const sequenceNotes = sequence
@@ -21,7 +20,8 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const desktopHero = window.matchMedia("(min-width: 981px)");
 
 const totalFrames = 240;
-const handoffEnd = 0.015;
+const startFrame = 5;
+const introEnd = 0.12;
 const framePath = (index) =>
   `assets/phone-scan-2-frames-webp/frame-${String(index).padStart(4, "0")}.webp`;
 
@@ -31,7 +31,7 @@ const loaded = new Set();
 let context;
 let canvasWidth = 0;
 let canvasHeight = 0;
-let activeFrame = 1;
+let activeFrame = startFrame;
 let renderedFrame = 0;
 let needsResize = true;
 let ready = false;
@@ -93,7 +93,7 @@ function loadFrame(index) {
   image.src = framePath(index);
   image.onload = () => {
     loaded.add(index);
-    if (!ready && index === 1) {
+    if (!ready && index === startFrame) {
       ready = true;
       sequence.classList.add("is-ready");
       drawFrame(index);
@@ -104,9 +104,9 @@ function loadFrame(index) {
 }
 
 function preloadInitialFrames() {
-  loadFrame(1);
+  loadFrame(startFrame);
 
-  for (let index = 2; index <= 36; index += 1) {
+  for (let index = startFrame + 1; index <= 36; index += 1) {
     loadFrame(index);
   }
 }
@@ -170,7 +170,7 @@ function nearestLoadedFrame(target) {
     }
   }
 
-  return 1;
+  return startFrame;
 }
 
 function drawCover(targetContext, targetWidth, targetHeight, image) {
@@ -221,39 +221,36 @@ function sequenceProgress() {
 }
 
 function updateHeroMediaState() {
-  if (!heroStage || !sequence) {
+  if (!sequence) {
     return;
   }
 
   if (reduceMotion.matches || !desktopHero.matches) {
-    heroStage.style.setProperty("--hero-media-opacity", "1");
     sequence.style.setProperty("--handoff-visibility", "1");
     return;
   }
-
-  // ponytail: fade keyed off the hero shell's own scroll-out, not the scan
-  // sequence below it — "What RackTrack Is" now sits between them, and the
-  // old rect.top-on-sequence trigger never fired while scrolling that section,
-  // leaving the fixed hero photo painted over it the whole way through.
-  const heroRect = heroStage.getBoundingClientRect();
-  const opacity = clamp(heroRect.bottom / 80);
-  heroStage.style.setProperty("--hero-media-opacity", opacity.toFixed(3));
 
   const rect = sequence.getBoundingClientRect();
   const reveal = 1 - clamp(rect.top / 80);
   sequence.style.setProperty("--handoff-visibility", reveal.toFixed(3));
 }
 
-function updateHandoff(progress) {
-  const sequenceOpacity = smooth(0, 0.05, progress);
-  const bridgeOpacity = 1 - smooth(0, 0.05, progress);
-
-  sequence.style.setProperty("--bridge-opacity", bridgeOpacity.toFixed(3));
-  sequence.style.setProperty("--sequence-opacity", sequenceOpacity.toFixed(3));
+function animationProgress(progress) {
+  return clamp((progress - introEnd) / (1 - introEnd));
 }
 
-function animationProgress(progress) {
-  return clamp((progress - handoffEnd) / (1 - handoffEnd));
+function updateSequenceIntro(progress) {
+  if (!sequence) {
+    return;
+  }
+
+  if (reduceMotion.matches) {
+    sequence.style.setProperty("--intro-opacity", "0");
+    return;
+  }
+
+  const opacity = 1 - smooth(0, introEnd, progress);
+  sequence.style.setProperty("--intro-opacity", opacity.toFixed(3));
 }
 
 function updateSequenceNarrative(progress) {
@@ -261,7 +258,7 @@ function updateSequenceNarrative(progress) {
     return;
   }
 
-  const progressAfterHandoff = animationProgress(progress);
+  const progressAfterIntro = animationProgress(progress);
 
   if (reduceMotion.matches) {
     sequence.style.setProperty("--narrative-opacity", "1");
@@ -275,13 +272,13 @@ function updateSequenceNarrative(progress) {
 
   const activeIndex = Math.min(
     sequenceNotes.length - 1,
-    Math.floor(clamp(progressAfterHandoff * sequenceNotes.length, 0, sequenceNotes.length - 0.001))
+    Math.floor(clamp(progressAfterIntro * sequenceNotes.length, 0, sequenceNotes.length - 0.001))
   );
-  const opacity = smooth(0.035, 0.09, progress) * (1 - smooth(0.96, 1, progress));
+  const opacity = smooth(introEnd, introEnd + 0.06, progress) * (1 - smooth(0.96, 1, progress));
 
   sequence.style.setProperty("--narrative-opacity", opacity.toFixed(3));
   sequence.style.setProperty("--narrative-y", `${((1 - opacity) * 18).toFixed(2)}px`);
-  sequence.style.setProperty("--sequence-note-progress", progressAfterHandoff.toFixed(3));
+  sequence.style.setProperty("--sequence-note-progress", progressAfterIntro.toFixed(3));
   sequenceNotes.forEach((note, index) => {
     note.classList.toggle("is-active", index === activeIndex);
   });
@@ -716,16 +713,17 @@ function renderLoop() {
   worldSequences.forEach((seq) => seq.update());
 
   const progress = sequenceProgress();
+  updateSequenceIntro(progress);
   updateSequenceNarrative(progress);
 
   if (reduceMotion.matches) {
     activeFrame = Math.round(totalFrames * 0.62);
-    sequence.style.setProperty("--handoff-visibility", "1");
-    sequence.style.setProperty("--bridge-opacity", "0");
-    sequence.style.setProperty("--sequence-opacity", "1");
   } else {
-    updateHandoff(progress);
-    activeFrame = clamp(Math.round(1 + animationProgress(progress) * (totalFrames - 1)), 1, totalFrames);
+    activeFrame = clamp(
+      Math.round(startFrame + animationProgress(progress) * (totalFrames - startFrame)),
+      startFrame,
+      totalFrames
+    );
   }
 
   const loadedFrame = nearestLoadedFrame(activeFrame);

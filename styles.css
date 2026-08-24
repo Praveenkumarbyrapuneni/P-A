@@ -111,12 +111,6 @@ body.is-sequencing .site-header {
   opacity: 1;
 }
 
-.brand,
-.hero-actions {
-  display: flex;
-  align-items: center;
-}
-
 .brand {
   display: flex;
   align-items: center;
@@ -174,146 +168,6 @@ body.is-sequencing .site-header {
   transform: translateY(1px) scale(0.99);
 }
 
-.hero-shell {
-  position: relative;
-  /* ponytail: 2 beats (100dvh each) + ~35dvh buffer before the hero photo
-     fades and hands off to the scan sequence, same buffer ratio as before. */
-  min-height: 235dvh;
-  overflow: visible;
-  isolation: isolate;
-}
-
-.hero-stage {
-  position: relative;
-  display: grid;
-  min-height: 235dvh;
-  overflow: visible;
-  isolation: isolate;
-}
-
-.hero-media {
-  position: fixed;
-  inset: 0;
-  grid-area: 1 / 1;
-  z-index: 0;
-  height: 100dvh;
-  overflow: hidden;
-  opacity: var(--hero-media-opacity, 1);
-  pointer-events: none;
-}
-
-.hero-photo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  filter: saturate(0.94) brightness(1.03) contrast(1.02);
-}
-
-.media-wash {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(247, 250, 255, 0.96) 0%, rgba(247, 250, 255, 0.78) 32%, rgba(238, 245, 255, 0.04) 58%, rgba(238, 245, 255, 0) 100%),
-    linear-gradient(180deg, rgba(247, 250, 255, 0), rgba(247, 250, 255, 0.08));
-}
-
-.hero-copy-layer {
-  grid-area: 1 / 1;
-  position: relative;
-  z-index: 2;
-  padding: 0 clamp(18px, 4vw, 64px);
-}
-
-.hero-beat {
-  display: flex;
-  min-height: 100dvh;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.hero-beat-primary {
-  padding: 108px 0 154px;
-}
-
-.hero-beat-about {
-  padding: 64px 0;
-}
-
-.hero-content {
-  width: min(680px, 52vw);
-}
-
-.hero-about-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  width: min(580px, 46vw);
-}
-
-.hero-beat-about h2 {
-  max-width: 14ch;
-  margin: 0 0 18px;
-  color: var(--ink);
-  font-size: clamp(30px, 3.2vw, 44px);
-  font-weight: 640;
-  letter-spacing: -0.01em;
-  line-height: 1.05;
-}
-
-.hero-about-copy {
-  max-width: 42ch;
-  margin: 0;
-  color: var(--muted);
-  font-size: clamp(17px, 1.35vw, 20px);
-  line-height: 1.5;
-}
-
-/* Restored capture-to-structured-record panel — opaque card so it stays
-   crisp and legible over the hero photo instead of the light cloud ground
-   it originally sat on. */
-.truth-figure {
-  margin: 0;
-}
-
-.truth-figure-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--steel);
-  padding-bottom: 10px;
-  margin-bottom: 16px;
-}
-
-.truth-figure-head figcaption {
-  font-family: var(--font-ui);
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.truth-figure-tag {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-}
-
-.truth-figure-frame {
-  border: 1px solid var(--steel);
-  background: var(--white);
-  box-shadow: 0 24px 60px rgba(16, 32, 51, 0.14);
-  padding: 20px 28px;
-}
-
-.truth-figure-frame svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
 .eyebrow {
   margin: 0 0 18px;
   color: var(--blue);
@@ -340,21 +194,40 @@ h1 {
   line-height: 0.98;
 }
 
+.sequence-intro h1 {
+  background: linear-gradient(
+    100deg,
+    var(--ink) 0%,
+    var(--ink) 28%,
+    color-mix(in srgb, var(--ink) 35%, var(--white) 65%) 50%,
+    var(--ink) 72%,
+    var(--ink) 100%
+  );
+  background-size: 280% 100%;
+  background-position: 200% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sequence-intro h1 {
+    animation: hero-shimmer 6s linear infinite;
+  }
+}
+
+@keyframes hero-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+
 h1 span {
   display: block;
-}
-
-.hero-copy {
-  max-width: 52ch;
-  margin: 24px 0 0;
-  color: var(--muted);
-  font-size: clamp(18px, 1.55vw, 22px);
-  line-height: 1.42;
-}
-
-.hero-actions {
-  gap: 12px;
-  margin-top: 28px;
 }
 
 .button-primary {
@@ -370,44 +243,6 @@ h1 span {
   font-size: 15px;
   font-weight: 650;
   transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
-}
-
-.proof-panel {
-  position: absolute;
-  left: clamp(18px, 4vw, 64px);
-  top: calc(100dvh - 120px);
-  display: grid;
-  width: min(620px, calc(100% - 36px));
-  grid-template-columns: repeat(3, 1fr);
-  overflow: hidden;
-  border: 1px solid rgba(217, 231, 246, 0.76);
-  border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.58);
-  box-shadow: 0 18px 52px rgba(42, 76, 119, 0.08);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-}
-
-.proof-panel div {
-  padding: 16px 18px;
-}
-
-.proof-panel div + div {
-  border-left: 1px solid rgba(217, 231, 246, 0.78);
-}
-
-.proof-panel span {
-  display: block;
-  color: var(--ink);
-  font-family: var(--font-mono);
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.proof-panel p {
-  margin: 5px 0 0;
-  color: var(--muted);
-  font-size: 13px;
 }
 
 .sequence-story {
@@ -435,20 +270,6 @@ h1 span {
   transition: opacity 140ms linear;
 }
 
-.sequence-bridge {
-  grid-area: 1 / 1;
-  z-index: 3;
-  width: 100%;
-  height: 100dvh;
-  object-fit: cover;
-  object-position: center center;
-  opacity: var(--bridge-opacity, 1);
-  filter: saturate(0.94) brightness(1.03) contrast(1.02);
-  transform: none;
-  transform-origin: center center;
-  will-change: opacity;
-}
-
 .sequence-poster,
 .sequence-canvas {
   grid-area: 1 / 1;
@@ -467,16 +288,12 @@ h1 span {
 .sequence-canvas {
   z-index: 2;
   display: block;
-  opacity: var(--sequence-opacity, 0);
-  transition: opacity 260ms ease;
-}
-
-.sequence-story.is-ready .sequence-canvas {
-  opacity: var(--sequence-opacity, 0);
+  opacity: 1;
 }
 
 .sequence-story.is-ready .sequence-poster {
   opacity: 0;
+  transition: opacity 260ms ease;
 }
 
 .sequence-scrim {
@@ -489,6 +306,76 @@ h1 span {
   opacity: var(--narrative-opacity, 0);
   transition: opacity 260ms ease;
   pointer-events: none;
+}
+
+.sequence-intro {
+  grid-area: 1 / 1;
+  z-index: 5;
+  position: relative;
+  align-self: center;
+  justify-self: start;
+  width: min(680px, 52vw);
+  margin-left: clamp(18px, 4vw, 64px);
+  opacity: var(--intro-opacity, 1);
+  transition: opacity 200ms linear;
+}
+
+.hero-copy {
+  max-width: 52ch;
+  margin: 24px 0 0;
+  color: var(--muted);
+  font-size: clamp(18px, 1.55vw, 22px);
+  line-height: 1.42;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.proof-panel {
+  grid-area: 1 / 1;
+  z-index: 5;
+  position: relative;
+  align-self: end;
+  justify-self: start;
+  display: grid;
+  width: min(620px, calc(100% - 36px));
+  margin: 0 0 clamp(36px, 6vh, 64px) clamp(18px, 4vw, 64px);
+  grid-template-columns: repeat(3, 1fr);
+  overflow: hidden;
+  border: 1px solid rgba(217, 231, 246, 0.76);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: 0 18px 52px rgba(42, 76, 119, 0.08);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  opacity: var(--intro-opacity, 1);
+  transition: opacity 200ms linear;
+}
+
+.proof-panel div {
+  padding: 16px 18px;
+}
+
+.proof-panel div + div {
+  border-left: 1px solid rgba(217, 231, 246, 0.78);
+}
+
+.proof-panel span {
+  display: block;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.proof-panel p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .sequence-progress {
@@ -1581,10 +1468,6 @@ h1 span {
     position: relative;
   }
 
-  .sequence-bridge {
-    opacity: 0;
-  }
-
   .sequence-canvas {
     opacity: 1;
   }
@@ -1679,11 +1562,6 @@ h1 span {
     display: none;
   }
 
-  .hero-shell,
-  .hero-stage {
-    min-height: auto;
-  }
-
   /* These three outer sections carry huge fixed heights (500dvh/1300dvh/
      145dvh) — that's scroll-scrubbing distance for the desktop pinned
      canvas, reserved as pure blank space now that their content is static
@@ -1692,55 +1570,6 @@ h1 span {
   .story-bridge,
   .world-story {
     min-height: auto;
-  }
-
-  .hero-stage {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    padding-top: 104px;
-  }
-
-  /* ponytail: static image band behind just the headline, not the whole
-     stack — inset:0 + height:auto is an unresolved edge case (CSS 2.1
-     §10.6.4: an absolute box with both top and bottom set ignores
-     height:auto), so the photo was stretching to the full combined height
-     of both hero beats instead of staying a normal-sized band. An explicit
-     height sidesteps that; below it the page's own background shows, and
-     the "What RackTrack Is" beat sits on that instead of a stretched photo. */
-  .hero-media {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 64vh;
-  }
-
-  .hero-copy-layer {
-    padding: 0 18px 28px;
-  }
-
-  .hero-beat {
-    min-height: auto;
-    padding: 0;
-  }
-
-  .hero-beat-about {
-    margin-top: 40px;
-  }
-
-  .hero-content {
-    width: 100%;
-  }
-
-  .hero-about-grid {
-    width: 100%;
-  }
-
-  .proof-panel {
-    position: static;
-    width: 100%;
-    margin-top: 34px;
   }
 
   h1 {
@@ -1758,7 +1587,6 @@ h1 span {
     opacity: 1;
   }
 
-  .sequence-bridge,
   .sequence-canvas,
   .sequence-scrim,
   .sequence-progress {
@@ -1776,6 +1604,22 @@ h1 span {
        still wins inside this media query since specificity beats source
        order, so it has to be forced back on here. */
     opacity: 1 !important;
+  }
+
+  .sequence-intro {
+    position: static;
+    width: 100%;
+    margin: 24px 0 0;
+    padding: 0 18px;
+    opacity: 1;
+  }
+
+  .proof-panel {
+    position: static;
+    width: 100%;
+    margin: 24px 0 0;
+    padding: 0 18px;
+    opacity: 1;
   }
 
   .sequence-narrative {
@@ -1990,38 +1834,14 @@ h1 span {
     padding-inline: 13px;
   }
 
-  .hero-stage {
-    padding-inline: 18px;
-    padding-bottom: 24px;
-  }
-
   .eyebrow {
     max-width: 28ch;
     margin-bottom: 14px;
     font-size: 11px;
   }
 
-  .hero-copy {
-    max-width: 34ch;
-    margin-top: 20px;
-    font-size: 17px;
-  }
-
-  .hero-actions {
-    flex-wrap: wrap;
-  }
-
   .button-primary {
     width: 100%;
-  }
-
-  .proof-panel {
-    grid-template-columns: 1fr;
-  }
-
-  .proof-panel div + div {
-    border-top: 1px solid rgba(217, 231, 246, 0.78);
-    border-left: 0;
   }
 
   .sequence-narrative {
