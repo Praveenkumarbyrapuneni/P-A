@@ -7,8 +7,9 @@ const WORLD_BEATS = [
   { key: "scale",      frames: 54,  dir: "scale-frames-webp" },
   { key: "outcomes",   frames: 57,  dir: "outcomes-frames-webp" },
 ];
+const WORLD_FRAME_ROOT = "homepage-lower-animation";
 const worldFramePath = (dir, i) =>
-  `assets/${dir}/frame-${String(i).padStart(4, "0")}.webp`;
+  `${WORLD_FRAME_ROOT}/${dir}/frame-${String(i).padStart(4, "0")}.webp`;
 
 const sequence = document.querySelector("[data-frame-sequence]");
 const canvas = document.querySelector(".sequence-canvas");
@@ -23,7 +24,7 @@ const totalFrames = 240;
 const startFrame = 5;
 const introEnd = 0.12;
 const framePath = (index) =>
-  `assets/phone-scan-2-frames-webp/frame-${String(index).padStart(4, "0")}.webp`;
+  `homepage-hero-animation/frame-${String(index).padStart(4, "0")}.webp`;
 
 const frames = new Array(totalFrames + 1);
 const loaded = new Set();
@@ -688,8 +689,11 @@ function updateHeaderState() {
 
   const sequenceRect = sequence.getBoundingClientRect();
   const bridgeRect = storyBridge ? storyBridge.getBoundingClientRect() : null;
+  const scanProgress = sequenceProgress();
   const sequenceActive =
-    sequenceRect.top < window.innerHeight * 0.22 && sequenceRect.bottom > window.innerHeight * 0.42;
+    scanProgress > 0.035 &&
+    sequenceRect.top < window.innerHeight * 0.22 &&
+    sequenceRect.bottom > window.innerHeight * 0.42;
   const bridgeActive = bridgeRect
     ? bridgeRect.top < window.innerHeight * 0.18 && bridgeRect.bottom > window.innerHeight * 0.5
     : false;

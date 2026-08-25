@@ -5,6 +5,8 @@
   --ink: #102033;
   --muted: #53667d;
   --blue: #2457d6;
+  --royal: #143f9f;
+  --copy-strong: #263a52;
   --scan: #7dbdff;
   --verified: #43b883;
   --amber: #d99a2b;
@@ -12,6 +14,7 @@
   --radius-sm: 10px;
   --radius-md: 18px;
   --shadow-soft: 0 28px 90px rgba(49, 93, 148, 0.18);
+  --font-display: "Geist", "Satoshi", "Aptos", "Segoe UI", system-ui, sans-serif;
   --font-ui: "Satoshi", "Geist", "Aptos", "Segoe UI", system-ui, sans-serif;
   --font-mono: "Geist Mono", "SFMono-Regular", Consolas, monospace;
 }
@@ -92,6 +95,9 @@ body {
   color: var(--ink);
   font-family: var(--font-ui);
   letter-spacing: 0;
+  font-kerning: normal;
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
 }
 
 body::before {
@@ -136,7 +142,7 @@ a {
   right: 0;
   z-index: 60;
   display: grid;
-  width: min(1480px, calc(100% - 72px));
+  width: calc(100% - 72px);
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 18px;
@@ -154,57 +160,88 @@ body.is-sequencing .site-header {
   display: flex;
   justify-content: center;
   gap: 30px;
+  transform: translateX(140px);
   pointer-events: auto;
 }
 
 .site-nav a {
-  color: var(--ink);
-  opacity: 0.72;
+  position: relative;
+  color: var(--copy-strong);
+  opacity: 1;
   font-size: 14px;
   font-weight: 550;
-  letter-spacing: -0.005em;
-  transition: opacity 150ms ease;
+  letter-spacing: 0;
+  transition: color 150ms ease, opacity 150ms ease;
 }
 
-.site-nav a:hover {
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -7px;
+  left: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--royal);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 180ms ease;
+}
+
+.site-nav a:hover,
+.site-nav a:focus-visible {
+  color: var(--ink);
   opacity: 1;
+}
+
+.site-nav a:hover::after,
+.site-nav a:focus-visible::after {
+  transform: scaleX(1);
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 12px;
+  margin-left: 0;
   width: fit-content;
   pointer-events: auto;
 }
 
 .brand-mark {
   display: block;
-  width: 26px;
-  height: 26px;
+  width: 34px;
+  height: 34px;
+  background: var(--ink);
+  -webkit-mask-image: url("assets/logo.jpg");
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-mode: luminance;
+  mask-image: url("assets/logo.jpg");
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-mode: luminance;
 }
 
-/* logo.jpg is a white "R" on a solid black square — invert flips that to
-   a dark mark on white, then multiply-blend makes the white drop out
-   against the page background, leaving just the mark with no visible box. */
 .brand-mark img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: invert(1);
-  mix-blend-mode: multiply;
+  display: none;
 }
 
 .brand-name {
   color: var(--ink);
-  font-size: 19px;
-  font-weight: 650;
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
 }
 
 .nav-cta {
   justify-self: end;
+  position: relative;
+  left: -48px;
   border: 1px solid rgba(36, 87, 214, 0.18);
   border-radius: 999px;
   background: var(--blue);
@@ -229,12 +266,18 @@ body.is-sequencing .site-header {
 
 .eyebrow {
   margin: 0 0 18px;
-  color: var(--blue);
+  color: var(--royal);
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 650;
-  letter-spacing: 0.055em;
+  font-size: 12px;
+  font-weight: 760;
+  letter-spacing: 0;
   text-transform: uppercase;
+}
+
+.sequence-intro .eyebrow {
+  font-size: 14px;
+  line-height: 1.25;
+  text-shadow: 0 1px 18px rgba(255, 255, 255, 0.58);
 }
 
 h1,
@@ -244,24 +287,25 @@ p {
 }
 
 h1 {
-  max-width: 680px;
+  max-width: 660px;
   margin: 0;
   color: var(--ink);
-  font-family: "Times New Roman", Times, Georgia, serif;
-  font-size: clamp(50px, 4.82vw, 78px);
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 68px;
+  font-weight: 720;
   letter-spacing: 0;
-  line-height: 1.1;
+  line-height: 1.02;
+  text-wrap: balance;
 }
 
 .sequence-intro h1 {
   background: linear-gradient(
     100deg,
-    #000 0%,
-    #000 42%,
+    var(--ink) 0%,
+    var(--ink) 42%,
     #ffffff 50%,
-    #000 58%,
-    #000 100%
+    var(--ink) 58%,
+    var(--ink) 100%
   );
   background-size: 200% 100%;
   background-position: 150% 0;
@@ -374,18 +418,20 @@ h1 span {
   position: relative;
   align-self: center;
   justify-self: start;
-  width: min(680px, 52vw);
+  width: min(620px, 48vw);
   margin-left: clamp(18px, 4vw, 64px);
   opacity: var(--intro-opacity, 1);
   transition: opacity 200ms linear;
 }
 
 .hero-copy {
-  max-width: 52ch;
-  margin: 24px 0 0;
-  color: var(--muted);
-  font-size: clamp(18px, 1.55vw, 22px);
-  line-height: 1.42;
+  max-width: 48ch;
+  margin: 26px 0 0;
+  color: var(--copy-strong);
+  font-size: 19px;
+  font-weight: 520;
+  line-height: 1.55;
+  text-shadow: 0 1px 20px rgba(255, 255, 255, 0.52);
 }
 
 .hero-actions {
@@ -434,8 +480,9 @@ h1 span {
 
 .proof-panel p {
   margin: 5px 0 0;
-  color: var(--muted);
+  color: var(--copy-strong);
   font-size: 13px;
+  font-weight: 500;
 }
 
 .sequence-progress {
@@ -499,9 +546,11 @@ h1 span {
   max-width: 15ch;
   margin: 0;
   color: var(--white);
+  font-family: var(--font-display);
   font-size: 30px;
-  font-weight: 640;
-  line-height: 1.06;
+  font-weight: 680;
+  letter-spacing: 0;
+  line-height: 1;
   text-shadow: 0 2px 18px rgba(16, 32, 51, 0.35);
 }
 
@@ -570,10 +619,11 @@ h1 span {
   max-width: 14ch;
   margin: 0;
   color: var(--ink);
-  font-size: clamp(38px, 4vw, 68px);
-  font-weight: 640;
+  font-family: var(--font-display);
+  font-size: 62px;
+  font-weight: 720;
   letter-spacing: 0;
-  line-height: 1;
+  line-height: 0.94;
   text-wrap: balance;
 }
 
@@ -581,7 +631,8 @@ h1 span {
   max-width: 41ch;
   margin: 20px 0 0;
   color: var(--muted);
-  font-size: clamp(15px, 1.12vw, 17px);
+  font-size: 17px;
+  font-weight: 500;
   line-height: 1.55;
 }
 
@@ -655,8 +706,10 @@ h1 span {
 .evidence-card h3 {
   margin: 0;
   color: var(--ink);
-  font-size: clamp(26px, 2vw, 34px);
-  font-weight: 640;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 680;
+  letter-spacing: 0;
   line-height: 1;
 }
 
@@ -896,8 +949,10 @@ h1 span {
   max-width: 14ch;
   margin: 0;
   color: var(--ink);
+  font-family: var(--font-display);
   font-size: 34px;
-  font-weight: 640;
+  font-weight: 680;
+  letter-spacing: 0;
   line-height: 1.05;
 }
 
@@ -1058,10 +1113,12 @@ h1 span {
   max-width: 15ch;
   margin: 0;
   color: var(--ink);
-  font-size: clamp(42px, 5.4vw, 82px);
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 82px;
+  font-weight: 720;
   line-height: 0.98;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
+  text-wrap: balance;
 }
 
 .world-note span {
@@ -1070,7 +1127,8 @@ h1 span {
   margin-top: 26px;
   color: var(--ink);
   opacity: 0.72;
-  font-size: clamp(15px, 1.2vw, 18px);
+  font-size: 18px;
+  font-weight: 450;
   line-height: 1.55;
 }
 
@@ -1095,10 +1153,12 @@ h1 span {
 .proof-tour-head h2 {
   margin: 0;
   color: var(--ink);
-  font-size: clamp(30px, 3.6vw, 48px);
-  font-weight: 640;
-  letter-spacing: -0.015em;
-  line-height: 1.08;
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 720;
+  letter-spacing: 0;
+  line-height: 0.98;
+  text-wrap: balance;
 }
 
 .app-frame {
@@ -1147,7 +1207,7 @@ h1 span {
   font-size: 14px;
   font-weight: 600;
   color: var(--ink);
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 .app-brand img {
@@ -1437,6 +1497,11 @@ h1 span {
     padding: 0 4px;
   }
 
+  .proof-tour-head h2 {
+    font-size: 38px;
+    line-height: 1;
+  }
+
   .app-frame {
     border-radius: 8px;
   }
@@ -1610,10 +1675,37 @@ h1 span {
   }
 }
 
+@media (max-width: 1280px) and (min-width: 981px) {
+  .sequence-intro {
+    width: 520px;
+    margin-left: 42px;
+  }
+
+  h1 {
+    max-width: 520px;
+    font-size: 58px;
+    line-height: 1.04;
+  }
+
+  .hero-copy {
+    max-width: 40ch;
+    font-size: 17px;
+  }
+
+  .proof-panel {
+    width: min(640px, calc(100% - 84px));
+    margin-left: 42px;
+  }
+}
+
 @media (max-width: 980px) {
   .site-header {
     width: calc(100% - 36px);
     grid-template-columns: 1fr auto;
+  }
+
+  .brand {
+    margin-left: 0;
   }
 
   /* No hamburger menu built yet — nav links drop out on mobile, brand + CTA
@@ -1633,8 +1725,9 @@ h1 span {
   }
 
   h1 {
-    max-width: 9ch;
-    font-size: clamp(38px, 10.5vw, 60px);
+    max-width: 12ch;
+    font-size: 50px;
+    line-height: 1.02;
   }
 
   /* The scan sequence is a scroll-scrubbed canvas (240 frames) — on mobile,
@@ -1805,7 +1898,7 @@ h1 span {
 
   .world-note h2 {
     max-width: 15ch;
-    font-size: clamp(28px, 8vw, 40px);
+    font-size: 36px;
     color: var(--ink);
   }
 
@@ -1834,7 +1927,7 @@ h1 span {
 
   .bridge-copy h2 {
     max-width: 15ch;
-    font-size: clamp(34px, 8.8vw, 52px);
+    font-size: 44px;
   }
 
   .bridge-copy p:not(.eyebrow) {
@@ -1890,6 +1983,15 @@ h1 span {
     display: none;
   }
 
+  .brand {
+    margin-left: 0;
+  }
+
+  .brand-mark {
+    width: 29px;
+    height: 29px;
+  }
+
   .nav-cta {
     padding-inline: 13px;
   }
@@ -1902,6 +2004,15 @@ h1 span {
 
   .button-primary {
     width: 100%;
+  }
+
+  h1 {
+    font-size: 38px;
+    line-height: 1.04;
+  }
+
+  .hero-copy {
+    font-size: 16.5px;
   }
 
   .sequence-narrative {
@@ -1961,6 +2072,18 @@ h1 span {
   .bridge-layers span {
     font-size: 9.5px;
     padding: 8px 9px;
+  }
+
+  .world-note h2 {
+    font-size: 30px;
+  }
+
+  .bridge-copy h2 {
+    font-size: 34px;
+  }
+
+  .proof-tour-head h2 {
+    font-size: 30px;
   }
 
   .split-note h2 {
