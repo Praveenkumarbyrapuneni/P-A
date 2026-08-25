@@ -4,13 +4,23 @@
 
 We are rebuilding RackTrack page by page inside this `P-A` folder, entirely on `main` now.
 
-**Chapters 1-3, the continuous-world rack story (4-8), the floor-plan proof-tour walkthrough, and the site footer are all built, accepted, and live.** `feat/continuous-world` is 16 commits behind `main` and can be deleted — nothing lives only on it. `.worktrees/legacy-sections-port` (branch `worktree-legacy-sections-port`) is also stale (sits at `61de89d`, pre-dates most of the current build) and clean — safe to remove if unused. Chapter 9 (Final CTA) is the only homepage piece **not yet built** — static bookend reusing the hero image, same pattern as Chapter 1, no video needed.
+**Chapters 1-3, the continuous-world rack story (4-8), the floor-plan proof-tour walkthrough, the site footer, the Why RackTrack page, and the Contact page are built on `main`.** `feat/continuous-world` is stale and nothing lives only on it. `.worktrees/legacy-sections-port` (branch `worktree-legacy-sections-port`) is also stale and should not be used for new work. Chapter 9 (Final CTA) is the only homepage piece **not yet built** — static bookend reusing the hero image, same pattern as Chapter 1, no video needed.
 
 **Live deployment:** the site is deployed via AWS Amplify Hosting, connected to the private GitHub repo `Praveenkumarbyrapuneni/P-A`, auto-building on every push to `main`. Amplify app details: app id `d1qibxn0njvfa1`, URL `https://main.d1qibxn0njvfa1.amplifyapp.com`, AWS account `984126996103` ("Vsoln" — this is Praveen's **personal** AWS account, not a client account, see `[[reference_vsoln_aws_account]]` in memory). Build settings: no build command (static site), output directory `/`. `enableAutoBuild` had to be manually turned on after the first console-connected deploy — it defaulted off, so the merge didn't auto-deploy until that was fixed and a manual `start-job` was triggered.
 
 **Caching (fixed, app-level, not in the repo):** the app had zero custom cache headers configured, so CloudFront applied its default caching to every file including `index.html` — teammates were seeing stale versions after pushes. Fixed via `aws amplify update-app --app-id d1qibxn0njvfa1 --custom-headers '{"customHeaders":[{"pattern":"**/*","headers":[{"key":"Cache-Control","value":"no-cache, no-store, must-revalidate"}]}]}' --profile personal --region us-east-1`, then a manual `start-job` (RELEASE) to force CloudFront to drop what it already had cached — the header change alone doesn't retroactively invalidate existing edge caches. This is intentionally aggressive (every file revalidates on every load, not just HTML) because the site is still under active iteration and correctness matters more than speed right now. Revisit before a real launch: keep `no-cache` on `index.html` only, let static assets (images, `*-frames-webp/`) cache normally with a real `max-age`.
 
 The existing `/Users/praveen/Desktop/Racktrack_Website` folder is the content and business reference only (real copy, claims, and a few directly-reusable light-palette images have come from its `docs/RackTrack-Website-Content.md` and `assets/` folder). Use its data and claims, but build the new experience here.
+
+## New Page Experiences
+
+`why-racktrack.html` and `contact.html` are local, static-site routes in this repository. They do not link to the Desktop source folder or external image URLs.
+
+- **Why RackTrack:** a full-width light infrastructure field with the three-layer message (Perceive, Reconcile, Cognize), interactive `01 / 03` verification controls, generated local rack imagery, proof statements, and sticky evidence cards.
+- **Contact:** a full-width contact experience with an animated canvas reconciliation field, pointer response, scan replay control, contact details, platform-brief form, email handoff, and FAQ accordions.
+- **Page scripts:** `why-racktrack.js` handles the verification manifest; `contact.js` handles form validation/email preparation and the animated network field.
+- **Generated assets:** active Why RackTrack visuals live in `assets/why-racktrack/`. The original user-provided upload folder is retained at `why-rack-track-assets/` for provenance; the live pages use the normalized copies under `assets/why-racktrack/`.
+- **Primary CTA routes:** homepage and Why RackTrack demo CTAs route to `contact.html`; local footer and navigation links use repository-relative paths.
 
 ## Continuous-World Rebuild (accepted, merged to `main`)
 
@@ -24,7 +34,7 @@ Ambient particle field (`createParticles()` in `main.js`, drifting scan-blue mot
 
 **Critical workflow rule, still in force:** do **not** use claude-in-chrome (or Playwright) to self-verify visual changes on this site. Make the change, describe exactly what to look at, and wait for the user to check and report back. One narrow exception happened this session: opening a *different* site (meter.com) purely to study a mobile design pattern, on explicit request — that was a one-off grant, not standing permission. See `[[feedback_no_browser_automation]]` in memory.
 
-## Build Progress (as of commit `789d438`, all on `main`)
+## Build Progress (current `main`)
 
 Actual section order in `index.html`: `.hero-shell` → scan (`data-frame-sequence`) → `.story-bridge` → `.world-story` → `.proof-tour` → `.site-footer`. No Chapter 9 section exists yet.
 
@@ -36,6 +46,8 @@ Actual section order in `index.html`: `.hero-shell` → scan (`data-frame-sequen
 | 4-8 | Rack story (Perceive → Outcomes) | Built & accepted, merged to `main`. One continuous `.world-story` section — see "Continuous-World Rebuild" above. Note labels are plain text now too. |
 | — | Floor-plan proof tour | Built & accepted. `.proof-tour` — see "Proof Tour" section below. |
 | 9 | Final CTA | **Not built.** Next real work item. No video needed — reuse `assets/Verified Rack Object.jpeg`, static like the hero, CTA as live HTML/CSS. |
+| — | Why RackTrack | Built. `why-racktrack.html` uses local generated imagery, a three-layer explanation, interactive verification steps, and sticky evidence cards. |
+| — | Contact | Built. `contact.html` uses local assets, a canvas reconciliation scene, validated brief request form, direct contact details, and FAQ content. |
 | — | Footer | Built & accepted. `.site-footer` — see "Footer & Header Logo" section below. |
 
 Chapter-by-chapter narrative detail, real copy sources, and full asset briefs (start/end frame + Flow prompt) for every chapter live in `docs/03-homepage-storyboard.md` — that file is the single source of truth for chapter content, keep it that way rather than duplicating chapter descriptions here. Note: the storyboard doc still describes Ch4-8 in the old five-section framing — treat "Continuous-World Rebuild" above as authoritative for how they're actually implemented; only the narrative/copy/asset-brief content in the storyboard doc is still current.
@@ -48,9 +60,9 @@ Chapter-by-chapter narrative detail, real copy sources, and full asset briefs (s
 
 **Proof tour:** `<section class="proof-tour" data-proof-tour>` → `.app-frame` (browser-chrome mockup: `.app-bar` with crumbs/count, `.tour-stage` with 6 `.tour-view[data-view]` SVGs — ported byte-for-byte from the old site's source with colors substituted to our CSS variables — `.tour-point` mascot+callout overlay positioned per step via `--point-x`/`--point-y` custom properties read from each SVG's own highlight-box coordinates). `initProofTour()` in `main.js` drives Prev/Next, crumb, counter, and pointer position. Real per-step tooltip text and end-of-tour Next-disable are a genuine fix over the old site's version, which had these as dead/unwired markup — don't assume "ported from the old site" means "fully working," verify the JS wiring.
 
-**Footer & header logo:** `.site-footer` — Platform/Company/Contact columns, links are `href="#"` placeholders (pages not built). `assets/logo.jpg` (white R on black) renders in the header via `filter: invert(1); mix-blend-mode: multiply` for a dark mark with no visible box; `assets/RackTrack-Logo.jpg` (full mark+wordmark lockup on a black tile) is used as-is in the footer.
+**Footer & header logo:** `.site-footer` — Platform/Company/Contact columns use repository-relative links for the built pages and mail/telephone links for direct contact. `assets/logo.jpg` (white R on black) renders through the existing mask treatment so no square is visible. The removed `assets/RackTrack-Logo.jpg` reference is not part of the live site.
 
-**Header top nav:** `.site-header` is a 3-column grid (brand | centered `.site-nav` | CTA). Nav picks 4 of the old site's 8 items for investor priority — Why RackTrack, Solutions, Use Cases, Trust & Security — same `href="#"` placeholder pattern as the footer. Resources/About Us/Contact Us are footer-only; Contact intent is covered by the existing "Get a demo" CTA. Nav drops entirely on mobile (`max-width: 980px`) — no hamburger menu built, a real gap if mobile nav access is ever asked for.
+**Header top nav:** `.site-header` is a 3-column grid (brand | centered `.site-nav` | CTA). Nav picks 4 of the old site's 8 items for investor priority — Why RackTrack, Solutions, Use Cases, Trust & Security — with local section/page targets. The CTA routes to `contact.html`. Resources/About Us remain footer links. Nav drops entirely on mobile (`max-width: 980px`) — no hamburger menu built, a real gap if mobile nav access is ever asked for.
 
 **JS (`main.js`), general:** `createPinnedSequence` (the old per-chapter factory) exists only in git history, not live code. The phone-scan section (Chapter 2) is a separate, older, unrelated code path (dense 240-frame hard-snap, no blending) — intentionally untouched. `main.js`/`styles.css` have occasionally been edited outside this conversation (another session, or a linter) between turns — always `git diff` before committing to see what actually changed, don't blindly assume only your own edits are present.
 
@@ -81,9 +93,11 @@ Floor-plan SVGs in proof-tour deliberately **shrink to fit** on mobile (`width: 
 ## Current Local Preview
 
 - `http://127.0.0.1:5174/`
+- `http://127.0.0.1:5174/why-racktrack.html`
+- `http://127.0.0.1:5174/contact.html`
 - Server may not be running in a fresh session — restart with: `python3 -m http.server 5174` from the `P-A` folder.
 - `feat/continuous-world` is stale/behind `main` (see "Current Phase") — stay on `main`.
-- `index.html` uses cache-busting `?v=world-redesign-N` query strings on `styles.css` and `main.js` (N is well past 28 now, always check the current value rather than assuming a number — it gets bumped on every CSS/JS edit this session, ~20+ times). When editing those files further, bump the version string (or ask the user to hard-refresh / Cmd+Shift+R) — a plain reload can silently serve stale cached JS/CSS and make a real change look like it did nothing.
+- `index.html`, `why-racktrack.html`, and `contact.html` use cache-busting query strings on their styles/scripts. When editing those files further, bump the relevant version string (or ask the user to hard-refresh / Cmd+Shift+R) — a plain reload can silently serve stale CSS/JS and make a real change look like it did nothing.
 - Live/deployed version: `https://main.d1qibxn0njvfa1.amplifyapp.com` — auto-deploys on push to `main` (see "Live deployment" above). Verifiable via `aws amplify list-jobs --app-id d1qibxn0njvfa1 --branch-name main --profile personal --region us-east-1` if you need to confirm a push actually built successfully rather than assuming.
 
 Important user instructions:

@@ -4122,6 +4122,32 @@ h1 span {
   }
 }
 
+@media (min-width: 781px) {
+  .contact-page .contact-hero,
+  .contact-page .contact-details,
+  .contact-page .contact-request {
+    padding-right: clamp(44px, 8vw, 160px);
+    padding-left: clamp(44px, 8vw, 160px);
+  }
+
+  .contact-page .contact-hero-inner {
+    width: 100%;
+    grid-template-columns: minmax(0, 1.05fr) minmax(520px, 0.75fr);
+    gap: clamp(70px, 9vw, 190px);
+  }
+
+  .contact-page .contact-details dl,
+  .contact-page .contact-request-inner {
+    width: 100%;
+  }
+
+  .contact-page .contact-faq {
+    width: 100%;
+    padding-right: clamp(44px, 8vw, 160px);
+    padding-left: clamp(44px, 8vw, 160px);
+  }
+}
+
 /* Bring the complete platform message into the first evidence viewport so
    the transition from explanation to proof never feels empty. */
 .why-stack-intro {
@@ -4299,6 +4325,25 @@ h1 span {
 /* Wide-screen pass: let the evidence overview use the full canvas instead of
    inheriting the narrower article width used by the card copy. */
 @media (min-width: 781px) {
+  .why-page .why-hero {
+    padding-right: clamp(44px, 8vw, 160px);
+    padding-left: clamp(44px, 8vw, 160px);
+  }
+
+  .why-page .why-hero-inner {
+    width: 100%;
+    grid-template-columns: minmax(0, 1.05fr) minmax(520px, 0.75fr);
+    gap: clamp(70px, 9vw, 190px);
+  }
+
+  .why-page .why-hero-copy {
+    max-width: 900px;
+  }
+
+  .why-page .why-hero-manifest {
+    max-width: none;
+  }
+
   .why-stack-intro {
     width: 100%;
     grid-template-columns: minmax(0, 1fr) minmax(480px, 0.82fr);
