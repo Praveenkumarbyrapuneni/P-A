@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact RackTrack | Request Platform Brief</title>
+    <meta
+      name="description"
+      content="Contact RackTrack to request a platform brief, scope a deployment, and explore continuous reconciliation across your infrastructure."
+    >
+    <link rel="icon" href="assets/logo.jpg">
+    <link rel="stylesheet" href="styles.css?v=contact-4">
+    <script type="module" src="contact.js?v=contact-1"></script>
+  </head>
+  <body class="contact-page">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="RackTrack home">
+        <span class="brand-mark"><img src="assets/logo.jpg" alt=""></span>
+        <span class="brand-name">RackTrack</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="why-racktrack.html">Why RackTrack</a>
+        <a href="index.html#platform">Solutions</a>
+        <a href="index.html#proof-tour">Use Cases</a>
+        <a href="why-racktrack.html#evidence">Trust &amp; Security</a>
+      </nav>
+      <a class="nav-cta" href="contact.html" aria-current="page">Get a demo</a>
+    </header>
+
+    <main id="main">
+      <section class="contact-hero" aria-labelledby="contact-title">
+        <div class="contact-hero-field" aria-hidden="true"></div>
+        <div class="contact-hero-inner">
+          <div class="contact-hero-copy">
+            <p class="contact-kicker">Contact RackTrack</p>
+            <h1 id="contact-title">Make your infrastructure easier to trust.</h1>
+            <p>
+              Tell us what you are evaluating, deploying, or trying to reconcile. We will show you the next step.
+            </p>
+            <a class="button-primary" href="#brief-form">Request platform brief</a>
+          </div>
+
+          <aside class="contact-hero-panel" aria-label="RackTrack contact overview">
+            <div class="contact-network-stage" data-network-scene tabindex="0" role="img" aria-label="Animated RackTrack reconciliation field showing physical rack signals connected to verified network state">
+              <canvas class="contact-network-canvas" width="760" height="520" aria-hidden="true"></canvas>
+              <div class="contact-network-top"><span>RACKTRACK / LIVE RECONCILIATION</span><b>01 / 03</b></div>
+              <div class="contact-network-label contact-network-label-a"><span>PHYSICAL SIGNAL</span><strong>RACK B-06</strong></div>
+              <div class="contact-network-label contact-network-label-b"><span>NETWORK STATE</span><strong>VERIFIED</strong></div>
+              <button class="contact-network-trigger" type="button" data-network-trigger aria-label="Replay reconciliation scan" title="Replay reconciliation scan">&#8635;</button>
+            </div>
+            <div class="contact-hero-readout">
+              <div><span>BASELINE ASSESSMENT</span><strong>~20 min</strong></div>
+              <div><span>RESPONSE TIME</span><strong>1 business day</strong></div>
+            </div>
+            <p>We compare what your systems say with what the rack and network show.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="contact-details" aria-label="RackTrack contact details">
+        <dl>
+          <div>
+            <dt>Office address</dt>
+            <dd><address>85 Felt Rd, Suite #604<br>South Windsor, CT 06074</address></dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd><a href="mailto:info@racktrack.ai">info@racktrack.ai</a><p>Share audit goals, rollout questions, or support requests.</p></dd>
+          </div>
+          <div>
+            <dt>Phone</dt>
+            <dd><a href="tel:+18608782448">+1 (860) 878 2448</a><p>Call our contact team for demos, support, and meeting schedules.</p></dd>
+          </div>
+          <div>
+            <dt>Response time</dt>
+            <dd><strong>Within 1 business day</strong><p>We respond quickly to demos, planning, and support conversations.</p></dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="contact-request" id="brief-form" aria-labelledby="brief-title">
+        <div class="contact-request-inner">
+          <div class="contact-request-intro">
+            <p class="contact-kicker">Request platform brief</p>
+            <h2 id="brief-title">Tell us about your infrastructure.</h2>
+            <p>Share the footprint. We will scope a guided demo around the problem you need to solve.</p>
+
+            <div class="contact-next">
+              <p class="contact-kicker">What happens next</p>
+              <ol>
+                <li><strong>You send the brief</strong><span>Whatever you know about the footprint: a rack, a row, or a site.</span></li>
+                <li><strong>We reply</strong><span>Within one business day.</span></li>
+                <li><strong>We scope a baseline</strong><span>About twenty minutes for a single rack or row, comparing your existing records against observed physical and network state.</span></li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="contact-form-panel">
+            <form id="brief-request" novalidate>
+              <fieldset>
+                <legend>Your details</legend>
+                <div class="contact-form-grid">
+                  <label>
+                    <span>Full name <em>Required</em></span>
+                    <input name="fullName" autocomplete="name" required type="text" placeholder="Enter your full name">
+                    <small data-error="fullName"></small>
+                  </label>
+                  <label>
+                    <span>Email address <em>Required</em></span>
+                    <input name="email" autocomplete="email" required type="email" placeholder="you@company.com">
+                    <small data-error="email"></small>
+                  </label>
+                  <label>
+                    <span>Company name <em>Optional</em></span>
+                    <input name="company" autocomplete="organization" type="text" placeholder="Your company">
+                  </label>
+                  <label>
+                    <span>Mobile number <em>Required</em></span>
+                    <div class="contact-phone-field">
+                      <select name="countryCode" autocomplete="tel-country-code" aria-label="Country code">
+                        <option value="+1">US +1</option>
+                        <option value="+44">UK +44</option>
+                        <option value="+91">IN +91</option>
+                        <option value="+61">AU +61</option>
+                        <option value="+49">DE +49</option>
+                      </select>
+                      <input name="mobile" autocomplete="tel-national" inputmode="numeric" required type="tel" placeholder="10-digit number">
+                    </div>
+                    <small data-error="mobile"></small>
+                  </label>
+                  <label class="contact-field-wide">
+                    <span>Requirement <em>Optional</em></span>
+                    <textarea name="requirement" rows="5" placeholder="Racks, rows or sites in scope, and what you are trying to reconcile."></textarea>
+                  </label>
+                </div>
+              </fieldset>
+              <div class="contact-form-foot">
+                <button class="button-primary" type="submit">Request platform brief</button>
+                <p>Submitting opens your email app with the request prepared for info@racktrack.ai.</p>
+              </div>
+              <p class="contact-form-status" id="form-status" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-faq" id="faq" aria-labelledby="faq-title">
+        <div class="contact-faq-intro">
+          <p class="contact-kicker">FAQ</p>
+          <h2 id="faq-title">Before you connect.</h2>
+          <p>Questions the platform team is asked most often.</p>
+        </div>
+        <div class="contact-faq-list">
+          <details><summary>Can RackTrack scan existing racks without downtime?</summary><p>Yes. RackTrack uses a smartphone video sweep to capture rack state without agents, downtime, or disruption to production infrastructure.</p></details>
+          <details><summary>What kind of infrastructure can RackTrack identify?</summary><p>RackTrack supports a broad and continuously expanding range of enterprise networking and data center infrastructure devices.</p></details>
+          <details><summary>How does RackTrack verify inventory accuracy?</summary><p>RackTrack reconciles physical scan data against live infrastructure signals to maintain continuously verified inventory and topology records.</p></details>
+          <details><summary>Does RackTrack replace our CMDB or DCIM?</summary><p>No. RackTrack acts as the physical infrastructure intelligence layer underneath existing CMDB, DCIM, and ITSM platforms, helping reconcile what systems report against what is physically present in the rack.</p></details>
+          <details><summary>Is RackTrack useful for compliance and audit preparation?</summary><p>Yes. RackTrack helps generate continuously updated inventory, topology, and infrastructure evidence that supports audit readiness and operational reviews.</p></details>
+          <details><summary>Can RackTrack help during incidents and outages?</summary><p>Yes. RackTrack helps teams quickly identify devices, ports, and cable relationships so responders spend less time validating rack state during critical incidents.</p></details>
+          <details><summary>Does RackTrack support security and vulnerability workflows?</summary><p>Yes. RackTrack provides device-level firmware and infrastructure posture visibility to help security teams identify operational and compliance risks faster.</p></details>
+          <details><summary>How long does a baseline assessment take?</summary><p>Typically about twenty minutes for a single rack or row. The assessment compares your existing records against observed physical and network state.</p></details>
+          <details><summary>Can we request a demo before committing?</summary><p>Yes. You can schedule a guided walkthrough against your own environment to see how RackTrack performs on real infrastructure.</p></details>
+          <details><summary>Does RackTrack work with existing enterprise tools?</summary><p>Yes. RackTrack is designed to integrate with existing infrastructure, inventory, compliance, and operational workflows.</p></details>
+          <details><summary>Where can RackTrack be deployed?</summary><p>RackTrack supports cloud-hosted, private cloud, on-premise, and air-gapped deployment models for regulated or restricted environments.</p></details>
+          <details><summary>Who uses RackTrack?</summary><p>RackTrack is built for infrastructure leaders, network engineering teams, security operations, compliance owners, incident responders, and data center operators.</p></details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="footer-brand-logo" href="index.html" aria-label="RackTrack home"><img src="assets/logo.jpg" alt="RackTrack"></a>
+          <p>Physical Infrastructure Intelligence for Data Centers.</p>
+        </div>
+        <nav class="footer-col" aria-label="Platform">
+          <p class="footer-label">Platform</p>
+          <a href="why-racktrack.html">Why RackTrack</a>
+          <a href="index.html#platform">Solutions</a>
+          <a href="index.html#proof-tour">Use Cases</a>
+          <a href="why-racktrack.html#evidence">Trust &amp; Security</a>
+        </nav>
+        <nav class="footer-col" aria-label="Company">
+          <p class="footer-label">Company</p>
+          <a href="contact.html" aria-current="page">Contact Us</a>
+          <a href="why-racktrack.html#evidence">Resources</a>
+          <a href="index.html#main">About Us</a>
+        </nav>
+        <div class="footer-col footer-contact">
+          <p class="footer-label">Contact</p>
+          <a href="mailto:info@racktrack.ai">info@racktrack.ai</a>
+          <a href="tel:+18608782448">+1 (860) 878 2448</a>
+          <span>85 Felt Rd, Suite #604<br>South Windsor, CT 06074</span>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 RackTrack Inc. &middot; Physical Infrastructure Intelligence for Data Centers &middot; Patent Pending</p>
+        <div class="footer-social">
+          <a href="https://www.linkedin.com/company/racktrack/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://www.instagram.com/racktrack_inc/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.facebook.com/share/18depF5xzA/" target="_blank" rel="noopener">Facebook</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
