@@ -1,0 +1,384 @@
+        /* ── 3D topology: a viewer, read from the left, subject on the right ── */
+        .rk-panel { position: relative; max-width: 940px; margin-inline: auto;
+            border: 1px solid var(--hair); border-radius: 10px; overflow: hidden;
+            background: #fff; }
+        .rk-meta { display: flex; align-items: baseline; justify-content: space-between;
+            gap: 16px; padding: 11px 16px; border-bottom: 1px solid var(--hair); }
+        .rk-split { display: grid; grid-template-columns: 40% 60%; }
+
+        /* left: the four readings you can ask the cabinet for */
+        .rk-console { position: relative; align-self: center; background: #fff;
+            border-right: 1px solid var(--hair); }
+        .rk-hd { padding: 13px 15px 9px;
+            font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+            color: var(--muted); }
+        .rk-controls { display: flex; flex-direction: column; gap: 7px; padding: 0 15px 15px; }
+        /* every reading is a pressable tile, not just the one that is open */
+        .rk-btn { display: grid; grid-template-columns: 1fr auto auto;
+            align-items: center; gap: 10px; width: 100%; text-align: left;
+            padding: 11px 12px 12px; border: 1px solid var(--hair-2); border-radius: 7px;
+            background: #fff; color: inherit; cursor: pointer;
+            box-shadow: 0 1px 0 rgba(16,24,40,.04);
+            transition: background-color .18s ease, border-color .18s ease,
+                        box-shadow .18s ease; }
+        .rk-btn:hover { background: #f5f8ff; border-color: #b7c8e8;
+            box-shadow: 0 2px 7px rgba(26,63,212,.10); }
+        .rk-btn:hover .rk-chev { transform: translateX(3px); color: var(--blue); }
+        .rk-btn[aria-pressed="true"] { background: #eef3fd; border-color: var(--blue);
+            box-shadow: inset 3px 0 0 var(--blue); }
+        .rk-btn[aria-pressed="true"] .rk-chev { color: var(--blue); transform: translateX(2px); }
+        .rk-btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+        .rk-chev { color: #9aa6b8; transition: transform .2s ease, color .2s ease; }
+        .rk-btn-t { font-size: 16px; line-height: 1.35;
+            letter-spacing: -.012em; font-weight: 600; color: var(--ink); }
+        /* the reading the current state gives you, against its own control */
+        .rk-btn-k { flex-shrink: 0;
+            font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 12px; letter-spacing: .07em; color: var(--muted);
+            opacity: 0; transition: opacity .25s ease; }
+        .rk-btn[aria-pressed="true"] .rk-btn-k { opacity: 1; color: var(--blue); }
+        /* only the pressed control's description shows, in the band under the stack */
+        .rk-btn-d { position: absolute; left: 0; right: 0; bottom: 66px; height: 60px;
+            display: flex; align-items: center; padding: 0 16px;
+            font-size: 16px; line-height: 1.5; color: var(--muted);
+            opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+        .rk-btn[aria-pressed="true"] .rk-btn-d { opacity: 1; }
+        .rk-band { height: 60px; border-top: 1px solid var(--hair); }
+        .rk-read { display: flex; align-items: center; height: 66px; padding: 0 16px;
+            border-top: 1px solid var(--hair); text-align: left; line-height: 1.55; }
+        /* ── the cabinet: a box with real depth, not a tilted picture ───── */
+        .rk-stage { --u1: 9px; --D: 92px; --rail: 18px; --proud: 10px;
+            position: relative; overflow: hidden;
+            padding: 14px 16px 22px;
+            background: radial-gradient(74% 56% at 50% 30%,
+                #ffffff 0%, #eff3fa 54%, #e2e8f3 100%); }
+        /* a faint measure behind the object, so it stands on a stage */
+        .rk-stage::before { content: ''; position: absolute; inset: 0; z-index: 0;
+            pointer-events: none;
+            background: repeating-linear-gradient(180deg,
+                rgba(26,63,212,.055) 0 1px, transparent 1px 46px);
+            -webkit-mask-image: radial-gradient(62% 54% at 50% 42%, transparent 36%, #000 100%);
+            mask-image: radial-gradient(62% 54% at 50% 42%, transparent 36%, #000 100%); }
+        .rk-scene { position: relative; z-index: 1;
+            perspective: 2200px; perspective-origin: 50% 40%;
+            display: flex; justify-content: center; padding: 0 30px 0 0; }
+        /* the pointer nudges this wrapper; the box below turns on its own */
+        .rk-tilt { --nudge: 0deg; width: min(100%, 288px);
+            transform-style: preserve-3d; transform: rotateY(var(--nudge));
+            transition: transform .55s cubic-bezier(.22,1,.28,1); }
+        .rk-rack { position: relative; transform-style: preserve-3d;
+            transform: rotateX(3.5deg) rotateY(-18deg);
+            animation: rkTurn 24s ease-in-out infinite alternate; }
+        /* a slow quarter-turn back and forth: enough to read it as a solid */
+        @keyframes rkTurn {
+            from { transform: rotateX(4deg) rotateY(-29deg); }
+            to   { transform: rotateX(3deg) rotateY(-7deg); }
+        }
+
+        /* the welded frame: the metal you see around the opening */
+        .rk-cab { position: relative; transform-style: preserve-3d;
+            padding: 9px 11px 0;
+            background: linear-gradient(102deg, #3d434c 0%, #272c33 42%, #14171b 100%);
+            border: 1px solid #4a515c; border-bottom: 0;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.16); }
+        /* the side panel, swung back on the front edge, vented like a real one */
+        .rk-cab-side { position: absolute; top: -1px; bottom: 0; left: 100%;
+            width: var(--D); transform-origin: 0 50%; transform: rotateY(90deg);
+            background: linear-gradient(90deg, #2b3138 0%, #16191e 52%, #090b0e 100%);
+            border-top: 1px solid #4a515c; }
+        .rk-cab-side::before { content: ''; position: absolute; inset: 30px 18px 40px;
+            background: repeating-linear-gradient(180deg,
+                rgba(255,255,255,.055) 0 1px, transparent 1px 12px); }
+        /* the roof, with its cable entry cut-out */
+        .rk-cab-top { position: absolute; left: -1px; right: -1px; bottom: 100%;
+            height: var(--D); transform-origin: 50% 100%; transform: rotateX(90deg);
+            background: linear-gradient(180deg, #525b66 0%, #2f353d 58%, #1b1f24 100%);
+            border-left: 1px solid #4a515c; border-right: 1px solid #4a515c; }
+        .rk-cab-top::before { content: ''; position: absolute; left: 22%; right: 22%;
+            top: 26%; bottom: 34%; background: #0b0d10;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,.9); }
+        /* the plinth it stands on */
+        .rk-plinth { position: relative; height: 17px; margin: 0 -11px;
+            background: linear-gradient(180deg, #23282f 0%, #0d0f13 62%, #05070a 100%);
+            border: 1px solid #3a4048; border-top-color: #4a515c; }
+        .rk-plinth::before { content: ''; position: absolute; left: 34%; right: 13%;
+            top: 8px; height: 3px;
+            background: repeating-linear-gradient(90deg,
+                rgba(255,255,255,.09) 0 1px, transparent 1px 7px); }
+        /* the shadow it drops on the floor */
+        .rk-floor { position: absolute; left: -14%; right: -24%; top: 100%; height: 82px;
+            transform: translateZ(-30px); pointer-events: none;
+            background: radial-gradient(50% 74% at 44% 0%,
+                rgba(8,12,20,.44) 0%, rgba(8,12,20,.16) 46%, rgba(8,12,20,0) 76%); }
+
+        /* the opening, and the cavity behind it */
+        .rk-bay { position: relative; transform-style: preserve-3d;
+            height: calc(var(--u1) * 42); background: #05070a;
+            box-shadow: inset 0 0 22px 2px rgba(0,0,0,.7); }
+        /* the back of the cabinet: real cabling, three feet away and unlit */
+        .rk-bay-back { position: absolute; inset: 0;
+            transform: translateZ(calc(var(--D) * -1));
+            background-image:
+                linear-gradient(90deg, transparent 0 13%, rgba(210,224,240,.16) 13% 17%,
+                    transparent 17% 82%, rgba(210,224,240,.13) 82% 86%, transparent 86%),
+                url(../../assets/media-rack3d-cabinet-face.jpg);
+            background-size: 100% 100%, cover;
+            background-position: 0 0, center;
+            background-color: #05070a;
+            filter: brightness(.36) saturate(.5) blur(1.5px); }
+        /* the inside of the left-hand side panel, seen past the equipment */
+        .rk-bay-left { position: absolute; top: 0; bottom: 0; left: 0; width: var(--D);
+            transform-origin: 0 50%; transform: rotateY(90deg);
+            background: linear-gradient(90deg, #1c2126 0%, #0a0c10 72%, #05070a 100%); }
+        .rk-bay-left::before { content: ''; position: absolute; inset: 0 34% 0 6px;
+            background: repeating-linear-gradient(180deg,
+                rgba(255,255,255,.05) 0 1px, transparent 1px 16px); }
+
+        /* the two front rails, standing proud of the equipment they hold */
+        .rk-rail { position: absolute; top: 0; bottom: 0; width: var(--rail);
+            transform: translateZ(var(--proud)); z-index: 3;
+            background-image:
+                repeating-linear-gradient(180deg,
+                    transparent 0 3px, #07090c 3px 6px, transparent 6px var(--u1)),
+                linear-gradient(96deg, #4d545f 0%, #333941 44%, #1c2026 100%);
+            background-size: 6px var(--u1), 100% 100%;
+            background-position: 50% 2px, 0 0;
+            background-repeat: repeat-y, no-repeat;
+            box-shadow: 0 3px 9px rgba(0,0,0,.55), inset 1px 0 0 rgba(255,255,255,.14); }
+        .rk-rail-l { left: 0; }
+        .rk-rail-r { right: 0; }
+        /* the inner face of the near rail is what makes the recess read */
+        .rk-rail-l::after { content: ''; position: absolute; top: 0; bottom: 0; left: 100%;
+            width: var(--proud); transform-origin: 0 50%; transform: rotateY(90deg);
+            background: linear-gradient(90deg, #2e343c 0%, #0f1216 100%); }
+
+        /* ── the equipment ──────────────────────────────────────────────── */
+        .rk-slots { position: absolute; inset: 3px var(--rail); z-index: 2;
+            transform-style: preserve-3d;
+            display: flex; flex-direction: column; gap: 5px; }
+        .rk-slot { position: relative; flex: var(--u) 1 0; min-height: 22px;
+            transform-style: preserve-3d; transform: translateZ(var(--dz, 7px));
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: flex-start; gap: 4px; padding: 4px 6px;
+            transition: box-shadow .3s ease; }
+        /* the front panel of the device itself */
+        .rk-slot::before { content: ''; position: absolute; inset: 0; z-index: 0;
+            border-top: 1px solid rgba(255,255,255,.13);
+            border-bottom: 1px solid rgba(0,0,0,.75);
+            box-shadow: inset 0 -6px 12px -8px rgba(0,0,0,.9); }
+        /* the top of the chassis, which you see because you are below the top of the rack */
+        .rk-lip { position: absolute; left: 0; right: 0; bottom: 100%;
+            height: var(--dz, 7px); transform-origin: 50% 100%; transform: rotateX(90deg);
+            background: linear-gradient(180deg, #59616c 0%, #2b3138 62%, #1a1e23 100%); }
+        .rk-slot > .rk-tag { position: relative; z-index: 2; }
+        .rk-slot > .rk-ports, .rk-slot > .rk-leds { z-index: 3; }
+
+        /* 48-port patch panel: two rows of cutouts and a designation strip */
+        .rk-slot[data-kind="patch"] { --dz: 6px; }
+        .rk-slot[data-kind="patch"]::before {
+            background-image:
+                repeating-linear-gradient(90deg,
+                    rgba(255,255,255,.16) 0 1px, #07090c 1px 9px, transparent 9px 12px),
+                linear-gradient(180deg, rgba(255,255,255,.5) 0 1px, rgba(214,222,232,.34) 1px 100%),
+                repeating-linear-gradient(90deg,
+                    rgba(255,255,255,.16) 0 1px, #07090c 1px 9px, transparent 9px 12px),
+                linear-gradient(180deg, #4e5661 0%, #333a43 46%, #21262c 100%);
+            background-size: calc(100% - 28px) 12px, calc(100% - 28px) 3px,
+                calc(100% - 28px) 12px, 100% 100%;
+            background-position: 14px 20%, 14px 44%, 14px 70%, 0 0;
+            background-repeat: no-repeat; }
+        /* ToR switch: 36 cages, a status column and the fan wall */
+        .rk-slot[data-kind="switch"] { --dz: 11px; }
+        .rk-slot[data-kind="switch"]::before {
+            background-image:
+                repeating-linear-gradient(180deg,
+                    #1f6b4c 0 3px, transparent 3px 7px),
+                repeating-linear-gradient(90deg,
+                    rgba(255,255,255,.14) 0 1px, #0a0f14 1px 12px, transparent 12px 15px),
+                repeating-linear-gradient(90deg,
+                    rgba(255,255,255,.14) 0 1px, #0a0f14 1px 12px, transparent 12px 15px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 4px),
+                linear-gradient(180deg, #3d444e 0%, #262c34 54%, #171b20 100%);
+            background-size: 4px 14px, calc(100% - 108px) 13px,
+                calc(100% - 108px) 13px, 34px 60%, 100% 100%;
+            background-position: 15px 50%, 46px 22%, 46px 72%, calc(100% - 22px) 50%, 0 0;
+            background-repeat: no-repeat; }
+        /* eight 2U servers: drive carriers left, vent wall right, seam between */
+        .rk-slot[data-kind="compute"] { --dz: 9px; }
+        .rk-slot[data-kind="compute"]::before {
+            background-image:
+                linear-gradient(180deg,
+                    rgba(255,255,255,.18) 0 1px, rgba(255,255,255,.05) 1px 3px,
+                    transparent 3px, transparent calc(100% - 4px), #05070a calc(100% - 4px) 100%),
+                repeating-linear-gradient(90deg,
+                    rgba(255,255,255,.13) 0 1px, #2c333b 1px 13px, #0b0e12 13px 15px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,.055) 0 1px, transparent 1px 4px),
+                linear-gradient(180deg, #434b55 0%, #2e353d 50%, #1b2026 100%);
+            background-size: 100% 12.5%, 152px 12.5%, calc(100% - 196px) 12.5%, 100% 100%;
+            background-position: 0 0, 12px 0, 178px 0, 0 0;
+            background-repeat: repeat-y, repeat-y, repeat-y, no-repeat; }
+        /* storage: a wall of drive carriers, each with its own activity light */
+        .rk-slot[data-kind="storage"] { --dz: 10px; }
+        .rk-slot[data-kind="storage"]::before {
+            background-image:
+                linear-gradient(180deg,
+                    rgba(255,255,255,.14) 0 1px, transparent 1px 4px,
+                    transparent calc(100% - 4px), #05070a calc(100% - 4px) 100%),
+                radial-gradient(circle at 6px 9px, #2b7f5c 0 1.6px, transparent 2.2px),
+                repeating-linear-gradient(90deg,
+                    rgba(255,255,255,.12) 0 1px, #2e353d 1px 20px, #07090c 20px 23px),
+                linear-gradient(180deg, #3e4650 0%, #2b323b 52%, #1a1f25 100%);
+            background-size: 100% 25%, 23px 25%, 100% 25%, 100% 100%;
+            background-position: 0 0, 10px 0, 10px 0, 0 0;
+            background-repeat: repeat-y, repeat, repeat-y, no-repeat; }
+        /* the cage-nut screws that hold each chassis to the rails */
+        .rk-slot[data-kind]:not([data-kind="free"])::after { content: ''; position: absolute;
+            inset: 0; z-index: 1; pointer-events: none; background-repeat: no-repeat;
+            background-image:
+                radial-gradient(circle at 4px 6px, #a3adba 0 1.5px, #262b31 1.6px 2.6px, transparent 2.9px),
+                radial-gradient(circle at calc(100% - 4px) 6px, #a3adba 0 1.5px, #262b31 1.6px 2.6px, transparent 2.9px),
+                radial-gradient(circle at 4px calc(100% - 6px), #a3adba 0 1.5px, #262b31 1.6px 2.6px, transparent 2.9px),
+                radial-gradient(circle at calc(100% - 4px) calc(100% - 6px), #a3adba 0 1.5px, #262b31 1.6px 2.6px, transparent 2.9px); }
+        /* free U space: you are looking straight through to the back of the cabinet */
+        .rk-slot[data-kind="free"] { --dz: 0px; justify-content: flex-start; }
+        .rk-slot[data-kind="free"]::before { background: transparent;
+            border-top: 1px solid rgba(255,255,255,.07); border-bottom: 0;
+            box-shadow: inset 0 14px 26px -12px #000, inset 0 -14px 26px -12px #000; }
+
+        /* ── what the sweep writes on top of the cabinet ─────────────────── */
+        .rk-tag { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px;
+            max-width: 100%; padding: 3px 6px; background: rgba(6,10,16,.88);
+            border: 1px solid rgba(146,182,240,.28);
+            box-shadow: 0 2px 8px rgba(0,0,0,.5); }
+        .rk-u { font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 9px; letter-spacing: .05em; color: #9fb6d8; flex-shrink: 0;
+            white-space: nowrap; }
+        .rk-name { font-size: 12px; font-weight: 500; color: #eef3ff; line-height: 1.28;
+            white-space: nowrap; }
+        .rk-state { font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 7.5px; letter-spacing: .06em; text-transform: uppercase;
+            color: #93aacc; flex-shrink: 0; }
+        .rk-slot[data-verified="1"] .rk-state { color: #8ab4ff; }
+
+        /* ── port inspection: port grids resolved onto the device faces ─── */
+        .rk-ports { display: none; grid-auto-flow: column; grid-template-rows: repeat(2, 3px);
+            gap: 1px; padding: 2px 4px; background: rgba(6,10,16,.9);
+            border: 1px solid rgba(138,180,255,.45); }
+        .rk-ports i { width: 3px; height: 3px; display: block;
+            background: #2b3f66; box-shadow: inset 0 0 0 1px rgba(138,180,255,.28); }
+        .rk-ports i.on { background: #8ab4ff; box-shadow: 0 0 4px rgba(138,180,255,.8); }
+        .rk-stage[data-mode="ports"] .rk-ports { display: grid;
+            position: absolute; right: 5px; bottom: 4px; }
+        .rk-stage[data-mode="ports"] .rk-slot[data-ports] {
+            box-shadow: 0 0 0 1px #8ab4ff, 0 0 18px rgba(138,180,255,.35); }
+        .rk-stage[data-mode="ports"] .rk-slot[data-ports] .rk-state { color: #8ab4ff; }
+
+        /* ── live LEDs: link indicators on the powered devices ──────────── */
+        .rk-leds { display: none; align-items: center; gap: 4px;
+            padding: 2px 5px; background: rgba(6,10,16,.9);
+            border: 1px solid rgba(95,208,164,.45); }
+        .rk-leds i { width: 4px; height: 4px; border-radius: 50%; background: #24365c;
+            display: block; }
+        .rk-stage[data-mode="leds"] .rk-leds { display: flex;
+            position: absolute; right: 5px; bottom: 4px; }
+        .rk-stage[data-mode="leds"] .rk-slot[data-live] {
+            box-shadow: 0 0 0 1px #5fd0a4, 0 0 18px rgba(95,208,164,.3); }
+        .rk-stage[data-mode="leds"] .rk-leds i { background: #5fd0a4;
+            box-shadow: 0 0 6px rgba(95,208,164,.85);
+            animation: rkBlink 1.9s steps(1, end) infinite; }
+        .rk-stage[data-mode="leds"] .rk-leds i:nth-child(2) { animation-delay: .32s; }
+        .rk-stage[data-mode="leds"] .rk-leds i:nth-child(3) { animation-delay: .74s; }
+        .rk-stage[data-mode="leds"] .rk-leds i:nth-child(4) { animation-delay: 1.15s; }
+        @keyframes rkBlink { 0%, 62% { opacity: 1; } 63%, 100% { opacity: .18; } }
+
+        /* ── rack sweep: a band of light travelling down the cabinet ─────── */
+        .rk-scan { position: absolute; left: -18px; right: -18px; top: 0; height: 13%;
+            opacity: 0; pointer-events: none; z-index: 6;
+            transform: translateZ(calc(var(--proud) + 8px));
+            background: linear-gradient(180deg, rgba(140,182,255,0) 0%,
+                rgba(140,182,255,.24) 72%, rgba(206,226,255,.46) 100%);
+            border-bottom: 2px solid rgba(226,238,255,.95);
+            box-shadow: 0 12px 30px rgba(140,182,255,.55); }
+        .rk-stage[data-mode="sweep"] .rk-scan { opacity: 1;
+            animation: rkScan 5.2s cubic-bezier(.5,0,.5,1) infinite; }
+        @keyframes rkScan { 0%, 5% { top: -13%; } 55% { top: 100%; } 96%, 100% { top: -13%; } }
+        /* a device registers as the light reaches it, then holds its reading */
+        .rk-stage[data-mode="sweep"] .rk-slot {
+            animation: rkReg 5.2s ease-in-out infinite; }
+        .rk-stage[data-mode="sweep"] .rk-slot:nth-child(1) { animation-delay: .2s; }
+        .rk-stage[data-mode="sweep"] .rk-slot:nth-child(2) { animation-delay: .75s; }
+        .rk-stage[data-mode="sweep"] .rk-slot:nth-child(3) { animation-delay: 1.3s; }
+        .rk-stage[data-mode="sweep"] .rk-slot:nth-child(4) { animation-delay: 2.2s; }
+        .rk-stage[data-mode="sweep"] .rk-slot:nth-child(5) { animation-delay: 2.75s; }
+        @keyframes rkReg {
+            0%, 3% { box-shadow: 0 0 0 0 rgba(138,180,255,0); }
+            8%, 78% { box-shadow: 0 0 0 1px #8ab4ff, 0 0 20px rgba(138,180,255,.4); }
+            90%, 100% { box-shadow: 0 0 0 0 rgba(138,180,255,0); }
+        }
+        .rk-tick { display: none; flex-shrink: 0;
+            font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 7.5px; letter-spacing: .04em; color: #cfe0ff; white-space: nowrap;
+            padding: 1px 4px; background: rgba(19,44,90,.92);
+            border: 1px solid rgba(138,180,255,.6); }
+        .rk-stage[data-mode="sweep"] .rk-tick { display: inline-block;
+            animation: rkTick 5.2s ease-in-out infinite; opacity: 0; }
+        .rk-stage[data-mode="sweep"] .rk-slot:nth-child(1) .rk-tick { animation-delay: .2s; }
+        .rk-stage[data-mode="sweep"] .rk-slot:nth-child(2) .rk-tick { animation-delay: .75s; }
+        .rk-stage[data-mode="sweep"] .rk-slot:nth-child(3) .rk-tick { animation-delay: 1.3s; }
+        .rk-stage[data-mode="sweep"] .rk-slot:nth-child(4) .rk-tick { animation-delay: 2.2s; }
+        .rk-stage[data-mode="sweep"] .rk-slot:nth-child(5) .rk-tick { animation-delay: 2.75s; }
+        @keyframes rkTick { 0%, 4% { opacity: 0; } 9%, 78% { opacity: 1; } 90%, 100% { opacity: 0; } }
+        .rk-stage[data-mode="sweep"] .rk-state { display: none; }
+
+        /* ── cable trace: patch leads followed switch → panel ────────────── */
+        .rk-cables { display: none; position: absolute; inset: 0;
+            width: 100%; height: 100%; z-index: 5; pointer-events: none;
+            transform: translateZ(calc(var(--proud) + 4px)); overflow: visible; }
+        .rk-stage[data-mode="cables"] .rk-cables { display: block; }
+        .rk-cables path { fill: none; stroke-width: 3; stroke-linecap: round;
+            stroke-dasharray: 100; stroke-dashoffset: 100;
+            filter: drop-shadow(0 1px 3px rgba(0,0,0,.95));
+            animation: rkDraw 2.6s cubic-bezier(.3,.8,.35,1) forwards; }
+        .rk-cables path:nth-child(1) { stroke: #8ab4ff; animation-delay: .05s; }
+        .rk-cables path:nth-child(2) { stroke: #5fd0a4; animation-delay: .35s; }
+        .rk-cables path:nth-child(3) { stroke: #8ab4ff; animation-delay: .65s; }
+        .rk-cables path:nth-child(4) { stroke: #e0b063; animation-delay: .95s; }
+        @keyframes rkDraw { to { stroke-dashoffset: 0; } }
+        .rk-stage[data-mode="cables"] .rk-slot[data-ends] {
+            box-shadow: 0 0 0 1px #8ab4ff, 0 0 18px rgba(138,180,255,.3); }
+
+        /* mobile: a flat elevation. a rotated box must never widen the page. */
+        @media (max-width: 860px) {
+            .rk-split { grid-template-columns: 1fr; }
+            .rk-console { border-right: 0; border-bottom: 1px solid var(--hair); }
+            .rk-tilt { transform: none; width: 100%; max-width: 270px; }
+            .rk-rack { animation: none; }
+            .rk-band { display: none; }
+            .rk-read { height: auto; min-height: 0; padding: 14px 16px; display: block; }
+            .rk-stage { padding: 14px 12px 20px; --u1: 8px; }
+            .rk-scene { perspective: none; padding: 0; }
+            .rk-rack { transform: none; }
+            .rk-cab-side, .rk-cab-top, .rk-bay-left, .rk-floor, .rk-lip,
+            .rk-rail-l::after { display: none; }
+            .rk-rail, .rk-slot, .rk-scan, .rk-cables { transform: none; }
+            .rk-slot { min-height: 40px; }
+            /* each control carries its own line again */
+            .rk-btn { padding: 12px 13px 13px; }
+            .rk-btn-d { position: static; grid-column: 1 / -1; height: auto; display: block;
+                padding: 3px 0 0; opacity: 1; font-size: 16px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            /* the cabinet holds its most readable angle and stops turning */
+            .rk-rack { animation: none; transform: rotateX(3.5deg) rotateY(-18deg); }
+            .rk-tilt { transform: none; transition: none; }
+            .rk-btn, .rk-slot, .rk-chev { transition: none; }
+            /* every mode still reads, it just holds its most informative frame */
+            .rk-stage[data-mode="sweep"] .rk-scan { animation: none; top: 44%; }
+            .rk-stage[data-mode="sweep"] .rk-slot { animation: none;
+                box-shadow: 0 0 0 1px #8ab4ff, 0 0 20px rgba(138,180,255,.4); }
+            .rk-stage[data-mode="sweep"] .rk-tick { animation: none; opacity: 1; }
+            .rk-stage[data-mode="leds"] .rk-leds i { animation: none; opacity: 1; }
+            .rk-cables path { animation: none; stroke-dashoffset: 0; }
+        }

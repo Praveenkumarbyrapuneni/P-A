@@ -14,12 +14,13 @@ The existing `/Users/praveen/Desktop/Racktrack_Website` folder is the content an
 
 ## New Page Experiences
 
-`why-racktrack.html` and `contact.html` are local, static-site routes in this repository. They do not link to the Desktop source folder or external image URLs.
+`why-racktrack.html`, `solutions.html`, and `contact.html` are local, static-site routes in this repository. They do not link to the Desktop source folder or external image URLs.
 
 - **Why RackTrack:** a full-width light infrastructure field with the three-layer message (Perceive, Reconcile, Cognize), interactive `01 / 03` verification controls, generated local rack imagery, proof statements, and sticky evidence cards.
 - **Contact:** a full-width contact experience with an animated canvas reconciliation field, pointer response, scan replay control, contact details, platform-brief form, email handoff, and FAQ accordions.
-- **Page scripts:** `why-racktrack.js` handles the verification manifest; `contact.js` handles form validation/email preparation and the animated network field.
-- **Generated assets:** active Why RackTrack visuals live in `assets/why-racktrack/`. The original user-provided upload folder is retained at `why-rack-track-assets/` for provenance; the live pages use the normalized copies under `assets/why-racktrack/`.
+- **Solutions:** a full-width technical field guide with the original local system schematic artwork, interactive cabinet-reading controls, three principles, and six intelligence surfaces backed by local assets.
+- **Page scripts:** `why-racktrack.js` handles the verification manifest; `solutions.js` handles cabinet reading state and section reveals; `contact.js` handles form validation/email preparation and the animated network field.
+- **Generated and local page assets:** active Why RackTrack visuals live in `assets/why-racktrack/`. Solutions assets live in `assets/solutions/`, including the original system schematic and cabinet-reader stylesheet, with the local cabinet backplate at `assets/media-rack3d-cabinet-face.jpg`. The original user-provided upload folder is retained at `why-rack-track-assets/` for provenance; live pages do not depend on the Desktop source folder.
 - **Primary CTA routes:** homepage and Why RackTrack demo CTAs route to `contact.html`; local footer and navigation links use repository-relative paths.
 
 ## Continuous-World Rebuild (accepted, merged to `main`)
@@ -47,6 +48,7 @@ Actual section order in `index.html`: `.hero-shell` → scan (`data-frame-sequen
 | — | Floor-plan proof tour | Built & accepted. `.proof-tour` — see "Proof Tour" section below. |
 | 9 | Final CTA | **Not built.** Next real work item. No video needed — reuse `assets/Verified Rack Object.jpeg`, static like the hero, CTA as live HTML/CSS. |
 | — | Why RackTrack | Built. `why-racktrack.html` uses local generated imagery, a three-layer explanation, interactive verification steps, and sticky evidence cards. |
+| — | Solutions | Built. `solutions.html` uses the original local schematic artwork, original cabinet-reader movement and interactions, local assets, and the six intelligence surfaces. |
 | — | Contact | Built. `contact.html` uses local assets, a canvas reconciliation scene, validated brief request form, direct contact details, and FAQ content. |
 | — | Footer | Built & accepted. `.site-footer` — see "Footer & Header Logo" section below. |
 
@@ -94,10 +96,11 @@ Floor-plan SVGs in proof-tour deliberately **shrink to fit** on mobile (`width: 
 
 - `http://127.0.0.1:5174/`
 - `http://127.0.0.1:5174/why-racktrack.html`
+- `http://127.0.0.1:5174/solutions.html`
 - `http://127.0.0.1:5174/contact.html`
 - Server may not be running in a fresh session — restart with: `python3 -m http.server 5174` from the `P-A` folder.
 - `feat/continuous-world` is stale/behind `main` (see "Current Phase") — stay on `main`.
-- `index.html`, `why-racktrack.html`, and `contact.html` use cache-busting query strings on their styles/scripts. When editing those files further, bump the relevant version string (or ask the user to hard-refresh / Cmd+Shift+R) — a plain reload can silently serve stale CSS/JS and make a real change look like it did nothing.
+- `index.html`, `why-racktrack.html`, `solutions.html`, and `contact.html` use cache-busting query strings on their styles/scripts. When editing those files further, bump the relevant version string (or ask the user to hard-refresh / Cmd+Shift+R) — a plain reload can silently serve stale CSS/JS and make a real change look like it did nothing.
 - Live/deployed version: `https://main.d1qibxn0njvfa1.amplifyapp.com` — auto-deploys on push to `main` (see "Live deployment" above). Verifiable via `aws amplify list-jobs --app-id d1qibxn0njvfa1 --branch-name main --profile personal --region us-east-1` if you need to confirm a push actually built successfully rather than assuming.
 
 Important user instructions:
