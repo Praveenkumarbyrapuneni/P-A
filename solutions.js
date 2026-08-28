@@ -50,7 +50,7 @@ if (rackStage && rackControls) {
   });
 }
 
-const revealItems = document.querySelectorAll('.solutions-hero, .solutions-intro, .principle-row, .schematic-section, .cabinet-section, .workflow-section, .surface-grid article, .solutions-cta');
+const revealItems = document.querySelectorAll('.process-intro .eyebrow, .process-intro h2, .process-intro .section-lede, .process-station, .schematic-section .eyebrow, .schematic-section .schematic-lede, .original-schematic, .workflow-section, .surface-grid article, .solutions-cta');
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -63,6 +63,37 @@ if ('IntersectionObserver' in window) {
   revealItems.forEach((item) => observer.observe(item));
 } else {
   revealItems.forEach((item) => item.classList.add('is-visible'));
+}
+
+// Process rail: the vertical line next to Capture/Check/Use fills in step
+// with how far you've scrolled through the section — a plain scroll-fraction
+// calc, not a pinned/scrubbed section, so it never fights the page scroll.
+const processRail = document.querySelector('[data-process-rail]');
+if (processRail) {
+  const fill = processRail.querySelector('[data-process-fill]');
+  const reducedForRail = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+
+  if (reducedForRail?.matches) {
+    fill.style.height = '100%';
+  } else {
+    let railTicking = false;
+    const updateRail = () => {
+      railTicking = false;
+      const rect = processRail.getBoundingClientRect();
+      const viewportAnchor = window.innerHeight * 0.75;
+      const total = rect.height + viewportAnchor - window.innerHeight * 0.25;
+      const traveled = Math.max(0, Math.min(total, viewportAnchor - rect.top));
+      fill.style.height = `${total ? (traveled / total) * 100 : 0}%`;
+    };
+    const onRailScroll = () => {
+      if (railTicking) return;
+      railTicking = true;
+      requestAnimationFrame(updateRail);
+    };
+    window.addEventListener('scroll', onRailScroll, { passive: true });
+    window.addEventListener('resize', onRailScroll);
+    updateRail();
+  }
 }
 
 const surfaceGrid = document.querySelector('.surface-grid');

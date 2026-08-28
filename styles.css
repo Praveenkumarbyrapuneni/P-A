@@ -3927,33 +3927,254 @@ h1 span {
 .solutions-hero-actions { display: flex; align-items: center; gap: 30px; flex-wrap: wrap; }
 .solutions-hero .text-link { color: var(--ink); font-weight: 700; }
 .solutions-hero .text-link span { color: var(--blue); margin-left: 8px; }
-.hero-readout { justify-self: end; width: min(100%, 480px); aspect-ratio: 1; position: relative; border: 1px solid rgba(16, 32, 51, .18); background: rgba(255,255,255,.46); box-shadow: 24px 30px 70px rgba(41, 82, 130, .1); overflow: hidden; }
-.hero-readout::before, .hero-readout::after { content: ''; position: absolute; background: rgba(36, 87, 214, .18); }
-.hero-readout::before { width: 1px; inset: 0 50%; } .hero-readout::after { height: 1px; inset: 50% 0; }
-.readout-top, .readout-bottom { position: absolute; z-index: 2; left: 26px; right: 26px; display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; }
-.readout-top { top: 24px; } .readout-bottom { bottom: 25px; color: var(--ink); } .readout-bottom strong { color: var(--blue); }
-.readout-orbit { position: absolute; inset: 22%; border: 1px solid rgba(36, 87, 214, .28); border-radius: 50%; }
-.readout-orbit::before, .readout-orbit::after { content: ''; position: absolute; inset: 13%; border: 1px dashed rgba(36,87,214,.2); border-radius: 50%; }
-.readout-orbit::after { inset: 28%; border-style: solid; border-color: rgba(67,184,131,.38); }
-.orbit-core { position: absolute; inset: 38%; display: grid; place-items: center; background: var(--blue); color: white; font-family: 'Geist Mono', monospace; font-size: 23px; font-weight: 700; border-radius: 50%; box-shadow: 0 0 0 10px rgba(36,87,214,.08), 0 0 34px rgba(36,87,214,.22); }
-.orbit-lines { position: absolute; inset: 0; } .orbit-lines i { position: absolute; top: 50%; left: 50%; width: 47%; height: 1px; transform-origin: left center; background: linear-gradient(90deg, rgba(36,87,214,.85), rgba(36,87,214,.15)); } .orbit-lines i::after { content: ''; position: absolute; top: -3px; left: 62%; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 5px rgba(36,87,214,.12); animation: signal-travel 2.8s ease-in-out infinite; } .orbit-lines i:nth-child(1) { transform: rotate(-90deg); } .orbit-lines i:nth-child(2) { transform: rotate(28deg); background: linear-gradient(90deg, rgba(36,87,214,.85), rgba(67,184,131,.2)); animation-delay: .3s; } .orbit-lines i:nth-child(2)::after { background: var(--verified); animation-delay: .55s; } .orbit-lines i:nth-child(3) { transform: rotate(148deg); animation-delay: .6s; }
-.readout-orbit > i { position: absolute; width: 9px; height: 9px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 0 5px rgba(36,87,214,.1); animation: signal-pulse 2.8s ease-in-out infinite; } .readout-orbit > i:nth-of-type(1) { top: 4%; left: 48%; } .readout-orbit > i:nth-of-type(2) { right: 6%; top: 45%; background: var(--verified); animation-delay: .55s; } .readout-orbit > i:nth-of-type(3) { bottom: 8%; left: 24%; animation-delay: 1s; }
-.readout-orbit b { position: absolute; color: var(--muted); font: 700 10px 'Geist Mono', monospace; letter-spacing: .08em; } .readout-orbit b:nth-of-type(1) { top: 11%; left: 15%; } .readout-orbit b:nth-of-type(2) { right: 4%; top: 72%; } .readout-orbit b:nth-of-type(3) { left: 2%; bottom: 15%; }
-@keyframes signal-travel { 0%, 100% { opacity: .25; transform: scale(.7); } 45% { opacity: 1; transform: scale(1.15); } } @keyframes signal-pulse { 0%, 100% { opacity: .55; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.15); } }
-.solutions-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 10vw; align-items: end; padding-block: 150px 70px; border-top: 1px solid rgba(16,32,51,.18); }
-.solutions-intro h2 { margin-bottom: 0; }
-.solutions-intro .section-lede { margin: 0 0 4px; max-width: 520px; }
-.principle-rail { border-top: 1px solid rgba(16,32,51,.18); }
-.principle-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 420px); align-items: center; gap: clamp(36px, 4vw, 64px); padding: 30px 0; border-bottom: 1px solid rgba(16,32,51,.18); opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
-.principle-row.is-visible { opacity: 1; transform: none; }
-.principle-row:nth-child(2) { transition-delay: .08s; } .principle-row:nth-child(3) { transition-delay: .16s; }
-.principle-row-reverse { grid-template-columns: minmax(320px, 420px) minmax(0, 1fr); }
-.principle-copy h3 { font-size: clamp(30px, 3vw, 46px); line-height: 1; letter-spacing: -.04em; margin-bottom: 11px; }
-.principle-copy p { max-width: 590px; color: var(--copy-strong); font-size: 18px; line-height: 1.4; margin-bottom: 17px; }
+/* Hero rail: a static preview of Capture -> Check -> Use. Replaces the old
+   orbiting-dots readout widget — the real, scroll-driven version of this
+   same idea lives in the process rail below (.process-rail). */
+.hero-rail {
+  position: relative;
+  justify-self: end;
+  width: min(100%, 420px);
+  padding: 32px 30px 26px;
+  border: 1px solid rgba(16, 32, 51, 0.15);
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 24px 30px 70px rgba(41, 82, 130, 0.1);
+}
+
+.hero-rail-label {
+  margin: 0 0 30px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.hero-rail-track {
+  position: absolute;
+  top: 78px;
+  bottom: 46px;
+  left: 41px;
+  width: 2px;
+  background: linear-gradient(var(--blue), var(--verified));
+  opacity: 0.3;
+}
+
+.hero-rail-station {
+  position: relative;
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 2px 16px;
+  padding: 12px 0;
+}
+
+.hero-rail-dot {
+  grid-row: 1 / 3;
+  align-self: center;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.9), 0 0 0 6px rgba(36, 87, 214, 0.16);
+}
+
+.hero-rail-station:last-child .hero-rail-dot {
+  background: var(--verified);
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.9), 0 0 0 6px rgba(67, 184, 131, 0.16);
+}
+
+.hero-rail-station strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: var(--ink);
+}
+
+.hero-rail-station span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Sheet tags: small "engineering document" index marks reused across the
+   technical sections (process rail, schematic, cabinet reader) — the page's
+   own device for telling sections apart, distinct from Why RackTrack's. */
+.sheet-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sheet-tag::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--verified);
+}
+
+/* Process section: Capture / Check / Use as three stations along a vertical
+   line that fills as you scroll past them (see the rail script). Replaces
+   the old plain alternating image/text rows. */
+.process-section {
+  padding-block: 150px 130px;
+  border-top: 1px solid rgba(16, 32, 51, 0.18);
+}
+
+.process-intro {
+  max-width: 720px;
+  margin-bottom: 70px;
+}
+
+.process-intro h2 {
+  margin: 16px 0 0;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+  transition-delay: 0.08s;
+}
+
+.process-intro h2.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.process-intro .eyebrow,
+.process-intro .section-lede {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.process-intro .eyebrow.is-visible,
+.process-intro .section-lede.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.process-intro .section-lede {
+  margin-top: 20px;
+  transition-delay: 0.16s;
+}
+
+.process-rail {
+  position: relative;
+  padding-left: clamp(28px, 4vw, 52px);
+}
+
+.process-line {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 0;
+  width: 2px;
+  background: rgba(16, 32, 51, 0.12);
+}
+
+.process-line-fill {
+  display: block;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(var(--blue), var(--verified));
+}
+
+.process-station {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+  align-items: center;
+  gap: clamp(28px, 3vw, 56px);
+  padding: 46px 0;
+  border-bottom: 1px solid rgba(16, 32, 51, 0.14);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.process-station:last-child {
+  border-bottom: 0;
+}
+
+.process-station.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.process-station:nth-child(3) { transition-delay: 0.08s; }
+.process-station:nth-child(4) { transition-delay: 0.16s; }
+
+.process-station-copy h3 {
+  font-size: clamp(28px, 2.8vw, 42px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin: 0 0 12px;
+}
+
+.process-station-copy p {
+  max-width: 520px;
+  color: var(--copy-strong);
+  font-size: 17px;
+  line-height: 1.5;
+  margin: 0 0 14px;
+}
+
 .row-tag { color: var(--blue); font-size: 10px; font-weight: 700; }
-.principle-row img { width: 100%; height: 170px; object-fit: cover; filter: saturate(.72) contrast(.95); }
-.schematic-section { margin-top: 170px; padding: 42px 0 28px; background: var(--white); border: 1px solid rgba(16,32,51,.18); box-shadow: 20px 28px 55px rgba(55,87,122,.08); }
-.schematic-section > * { padding-inline: 46px; }
+
+.process-station-media {
+  margin: 0;
+  height: 180px;
+  overflow: hidden;
+}
+
+.process-station-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.75) contrast(0.95);
+}
+
+@media (max-width: 900px) {
+  .process-station {
+    grid-template-columns: 1fr;
+  }
+
+  .process-station-media {
+    height: 200px;
+  }
+}
+
+.schematic-section {
+  margin-top: 0;
+  padding: 130px 0 140px;
+  background: var(--mist);
+  border-top: 1px solid rgba(16, 32, 51, 0.18);
+}
+
+/* Narrower than the standard 1440px .section-frame — at full width the
+   diagram stretched edge-to-edge and read as cramped, not spacious. Needs
+   .solutions-page prefixed to match (and via later cascade order, beat)
+   the .solutions-page .section-frame rule's specificity above. */
+.solutions-page .schematic-section {
+  width: min(1180px, calc(100% - 96px));
+}
+
+.schematic-section .eyebrow,
+.schematic-section .schematic-lede {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.schematic-section .eyebrow.is-visible,
+.schematic-section .schematic-lede.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.schematic-section .schematic-lede {
+  max-width: 420px;
+  margin: 20px 0 56px;
+  transition-delay: 0.08s;
+}
 .schematic-heading { display: flex; justify-content: space-between; align-items: end; gap: 30px; padding-bottom: 34px; border-bottom: 1px solid rgba(16,32,51,.75); }
 .schematic-heading h2 { margin-bottom: 0; font-size: clamp(44px, 5.4vw, 78px); }
 .drawing-meta { display: grid; gap: 8px; text-align: right; color: #676f79; font-size: 11px; }
@@ -3982,7 +4203,16 @@ h1 span {
 .rack-caption { position: absolute; z-index: 5; bottom: 16px; left: 16px; right: 16px; display: flex; justify-content: space-between; color: #aac7ff; font-size: 10px; } .rack-caption strong { color: #72d19f; font-weight: 700; }
 .workflow-section { padding-block: 140px 120px; border-top: 1px solid rgba(16,32,51,.18); } .workflow-heading { display: grid; grid-template-columns: 1fr 1fr; gap: 8vw; align-items: end; margin-bottom: 62px; } .workflow-heading h2 { margin-bottom: 0; } .workflow-heading .section-lede { margin-bottom: 4px; }
 .surface-grid { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid rgba(16,32,51,.18); border-left: 1px solid rgba(16,32,51,.18); } .surface-grid article { min-height: 260px; padding: 30px 34px; border-right: 1px solid rgba(16,32,51,.18); border-bottom: 1px solid rgba(16,32,51,.18); opacity: 0; transform: translateY(20px); transition: opacity .55s ease, transform .55s ease; } .surface-grid article.is-visible { opacity: 1; transform: none; } .surface-grid article:nth-child(even) { transition-delay: .08s; } .surface-grid article > span { color: var(--blue); font-size: 11px; font-weight: 700; } .surface-grid h3 { font-size: clamp(24px, 2.5vw, 36px); letter-spacing: -.04em; line-height: 1; margin: 54px 0 14px; } .surface-grid p { color: var(--copy-strong); font-size: 16px; line-height: 1.45; max-width: 510px; margin: 0; }
-.solutions-cta { margin-top: 80px; margin-bottom: 140px; padding: 100px clamp(30px, 8vw, 140px); background: var(--ink); color: white; position: relative; overflow: hidden; } .solutions-cta::before { content: ''; position: absolute; inset: 0; opacity: .24; background-image: linear-gradient(rgba(125,189,255,.4) 1px, transparent 1px), linear-gradient(90deg, rgba(125,189,255,.4) 1px, transparent 1px); background-size: 46px 46px; mask-image: linear-gradient(90deg, black, transparent 80%); } .solutions-cta > * { position: relative; } .solutions-cta .eyebrow { color: #8bb3ff; } .solutions-cta h2 { margin-bottom: 28px; } .solutions-cta h2 em { color: #8bb3ff; } .solutions-cta p:not(.eyebrow) { max-width: 580px; color: #c9d7e9; font-size: 19px; line-height: 1.45; margin-bottom: 34px; } .solutions-cta .button-primary { background: white; color: var(--ink); }
+/* Was a dark (--ink) full-bleed panel — broke the site's "no dark dominant
+   background" rule. Rebuilt light, matching the rest of the site's CTAs. */
+.solutions-cta { margin-top: 0; margin-bottom: 0; padding: 130px clamp(30px, 8vw, 140px); background: #dfeafa; border-top: 1px solid rgba(16, 32, 51, 0.18); position: relative; overflow: hidden; }
+.solutions-cta::before { content: ''; position: absolute; inset: 0; opacity: .5; background-image: linear-gradient(rgba(36, 87, 214, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(36, 87, 214, .08) 1px, transparent 1px); background-size: 46px 46px; mask-image: linear-gradient(90deg, black, transparent 80%); }
+.solutions-cta > * { position: relative; }
+.solutions-cta .eyebrow { color: var(--blue); }
+.solutions-cta h2 { margin-bottom: 28px; color: var(--ink); }
+.solutions-cta h2 em { color: var(--blue); font-style: normal; }
+.solutions-cta p:not(.eyebrow) { max-width: 580px; color: var(--copy-strong); font-size: 19px; line-height: 1.45; margin-bottom: 34px; }
+.solutions-cta .button-primary { background: var(--blue); color: white; }
 .solutions-page .site-footer {
   margin-top: 0;
   padding-top: 72px;
@@ -4003,8 +4233,6 @@ h1 span {
 .solutions-page .footer-col a:hover,
 .solutions-page .footer-social a:hover { color: var(--ink); }
 .solutions-page .footer-bottom { border-top-color: var(--why-line); }
-.solutions-motion .solutions-hero-copy,
-.solutions-motion .hero-readout,
 .solutions-motion .solutions-intro > *,
 .solutions-motion .principle-row,
 .solutions-motion .schematic-heading,
@@ -4019,8 +4247,6 @@ h1 span {
   transform: translateY(28px);
   transition: opacity 700ms cubic-bezier(.22, .8, .22, 1), transform 700ms cubic-bezier(.22, .8, .22, 1);
 }
-.solutions-motion .solutions-hero.is-visible .solutions-hero-copy,
-.solutions-motion .solutions-hero.is-visible .hero-readout,
 .solutions-motion .solutions-intro.is-visible > *,
 .solutions-motion .principle-row.is-visible,
 .solutions-motion .schematic-section.is-visible .schematic-heading,
@@ -4034,7 +4260,6 @@ h1 span {
   opacity: 1;
   transform: none;
 }
-.solutions-motion .hero-readout,
 .solutions-motion .cabinet-reader { transition-delay: 120ms; }
 .solutions-motion .solutions-intro .section-lede,
 .solutions-motion .workflow-heading .section-lede,
@@ -4048,7 +4273,7 @@ html:not(.solutions-motion) .principle-row,
 html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none; }
 @media (max-width: 980px) {
   .solutions-page .section-frame { width: min(100% - 42px, 720px); }
-  .solutions-hero { min-height: auto; grid-template-columns: 1fr; gap: 70px; padding-block: 100px 80px; } .solutions-hero-copy { padding-left: 0; } .hero-readout { justify-self: start; width: min(100%, 500px); }
+  .solutions-hero { min-height: auto; grid-template-columns: 1fr; gap: 70px; padding-block: 100px 80px; } .solutions-hero-copy { padding-left: 0; } .hero-rail { justify-self: start; width: min(100%, 500px); }
   .solutions-intro, .workflow-heading { grid-template-columns: 1fr; gap: 30px; padding-block: 100px 50px; }
   .principle-row, .principle-row-reverse { grid-template-columns: 1fr; gap: 22px; } .principle-row img { grid-column: auto; height: 180px; }
   .schematic-section { margin-top: 100px; } .schematic-section > * { padding-inline: 26px; } .schematic-heading { display: block; } .drawing-meta { text-align: left; margin-top: 25px; } .schematic-labels { display: none; } .schematic-grid { grid-template-columns: 1fr; gap: 16px; } .source-stack, .record-stack { gap: 12px; } .source-stack { grid-template-columns: 1fr 30px 1fr; align-items: center; } .source-stack .flow-arrow { display: grid; justify-items: center; gap: 0; } .source-stack .flow-arrow b { transform: rotate(90deg); } .source-stack .flow-arrow:last-child { display: none; } .engine-node { margin: 10px 0; } .record-stack { grid-template-columns: repeat(3, 1fr); margin-left: 0; } .record-node { min-height: 100px; padding: 14px; } .record-node span { font-size: 9px; }
@@ -4058,11 +4283,11 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
   .solutions-page .footer-links { margin-top: 0; }
 }
 @media (max-width: 640px) {
-  .solutions-page .section-frame { width: calc(100% - 30px); } .solutions-hero h1 { font-size: clamp(48px, 13vw, 68px); } .solutions-hero .hero-lede { font-size: 18px; } .solutions-hero-actions { gap: 20px; } .hero-readout { width: 100%; } .solutions-intro h2, .cabinet-copy h2, .workflow-heading h2 { font-size: 52px; }
+  .solutions-page .section-frame { width: calc(100% - 30px); } .solutions-hero h1 { font-size: clamp(48px, 13vw, 68px); } .solutions-hero .hero-lede { font-size: 18px; } .solutions-hero-actions { gap: 20px; } .hero-rail { width: 100%; } .process-intro h2, .workflow-heading h2 { font-size: 52px; }
   .principle-row, .principle-row-reverse { grid-template-columns: 1fr; } .principle-row img { grid-column: auto; height: 150px; } .principle-copy p { font-size: 16px; } .row-tag { font-size: 9px; line-height: 1.5; display: block; }
   .schematic-section { padding-top: 28px; } .schematic-section > * { padding-inline: 17px; } .schematic-heading h2 { font-size: 45px; } .source-stack { grid-template-columns: 1fr; } .source-stack .flow-arrow { justify-content: flex-start; } .source-stack .flow-arrow b { transform: none; } .record-stack { grid-template-columns: 1fr; } .record-node { min-height: 78px; } .schematic-key { display: grid; gap: 15px; padding-top: 22px; } .schematic-key strong { margin-left: 0; }
   .reader-label, .reader-tabs { padding-left: 17px; padding-right: 17px; } .reader-tabs button { min-height: 55px; font-size: 16px; } .rack-stage { min-height: 480px; } .cabinet { width: 74%; min-height: 410px; height: 82%; } .rack-slot { padding: 8px; } .rack-slot strong { font-size: 10px; } .rack-slot span, .rack-slot em { font-size: 8px; } .scan-beam { animation-name: rack-scan-mobile; } @keyframes rack-scan-mobile { 0%,100% { transform: translateY(0); } 50% { transform: translateY(300px); } }
-  .surface-grid article { min-height: 220px; padding: 24px 20px; } .surface-grid h3 { margin-top: 40px; } .solutions-cta { width: calc(100% - 30px); padding: 70px 24px; margin-top: 40px; margin-bottom: 80px; } .solutions-cta h2 { font-size: 50px; }
+  .surface-grid article { min-height: 220px; padding: 24px 20px; } .surface-grid h3 { margin-top: 40px; } .solutions-cta { padding: 70px 24px; } .solutions-cta h2 { font-size: 50px; }
 }
 @media (prefers-reduced-motion: reduce) { .solutions-page *, .solutions-page *::before, .solutions-page *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
 
@@ -4076,11 +4301,22 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
   box-shadow: none;
 }
 .solutions-page .schematic-section > * { padding-inline: 0; }
-.original-schematic { margin: 0; }
-.original-schematic img { display: block; width: 100%; height: auto; border: 1px solid rgba(16,32,51,.16); background: var(--white); }
+/* The diagram used to touch its own border directly — no breathing room,
+   reading as a raw exported drawing pasted onto the page. Padding + a soft
+   card now gives it space to sit in, like a framed print rather than a
+   spec-sheet crop. */
+.original-schematic {
+  margin: 0;
+  padding: clamp(20px, 3vw, 44px);
+  background: var(--white);
+  border: 1px solid rgba(16, 32, 51, 0.14);
+  border-radius: var(--radius-md);
+  box-shadow: 0 30px 70px rgba(16, 32, 51, 0.09);
+}
+.original-schematic img { display: block; width: 100%; height: auto; border: 0; background: transparent; }
 .original-schematic figcaption { margin-top: 12px; color: #788597; font: 11px var(--font-mono); letter-spacing: .06em; }
 .solutions-motion .original-schematic { opacity: 0; transform: translateY(28px); transition: opacity 700ms cubic-bezier(.22,.8,.22,1), transform 700ms cubic-bezier(.22,.8,.22,1); }
-.solutions-motion .schematic-section.is-visible .original-schematic { opacity: 1; transform: none; }
+.solutions-motion .original-schematic.is-visible { opacity: 1; transform: none; }
 @media (max-width: 980px) {
   .solutions-page .schematic-section,
   .solutions-page #system { width: calc(100% - 30px); margin-top: 100px; }
@@ -4090,7 +4326,10 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 /* Original cabinet reader frame and its source-page spacing. */
 .solutions-page #rack-3d { padding-block: 92px 108px; border-top: 1px solid rgba(16,32,51,.18); }
 .solutions-page #rack-3d { --blue: #1a3fd4; --ink: #1a1a1a; --muted: #6f7785; }
-.solutions-page #rack-3d > .max-w-container-max-width { width: min(1760px, calc(100% - 64px)); margin-inline: auto; }
+/* Was 1760px — the cabinet reader stretched edge-to-edge and looked
+   oversized/cramped rather than spacious. Narrowed to match the schematic
+   section above it. */
+.solutions-page #rack-3d > .max-w-container-max-width { width: min(1280px, calc(100% - 64px)); margin-inline: auto; }
 .solutions-page #rack-3d > .max-w-container-max-width > .grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(50px, 8vw, 130px); align-items: end; }
 .solutions-page #rack-3d .eyebrow { margin-bottom: 20px; }
 .solutions-page #rack-3d h2 { max-width: 19ch; margin: 0; font-size: clamp(42px, 3.6vw, 54px); font-weight: 700; line-height: .96; letter-spacing: -.05em; }
@@ -4969,14 +5208,18 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 /* Scroll reveal — shared by every [data-reveal] element on the Why RackTrack
    page. Hidden a little below its resting position, animates in once when
    scrolled into view (see the IntersectionObserver in why-racktrack.js).
-   Never applied to the hero: that content must be visible on load. */
-[data-reveal] {
+   Never applied to the hero: that content must be visible on load.
+   Scoped to .why-page specifically — Solutions has its own pre-existing
+   data-reveal attributes (unused, left over from an earlier build) on the
+   rack-3D section; a page-wide selector here would have silently hidden
+   them forever with no script to ever un-hide them. */
+.why-page [data-reveal] {
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 0.8, 0.24, 1);
 }
 
-[data-reveal].is-visible {
+.why-page [data-reveal].is-visible {
   opacity: 1;
   transform: none;
 }
