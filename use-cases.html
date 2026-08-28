@@ -6,8 +6,8 @@
             <meta name="description" content="See how RackTrack helps each team use the same rack sweep to answer a different operational question." />
     <title>Use Cases | RackTrack</title>
     <link rel="icon" href="assets/logo.jpg" />
-    <link rel="stylesheet" href="styles.css?v=use-cases-7" />
-    <script type="module" src="use-cases.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css?v=use-cases-10" />
+    <script type="module" src="use-cases.js?v=3"></script>
   </head>
   <body class="use-cases-page">
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -18,26 +18,113 @@
     </header>
     <main id="main-content">
       <section class="uc-opening" aria-labelledby="uc-title">
-        <div class="uc-opening-grid" aria-hidden="true"></div>
-        <div class="uc-opening-copy"><p class="eyebrow">USE CASES / ONE RACK, MANY TEAMS</p><h1 id="uc-title">One rack sweep.<br /><em>Six useful answers.</em></h1><p>A phone sweep captures the rack. RackTrack turns it into a clear record. Each team uses that record to answer the question they care about.</p><a class="uc-opening-link" href="#role-navigator">Explore the team views <span aria-hidden="true">↓</span></a></div>
-        <figure class="uc-opening-figure"><img src="assets/use-cases/media-hall-aisle-rows.jpg" alt="Long rows of server cabinets in a production data center" /><figcaption><span>LIVE INFRASTRUCTURE</span><strong>ONE SHARED RECORD</strong></figcaption><span class="uc-scanline" aria-hidden="true"></span></figure>
-      </section>
-      <section class="uc-brief" aria-labelledby="uc-brief-title"><p class="eyebrow">HOW TO READ THIS PAGE</p><div><h2 id="uc-brief-title">Same source.<br /><em>Different job.</em></h2><p>The rack is the shared fact. A leader, engineer, security owner, auditor, responder, and migration team all look at that fact differently.</p></div></section>
-      <section class="uc-simple-flow" aria-label="RackTrack use-case flow"><div><span>01</span><strong>Capture</strong><p>Record the physical rack with a guided phone sweep.</p></div><div><span>02</span><strong>Verify</strong><p>Compare what was captured with the systems and network records.</p></div><div><span>03</span><strong>Use</strong><p>Give each team a simple answer they can act on.</p></div></section>
-      <section class="uc-navigator" id="role-navigator" data-role-navigator aria-label="RackTrack use cases by role">
-        <div class="uc-navigator-pin">
-          <div class="uc-role-index" role="tablist" aria-label="Choose a team view"><button class="is-active" type="button" role="tab" aria-selected="true" aria-controls="role-leaders" data-role="0">Infrastructure leaders</button><button type="button" role="tab" aria-selected="false" aria-controls="role-network" data-role="1">Network architects</button><button type="button" role="tab" aria-selected="false" aria-controls="role-security" data-role="2">Security teams</button><button type="button" role="tab" aria-selected="false" aria-controls="role-compliance" data-role="3">Audit owners</button><button type="button" role="tab" aria-selected="false" aria-controls="role-incident" data-role="4">Incident response</button><button type="button" role="tab" aria-selected="false" aria-controls="role-migration" data-role="5">Migration teams</button></div>
-          <div class="uc-role-visual" aria-hidden="true"><div class="uc-visual-grid"></div><div class="uc-visual-images"><img class="is-active" data-role-image="0" src="assets/role-infrastructure-leaders.jpeg" alt="" /><img data-role-image="1" src="assets/role-network-architects.jpeg" alt="" /><img data-role-image="2" src="assets/role-security-team.jpeg" alt="" /><img data-role-image="3" src="assets/role-compliance-audit-owners.jpeg" alt="" /><img data-role-image="4" src="assets/role-incident-response.jpeg" alt="" /><img data-role-image="5" src="assets/role-migration-teams.jpeg" alt="" /></div></div>
-          <div class="uc-role-detail">
-            <article class="is-active" id="role-leaders" role="tabpanel" data-role-panel="0"><p class="uc-role-kicker">01 / OPERATE</p><h3>Infrastructure &amp;<br />Data Center Leaders</h3><p class="uc-role-question">“What is actually deployed across every cabinet, row, and site?”</p><dl><div><dt>Physical question</dt><dd>What changed since the last verified sweep?</dd></div><div><dt>Evidence returned</dt><dd>Cabinet-level inventory with source-linked proof.</dd></div></dl><a href="use-case-infrastructure-data-center-leaders.html">Read the case <span aria-hidden="true">↗</span></a></article>
-            <article id="role-network" role="tabpanel" data-role-panel="1" hidden><p class="uc-role-kicker">02 / CONNECT</p><h3>Network Architects<br />&amp; Engineers</h3><p class="uc-role-question">“Does the port map match the cables in the rack?”</p><dl><div><dt>Physical question</dt><dd>Which ports, devices, and visible paths are really connected?</dd></div><div><dt>Evidence returned</dt><dd>Port-level topology tied back to the cabinet sweep.</dd></div></dl><a href="use-case-network-architects-engineers.html">Read the case <span aria-hidden="true">↗</span></a></article>
-            <article id="role-security" role="tabpanel" data-role-panel="2" hidden><p class="uc-role-kicker">03 / COVER</p><h3>Security &amp;<br />Vulnerability Teams</h3><p class="uc-role-question">“Which physical devices sit outside our current coverage?”</p><dl><div><dt>Physical question</dt><dd>What equipment is present but missing from the expected record?</dd></div><div><dt>Evidence returned</dt><dd>A physical inventory that exposes unmanaged devices.</dd></div></dl><a href="use-case-security-vulnerability-teams.html">Read the case <span aria-hidden="true">↗</span></a></article>
-            <article id="role-compliance" role="tabpanel" data-role-panel="3" hidden><p class="uc-role-kicker">04 / PROVE</p><h3>Compliance &amp;<br />Audit Owners</h3><p class="uc-role-question">“Can we show where this record came from, and when?”</p><dl><div><dt>Physical question</dt><dd>Can each asset claim be traced to a real-world observation?</dd></div><div><dt>Evidence returned</dt><dd>Timestamped, source-linked audit evidence.</dd></div></dl><a href="use-case-compliance-audit-owners.html">Read the case <span aria-hidden="true">↗</span></a></article>
-            <article id="role-incident" role="tabpanel" data-role-panel="4" hidden><p class="uc-role-kicker">05 / RESPOND</p><h3>Incident Responders<br />&amp; On-Call</h3><p class="uc-role-question">“Which device and port do we need to reach right now?”</p><dl><div><dt>Physical question</dt><dd>Where is the affected hardware, down to its rack position?</dd></div><div><dt>Evidence returned</dt><dd>Fast, evidence-backed location and connectivity context.</dd></div></dl><a href="use-case-incident-responders-on-call.html">Read the case <span aria-hidden="true">↗</span></a></article>
-            <article id="role-migration" role="tabpanel" data-role-panel="5" hidden><p class="uc-role-kicker">06 / TRANSITION</p><h3>M&amp;A &amp;<br />Migration Teams</h3><p class="uc-role-question">“What did we inherit — and where does it disagree?”</p><dl><div><dt>Physical question</dt><dd>What is truly in the footprint before a migration begins?</dd></div><div><dt>Evidence returned</dt><dd>A baseline of inventory, topology, and record deltas.</dd></div></dl><a href="use-case-m-a-migration-teams.html">Read the case <span aria-hidden="true">↗</span></a></article>
+        <div class="uc-opening-media" aria-hidden="true">
+          <img src="assets/use-cases/media-hall-aisle-rows.jpg" alt="" />
+          <div class="uc-opening-scrim"></div>
+          <span class="uc-scanline"></span>
+          <div class="uc-opening-tags">
+            <span class="uc-opening-tag" style="--x:14%;--y:20%">Leaders</span>
+            <span class="uc-opening-tag" style="--x:78%;--y:16%">Network</span>
+            <span class="uc-opening-tag" style="--x:20%;--y:66%">Security</span>
+            <span class="uc-opening-tag" style="--x:82%;--y:62%">Compliance</span>
+            <span class="uc-opening-tag" style="--x:30%;--y:82%">Incident</span>
+            <span class="uc-opening-tag" style="--x:70%;--y:84%">Migration</span>
           </div>
-          <p class="uc-scroll-cue"><span></span>Scroll to change operating view</p>
         </div>
+        <div class="uc-opening-copy">
+          <p class="eyebrow">USE CASES / ONE RACK, MANY TEAMS</p>
+          <h1 id="uc-title">One rack sweep.<br /><em>Six useful answers.</em></h1>
+          <p>A phone sweep captures the rack. RackTrack turns it into a clear record. Each team uses that record to answer the question they care about.</p>
+          <a class="uc-opening-link" href="#role-navigator">Explore the team views <span aria-hidden="true">↓</span></a>
+        </div>
+        <p class="uc-opening-credit"><span>LIVE INFRASTRUCTURE</span><strong>ONE SHARED RECORD</strong></p>
+      </section>
+      <section class="uc-fanout" aria-labelledby="uc-fanout-title">
+        <div class="uc-fanout-copy">
+          <p class="eyebrow">HOW TO READ THIS PAGE</p>
+          <h2 id="uc-fanout-title">One rack.<br /><em>Six different questions.</em></h2>
+          <p>The same phone sweep becomes six different answers, because a leader, an engineer, a security owner, an auditor, a responder, and a migration team each look at the same rack for a different reason. Below, drag through each one.</p>
+        </div>
+        <svg class="uc-fanout-diagram" viewBox="0 0 640 340" aria-hidden="true" focusable="false">
+          <circle class="uc-fanout-source" cx="34" cy="170" r="7" />
+          <path class="uc-fanout-line" d="M34,170 C210,170 210,26 400,26" />
+          <path class="uc-fanout-line" d="M34,170 C210,170 210,82 400,82" />
+          <path class="uc-fanout-line" d="M34,170 C210,170 210,138 400,138" />
+          <path class="uc-fanout-line" d="M34,170 C210,170 210,202 400,202" />
+          <path class="uc-fanout-line" d="M34,170 C210,170 210,258 400,258" />
+          <path class="uc-fanout-line" d="M34,170 C210,170 210,314 400,314" />
+          <g class="uc-fanout-node" transform="translate(400,26)"><circle r="4" /><text x="14" y="4">Leaders</text></g>
+          <g class="uc-fanout-node" transform="translate(400,82)"><circle r="4" /><text x="14" y="4">Network</text></g>
+          <g class="uc-fanout-node" transform="translate(400,138)"><circle r="4" /><text x="14" y="4">Security</text></g>
+          <g class="uc-fanout-node" transform="translate(400,202)"><circle r="4" /><text x="14" y="4">Compliance</text></g>
+          <g class="uc-fanout-node" transform="translate(400,258)"><circle r="4" /><text x="14" y="4">Incident</text></g>
+          <g class="uc-fanout-node" transform="translate(400,314)"><circle r="4" /><text x="14" y="4">Migration</text></g>
+          <text class="uc-fanout-source-label" x="34" y="196">ONE SWEEP</text>
+        </svg>
+      </section>
+      <section class="uc-filmstrip" id="role-navigator" aria-label="RackTrack use cases by role">
+        <div class="uc-filmstrip-head">
+          <p class="eyebrow">SIX TEAMS, ONE SWEEP</p>
+          <h2>Find your team below.</h2>
+          <p>Every card starts the same way: a phone walks the rack. What each team gets back is different. Drag sideways, or just scroll.</p>
+        </div>
+        <div class="uc-reel-track" data-reel-track tabindex="0" role="group" aria-label="Six team stories — scroll or drag sideways">
+          <article class="uc-reel" data-reel>
+            <figure><img src="assets/role-infrastructure-leaders.jpeg" alt="Infrastructure and data center leaders reviewing rack records" loading="lazy" /></figure>
+            <div class="uc-reel-copy">
+              <p class="uc-reel-role">Infrastructure &amp; Data Center Leaders</p>
+              <p class="uc-reel-quote">&ldquo;Just tell me what&rsquo;s actually installed, everywhere.&rdquo;</p>
+              <p class="uc-reel-plain">One phone sweep turns every rack into a list they can trust &mdash; no more chasing five different spreadsheets.</p>
+              <a href="use-case-infrastructure-data-center-leaders.html">See their case <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+          <article class="uc-reel" data-reel>
+            <figure><img src="assets/role-network-architects.jpeg" alt="Network architects tracing cable and port connections" loading="lazy" /></figure>
+            <div class="uc-reel-copy">
+              <p class="uc-reel-role">Network Architects &amp; Engineers</p>
+              <p class="uc-reel-quote">&ldquo;Does the wiring actually match the diagram?&rdquo;</p>
+              <p class="uc-reel-plain">RackTrack checks the real cables and ports against the map, so nobody finds out the hard way.</p>
+              <a href="use-case-network-architects-engineers.html">See their case <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+          <article class="uc-reel" data-reel>
+            <figure><img src="assets/role-security-team.jpeg" alt="Security team reviewing physical device coverage" loading="lazy" /></figure>
+            <div class="uc-reel-copy">
+              <p class="uc-reel-role">Security &amp; Vulnerability Teams</p>
+              <p class="uc-reel-quote">&ldquo;What&rsquo;s plugged in that we don&rsquo;t even know about?&rdquo;</p>
+              <p class="uc-reel-plain">It finds the boxes your scanners can&rsquo;t see, so nothing sits outside your radar.</p>
+              <a href="use-case-security-vulnerability-teams.html">See their case <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+          <article class="uc-reel" data-reel>
+            <figure><img src="assets/role-compliance-audit-owners.jpeg" alt="Compliance and audit owners reviewing evidence records" loading="lazy" /></figure>
+            <div class="uc-reel-copy">
+              <p class="uc-reel-role">Compliance &amp; Audit Owners</p>
+              <p class="uc-reel-quote">&ldquo;Can we actually prove this record is real?&rdquo;</p>
+              <p class="uc-reel-plain">Every entry links back to a photo, a place, and a timestamp &mdash; evidence, not guesswork.</p>
+              <a href="use-case-compliance-audit-owners.html">See their case <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+          <article class="uc-reel" data-reel>
+            <figure><img src="assets/role-incident-response.jpeg" alt="Incident responder locating rack equipment" loading="lazy" /></figure>
+            <div class="uc-reel-copy">
+              <p class="uc-reel-role">Incident Responders &amp; On-Call</p>
+              <p class="uc-reel-quote">&ldquo;Where do I need to go, right now?&rdquo;</p>
+              <p class="uc-reel-plain">One search gives you the exact rack, row, and port &mdash; before you even walk over.</p>
+              <a href="use-case-incident-responders-on-call.html">See their case <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+          <article class="uc-reel" data-reel>
+            <figure><img src="assets/role-migration-teams.jpeg" alt="Migration team assessing an inherited data center footprint" loading="lazy" /></figure>
+            <div class="uc-reel-copy">
+              <p class="uc-reel-role">M&amp;A &amp; Migration Teams</p>
+              <p class="uc-reel-quote">&ldquo;What did we actually just buy?&rdquo;</p>
+              <p class="uc-reel-plain">A fast sweep of the new site turns &ldquo;we think&rdquo; into &ldquo;we know&rdquo; before day one.</p>
+              <a href="use-case-m-a-migration-teams.html">See their case <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+        <div class="uc-reel-dots" data-reel-dots aria-hidden="true"></div>
       </section>
       <section class="uc-close" aria-labelledby="uc-close-title"><p class="eyebrow">START WITH THE QUESTION</p><h2 id="uc-close-title">Bring the pressure you own.<br /><em>We’ll start at the rack.</em></h2><p>One guided sweep can give your team a more defensible place to make its next decision.</p><a class="button-primary" href="contact.html">Request a platform brief <span aria-hidden="true">↗</span></a></section>
     </main>
