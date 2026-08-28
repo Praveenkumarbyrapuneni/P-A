@@ -51,7 +51,7 @@ evidence — scaling from one rack to the whole floor.
 - Chapter 2 (dense 240-frame phone scan) keeps its proven internal rendering; it is
   brought into the continuous flow, not re-implemented.
 
-## Fixed constraints (from CLAUDE.md — do not violate)
+## Fixed constraints (from AGENTS.md — do not violate)
 
 - **Palette:** light infrastructure glass. `#F7FAFF` cloud white (page bg), `#EEF5FF`
   mist blue, `#D9E7F6` pale steel (borders/panels/overlays), `#102033` deep ink

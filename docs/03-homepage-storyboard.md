@@ -706,6 +706,6 @@ Do not stitch multiple *chapters* into one long video — each chapter gets its 
 
 ## Status Summary (update this after every chapter)
 
-All 9 chapters are accounted for: 1-8 built and accepted, 9 (Final CTA) is the only remaining item and needs no video generation — just a static HTML/CSS section reusing the hero image. See `CLAUDE.md`'s Build Progress table for the current authoritative status table; keep both in sync when either changes.
+All 9 chapters are accounted for: 1-8 built and accepted, 9 (Final CTA) is the only remaining item and needs no video generation — just a static HTML/CSS section reusing the hero image. See `AGENTS.md`'s Build Progress table for the current authoritative status table; keep both in sync when either changes.
 
 Prioritize explanation quality over perfect frame-to-frame continuity. If the clearest next chapter needs a new composed start frame, use one.

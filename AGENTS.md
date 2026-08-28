@@ -14,6 +14,12 @@ The existing `/Users/praveen/Desktop/Racktrack_Website` folder is the content an
 
 ## New Page Experiences
 
+## Non-negotiable page-design direction
+
+Each top-level RackTrack page must be a deliberately different, premium interaction concept — not a reskin of the legacy Racktrack_Website pages and not a repeated card-grid template. Keep the established RackTrack palette and type system, but make full use of the viewport, whitespace, editorial scale, visual depth, and purposeful scroll or direct-manipulation interactions. The approved Solutions page must not be visually or functionally changed unless explicitly requested. Why RackTrack, Solutions, and Use Cases must use the same active navigation treatment: dark active label plus the royal-blue underline. When a new page needs a concept, first invent one from its actual content; if that does not produce a strong answer, research award-winning 3D/scroll-interactive work for craft inspiration only, never copy a reference site. On mobile, replace desktop pinned/scroll effects with composed static stacked content rather than compressing the desktop layout.
+
+Every non-homepage page must be understandable to a first-time visitor with no server or data-center background. Start from plain language before technical detail: what problem the person has, what RackTrack captures, what it checks, what the user sees, and what decision becomes easier. Avoid abstract-only phrases like "physical signal" or "decision-ready record" unless the page immediately explains them in ordinary words. Do not let interaction or visual polish hide the explanation; the visitor should be able to follow the page slowly without getting bored, lost, or forced to decode jargon.
+
 `why-racktrack.html`, `solutions.html`, and `contact.html` are local, static-site routes in this repository. They do not link to the Desktop source folder or external image URLs.
 
 - **Why RackTrack:** a full-width light infrastructure field with the three-layer message (Perceive, Reconcile, Cognize), interactive `01 / 03` verification controls, generated local rack imagery, proof statements, and sticky evidence cards.
