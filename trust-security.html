@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="How RackTrack meets enterprise security, data-handling, deployment, and IP diligence for infrastructure, security, and compliance buyers." />
+    <title>Trust &amp; Security | RackTrack</title>
+    <link rel="icon" href="assets/logo.jpg" />
+    <link rel="stylesheet" href="styles.css?v=trust-5" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <script type="module" src="trust-security.js?v=5"></script>
+  </head>
+  <body class="trust-page">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="RackTrack home"><span class="brand-mark"><img src="assets/logo.jpg" alt="" /></span><span class="brand-name">RackTrack</span></a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="why-racktrack.html">Why RackTrack</a>
+        <a href="solutions.html">Solutions</a>
+        <div class="nav-item"><a href="use-cases.html">Use Cases</a><div class="nav-dropdown"><a href="use-case-infrastructure-data-center-leaders.html">Infrastructure &amp; Data Center Leaders</a><a href="use-case-network-architects-engineers.html">Network Architects &amp; Engineers</a><a href="use-case-security-vulnerability-teams.html">Security &amp; Vulnerability Teams</a><a href="use-case-compliance-audit-owners.html">Compliance &amp; Audit Owners</a><a href="use-case-incident-responders-on-call.html">Incident Responders &amp; On-Call</a><a href="use-case-m-a-migration-teams.html">M&amp;A &amp; Migration Teams</a></div></div>
+        <div class="nav-item"><a href="resources.html">Resources</a><div class="nav-dropdown"><a href="article-why-every-enterprise-cmdb-is-40-wrong-and-the-architecture-t.html">Why your infrastructure records are wrong more often than you think</a><a href="article-the-hidden-cost-of-unreconciled-infrastructure-a-framework-f.html">What it actually costs when nobody checks the rack</a><a href="article-from-audit-to-autonomy-how-continuous-reconciliation-reshape.html">From once-a-year audits to always-on records</a><a href="article-physical-layer-the-missing-link-in-infrastructure-security.html">The security gap your network tools can't see</a><a href="article-how-infrastructure-teams-prepare-for-soc-2-audits.html">Getting ready for a SOC 2 audit without the scramble</a><a href="article-dcim-vs-physical-reality-why-the-gap-matters.html">Your DCIM platform shows a plan. The rack shows what's real.</a><a href="article-the-hidden-cost-of-wrong-rack-inventory.html">What a wrong inventory actually costs you</a><a href="article-what-network-verified-actually-means.html">What we mean when we say a record is "verified"</a><a href="article-free-port-discovery-and-rack-capacity-planning.html">Planning your next rack without guessing at free ports</a></div></div>
+        <a class="is-current" href="trust-security.html" aria-current="page">Trust &amp; Security</a> <a href="contact.html">Contact Us</a>
+      </nav>
+      <a class="nav-cta" href="#sign-in">Sign In</a>
+    </header>
+
+    <main id="main-content">
+      <section class="tsec-hero">
+        <div class="tsec-frame tsec-hero-grid">
+          <div class="tsec-hero-copy">
+            <p class="eyebrow">TRUST &amp; SECURITY</p>
+            <h1><span class="tsec-h-line"><span>Enterprise-grade by architecture.</span></span><br /><em class="tsec-h-line"><span>Audit-ready by default.</span></em></h1>
+            <p class="tsec-hero-lede">Built to meet how enterprise security, compliance, and infrastructure teams evaluate a new platform &mdash; clear ownership over your data, deployment options that match how you already operate, and engineering backed by defensible, patent-pending work.</p>
+            <div class="tsec-hero-ctas">
+              <a class="button-primary" href="contact.html">Request a Security Brief <span aria-hidden="true">&rarr;</span></a>
+              <a class="tsec-link" href="solutions.html">View Solutions <span aria-hidden="true">&rarr;</span></a>
+            </div>
+            <ul class="tsec-pills">
+              <li>Clear data ownership</li>
+              <li>Flexible deployment</li>
+              <li>Enterprise-ready controls</li>
+            </ul>
+          </div>
+          <div class="tsec-console" data-console aria-hidden="true">
+            <p class="tsec-console-head">LIVE POSTURE READOUT</p>
+            <ol class="tsec-console-lines">
+              <li><span>TENANT_ISOLATION</span><b class="is-ok">ENFORCED</b></li>
+              <li><span>ENCRYPTION_AT_REST</span><b class="is-ok">ACTIVE</b></li>
+              <li><span>ENCRYPTION_IN_TRANSIT</span><b class="is-ok">ACTIVE</b></li>
+              <li><span>ACCESS_CONTROL</span><b class="is-ok">ROLE-BASED</b></li>
+              <li><span>AUDIT_LOGGING</span><b class="is-ok">ENABLED</b></li>
+              <li><span>SOC_2_TYPE_II</span><b class="is-pending">IN PROGRESS</b></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <figure class="tsec-figure tsec-hero-figure tsec-frame" data-reveal>
+        <img src="assets/solutions/posture.jpg" alt="A row of RackTrack-monitored server cabinets in a data center aisle" loading="lazy" decoding="async" />
+        <figcaption><span class="tsec-figure-tag">FIG. 01</span><p class="tsec-figure-caption">A RackTrack-verified rack row &mdash; the physical reality behind every posture line above.</p></figcaption>
+      </figure>
+
+      <div class="tsec-body tsec-frame">
+        <nav class="tsec-index" aria-label="Trust and security sections">
+          <ol data-index-list>
+            <span class="tsec-index-rail" aria-hidden="true"><span class="tsec-index-fill" data-index-fill></span></span>
+            <li><a href="#posture" data-index-link="posture"><span class="tsec-index-dot">01</span><span class="tsec-index-label">Security Posture</span></a></li>
+            <li><a href="#data-handling" data-index-link="data-handling"><span class="tsec-index-dot">02</span><span class="tsec-index-label">Data Handling</span></a></li>
+            <li><a href="#deployment" data-index-link="deployment"><span class="tsec-index-dot">03</span><span class="tsec-index-label">Deployment Options</span></a></li>
+            <li><a href="#patents" data-index-link="patents"><span class="tsec-index-dot">04</span><span class="tsec-index-label">Defensible Innovation</span></a></li>
+          </ol>
+        </nav>
+
+        <div class="tsec-sections">
+          <section class="tsec-section" id="posture" data-index-section="posture">
+            <p class="tsec-kicker">01 &mdash; SECURITY POSTURE</p>
+            <h2>Built to meet the signals procurement teams check first.</h2>
+            <p class="tsec-section-lede">RackTrack is designed to support formal enterprise diligence, with controls, evidence handling, and operational boundaries kept clear and reviewable.</p>
+
+            <ol class="tsec-ledger" data-reveal-group>
+              <li class="tsec-ledger-row" data-reveal>
+                <span class="tsec-ledger-num">01</span>
+                <div class="tsec-ledger-body">
+                  <p class="tsec-ledger-name">SOC 2 Type II</p>
+                  <p class="tsec-ledger-desc">In progress, with controls and evidence practices being prepared for formal review.</p>
+                </div>
+                <span class="tsec-status tsec-status-pending"><i></i>In progress</span>
+              <span class="tsec-reveal-bar" aria-hidden="true"></span></li>
+              <li class="tsec-ledger-row" data-reveal>
+                <span class="tsec-ledger-num">02</span>
+                <div class="tsec-ledger-body">
+                  <p class="tsec-ledger-name">Tenant Isolation</p>
+                  <p class="tsec-ledger-desc">Every customer environment is isolated, with data residency for evidence and structured records kept under your control.</p>
+                </div>
+                <span class="tsec-status tsec-status-ok"><i></i>Verified</span>
+              <span class="tsec-reveal-bar" aria-hidden="true"></span></li>
+              <li class="tsec-ledger-row" data-reveal>
+                <span class="tsec-ledger-num">03</span>
+                <div class="tsec-ledger-body">
+                  <p class="tsec-ledger-name">Encryption</p>
+                  <p class="tsec-ledger-desc">Rack video, derived records, and operational metadata are encrypted in transit and at rest.</p>
+                </div>
+                <span class="tsec-status tsec-status-ok"><i></i>Active</span>
+              <span class="tsec-reveal-bar" aria-hidden="true"></span></li>
+              <li class="tsec-ledger-row" data-reveal>
+                <span class="tsec-ledger-num">04</span>
+                <div class="tsec-ledger-body">
+                  <p class="tsec-ledger-name">Credential Vaulting</p>
+                  <p class="tsec-ledger-desc">Works with the credential vault you already run &mdash; RackTrack never stores production access keys directly.</p>
+                </div>
+                <span class="tsec-status tsec-status-ok"><i></i>Active</span>
+              <span class="tsec-reveal-bar" aria-hidden="true"></span></li>
+              <li class="tsec-ledger-row" data-reveal>
+                <span class="tsec-ledger-num">05</span>
+                <div class="tsec-ledger-body">
+                  <p class="tsec-ledger-name">Access Control &amp; Audit Logs</p>
+                  <p class="tsec-ledger-desc">Role-based access and full audit logging support least-privilege operations and after-the-fact review.</p>
+                </div>
+                <span class="tsec-status tsec-status-ok"><i></i>Enabled</span>
+              <span class="tsec-reveal-bar" aria-hidden="true"></span></li>
+            </ol>
+          </section>
+
+          <section class="tsec-section" id="data-handling" data-index-section="data-handling">
+            <p class="tsec-kicker">02 &mdash; DATA HANDLING</p>
+            <h2>Your data stays inside your tenant, on your terms.</h2>
+            <p class="tsec-section-lede">Rack video is processed inside your tenant and turned into structured device and topology records. The structured output is what powers your workflows &mdash; the raw footage stays under your operational control throughout.</p>
+
+            <div class="tsec-flow" data-reveal-group>
+              <svg class="tsec-flow-svg" data-flow-line viewBox="0 0 100 2" preserveAspectRatio="none" aria-hidden="true">
+                <line x1="0" y1="1" x2="100" y2="1" pathLength="100" />
+              </svg>
+              <div class="tsec-flow-node" data-reveal>
+                <span class="tsec-flow-num">1</span>
+                <p class="tsec-flow-label">Rack Video</p>
+                <p class="tsec-flow-caption">You capture it. You own it.</p>
+              </div>
+              <div class="tsec-flow-node" data-reveal>
+                <span class="tsec-flow-num">2</span>
+                <p class="tsec-flow-label">AI Processing</p>
+                <p class="tsec-flow-caption">Runs inside your tenant.</p>
+              </div>
+              <div class="tsec-flow-node" data-reveal>
+                <span class="tsec-flow-num">3</span>
+                <p class="tsec-flow-label">Structured Output</p>
+                <p class="tsec-flow-caption">Devices, connections, topology.</p>
+              </div>
+              <div class="tsec-flow-node" data-reveal>
+                <span class="tsec-flow-num">4</span>
+                <p class="tsec-flow-label">Your Control</p>
+                <p class="tsec-flow-caption">Retain, delete, or reprocess.</p>
+              </div>
+            </div>
+
+            <ul class="tsec-pills tsec-pills-inline">
+              <li>Tenant-resident processing</li>
+              <li>Evidence retention on your terms</li>
+              <li>Raw footage never leaves your control</li>
+            </ul>
+
+            <div class="tsec-actions">
+              <div class="tsec-action">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h6l2 2h10v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Z"/></svg>
+                <p><b>Retain as Evidence</b>Keep what matters, for as long as you need it.</p>
+              </div>
+              <div class="tsec-action">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0-.7 12.1a1 1 0 0 1-1 .9H8.7a1 1 0 0 1-1-.9L7 7"/></svg>
+                <p><b>Delete Anytime</b>Remove raw footage the moment it's no longer needed.</p>
+              </div>
+              <div class="tsec-action">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16m0 5v-5h5"/></svg>
+                <p><b>Reprocess as We Improve</b>Re-run past footage as the platform gets sharper.</p>
+              </div>
+            </div>
+
+            <p class="tsec-footnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Raw footage never leaves your control.</p>
+
+            <figure class="tsec-figure" data-reveal>
+              <img src="assets/why-racktrack/timestamped-change.jpeg" alt="A technician reviewing structured rack records on a tablet beside live equipment" loading="lazy" decoding="async" />
+              <figcaption><span class="tsec-figure-tag">FIG. 02</span><p class="tsec-figure-caption">Structured output gets reviewed like this &mdash; against the live rack, inside your own tenant.</p></figcaption>
+            </figure>
+          </section>
+
+          <section class="tsec-section" id="deployment" data-index-section="deployment">
+            <p class="tsec-kicker">03 &mdash; DEPLOYMENT OPTIONS</p>
+            <h2>Flexible enough for standard environments and restricted ones.</h2>
+            <p class="tsec-section-lede">Assess RackTrack against the operating model you already run &mdash; from managed cloud to fully isolated environments with stricter boundary requirements.</p>
+
+            <div class="tsec-spectrum" data-spectrum>
+              <div class="tsec-spectrum-track">
+                <span class="tsec-spectrum-fill" data-spectrum-fill></span>
+                <button class="tsec-spectrum-stop is-active" data-stop="0" aria-pressed="true"><i></i><em>Multi-Tenant Cloud</em></button>
+                <button class="tsec-spectrum-stop" data-stop="1" aria-pressed="false"><i></i><em>Dedicated Cloud Tenancy</em></button>
+                <button class="tsec-spectrum-stop" data-stop="2" aria-pressed="false"><i></i><em>Customer-Hosted</em></button>
+                <button class="tsec-spectrum-stop" data-stop="3" aria-pressed="false"><i></i><em>Sovereign / Air-Gapped</em></button>
+              </div>
+              <div class="tsec-spectrum-ends"><span>Shared &middot; fastest to deploy</span><span>Isolated &middot; strictest boundary</span></div>
+
+              <div class="tsec-spectrum-detail">
+                <p data-spectrum-detail="0" class="is-active"><b>Multi-Tenant Cloud.</b> Secure, scalable, and the fastest path to value &mdash; the right starting point for most teams.</p>
+                <p data-spectrum-detail="1"><b>Dedicated Cloud Tenancy.</b> Deployed inside your own private environment, with full control over that tenancy.</p>
+                <p data-spectrum-detail="2"><b>Customer-Hosted Deployment.</b> Runs inside your own data center, built for regulated environments.</p>
+                <p data-spectrum-detail="3"><b>Sovereign / Air-Gapped Deployment.</b> For classified or restricted facilities with no external network access at all.</p>
+              </div>
+            </div>
+
+            <div class="tsec-banner">
+              <p>Need deeper architecture detail for a procurement or security review? RackTrack shares it during the formal evaluation process.</p>
+              <a href="contact.html">Contact RackTrack <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </section>
+
+          <section class="tsec-section" id="patents" data-index-section="patents">
+            <p class="tsec-kicker">04 &mdash; DEFENSIBLE INNOVATION</p>
+            <h2>Built on defensible innovation.</h2>
+            <p class="tsec-section-lede">RackTrack's platform is backed by pending patent filings covering automated cable mapping and infrastructure intelligence workflows &mdash; the foundation of a multi-year technical moat.</p>
+
+            <ol class="tsec-filings" data-reveal-group>
+              <li data-reveal>
+                <span class="tsec-filing-num">i</span>
+                <div>
+                  <p class="tsec-filing-name">Visual Rack Intelligence</p>
+                  <p class="tsec-filing-desc">Patent-pending methods for capturing rack imagery and identifying devices, ports, cables, and labels directly from the physical environment.</p>
+                </div>
+              <span class="tsec-reveal-bar" aria-hidden="true"></span></li>
+              <li data-reveal>
+                <span class="tsec-filing-num">ii</span>
+                <div>
+                  <p class="tsec-filing-name">Cable-to-Port Mapping &amp; Validation</p>
+                  <p class="tsec-filing-desc">Patent-pending workflows that generate cable-to-port maps from visual data and validate them against live switch data &mdash; CDP, LLDP, ARP, and neighbor information.</p>
+                </div>
+              <span class="tsec-reveal-bar" aria-hidden="true"></span></li>
+              <li data-reveal>
+                <span class="tsec-filing-num">iii</span>
+                <div>
+                  <p class="tsec-filing-name">Infrastructure Reconciliation Methods</p>
+                  <p class="tsec-filing-desc">Patent-pending methods for merging scans across sessions and reconciling physical-to-logical infrastructure data into one verified state.</p>
+                </div>
+              <span class="tsec-reveal-bar" aria-hidden="true"></span></li>
+            </ol>
+            <p class="tsec-filing-ref">Reference: US Application 19/219,347 &mdash; covers all three filings above.</p>
+
+            <figure class="tsec-figure" data-reveal>
+              <img src="assets/why-racktrack/audit-evidence.jpeg" alt="A rack diagram, equipment records, and cable labels laid out on a desk beside the live rack" loading="lazy" decoding="async" />
+              <figcaption><span class="tsec-figure-tag">FIG. 03</span><p class="tsec-figure-caption">These filings started from real rack documentation like this, not diagrams alone.</p></figcaption>
+            </figure>
+          </section>
+        </div>
+      </div>
+
+      <section class="tsec-cta">
+        <div class="tsec-frame tsec-cta-inner">
+          <div>
+            <p class="eyebrow">READY FOR FORMAL REVIEW</p>
+            <h2>Bring RackTrack to your security team.</h2>
+          </div>
+          <div class="tsec-cta-actions">
+            <a class="button-primary" href="contact.html">Request a Security Brief <span aria-hidden="true">&rarr;</span></a>
+            <a class="tsec-link" href="solutions.html">View Solutions <span aria-hidden="true">&rarr;</span></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer"><div class="footer-top"><div class="footer-brand"><a class="footer-brand-logo" href="index.html" aria-label="RackTrack home"><img src="assets/logo.jpg" alt="RackTrack" /></a><p>Physical Infrastructure Intelligence for Data Centers.</p></div><nav class="footer-col" aria-label="Platform"><p class="footer-label">Platform</p><a href="why-racktrack.html">Why RackTrack</a><a href="solutions.html">Solutions</a><a href="use-cases.html">Use Cases</a><a href="trust-security.html" aria-current="page">Trust &amp; Security</a></nav><nav class="footer-col" aria-label="Company"><p class="footer-label">Company</p><a href="resources.html">Resources</a><a href="about-us.html">About Us</a><a href="contact.html">Contact Us</a></nav><div class="footer-col footer-contact"><p class="footer-label">Contact</p><a href="mailto:info@racktrack.ai">info@racktrack.ai</a><a href="tel:+18608782448">+1 (860) 878 2448</a><span>85 Felt Rd, Suite #604<br />South Windsor, CT 06074</span></div></div><div class="footer-bottom"><p>&copy; 2026 RackTrack Inc. &middot; Physical Infrastructure Intelligence for Data Centers &middot; Patent Pending</p><div class="footer-social"><a href="https://www.linkedin.com/company/racktrack/" target="_blank" rel="noopener">LinkedIn</a><a href="https://www.instagram.com/racktrack_inc/" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/share/18depF5xzA/" target="_blank" rel="noopener">Facebook</a></div></div></footer>
+  </body>
+</html>

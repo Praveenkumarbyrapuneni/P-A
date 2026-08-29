@@ -50,7 +50,7 @@ if (rackStage && rackControls) {
   });
 }
 
-const revealItems = document.querySelectorAll('.process-intro .eyebrow, .process-intro h2, .process-intro .section-lede, .process-station, .schematic-section .eyebrow, .schematic-section .schematic-lede, .original-schematic, .workflow-section, .surface-grid article, .solutions-cta');
+const revealItems = document.querySelectorAll('.process-intro .eyebrow, .process-intro h2, .process-intro .section-lede, .process-station, .schematic-section .eyebrow, .schematic-section .schematic-lede, .original-schematic, .workflow-section, .surface-grid article, .solutions-cta, [data-reveal]');
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -180,11 +180,28 @@ if (surfaceGrid && workflowSection) {
     }
   };
 
+  // `.workflow-section` is ~4200px tall, so an intersection-ratio threshold
+  // is the wrong tool for "start a bit after the heading" — 0.18 of a
+  // 4200px box needs ~750px of simultaneous overlap, which this sticky
+  // layout may rarely or never reach, and the loop silently never starts.
+  // Use the original lenient trigger (reliable) and instead delay just the
+  // FIRST activation by a fixed beat, so the heading's own 700ms fade has
+  // a head start before cards begin easing in from opacity 0.
+  let hasActivatedOnce = false;
+  const activateSurfaceLoop = () => {
+    if (hasActivatedOnce) {
+      startSurfaceLoop();
+      return;
+    }
+    hasActivatedOnce = true;
+    window.setTimeout(startSurfaceLoop, 350);
+  };
+
   if ('IntersectionObserver' in window) {
     const workflowObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          startSurfaceLoop();
+          activateSurfaceLoop();
         } else {
           stopSurfaceLoop();
         }
