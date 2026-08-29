@@ -310,6 +310,22 @@ body.is-sequencing .site-header {
   display: none;
 }
 
+/* Per-dropdown accordion toggles (Use Cases / Resources inside the mobile
+   panel) — same invisible-checkbox / inert-button pattern as the main
+   toggle above; both are display:none/hidden above 980px where desktop's
+   hover flyout already handles them. */
+.nav-sub-toggle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav-sub-toggle-btn {
+  display: none;
+}
+
 .nav-cta {
   justify-self: end;
   position: relative;
@@ -1873,6 +1889,7 @@ h1 span {
   }
 
   .nav-toggle-input:checked ~ .site-nav .nav-item {
+    position: relative;
     width: 100%;
   }
 
@@ -1898,27 +1915,72 @@ h1 span {
     color: var(--ink);
   }
 
-  /* Hover-flyout dropdowns (Use Cases / Resources) become plain static
-     sub-lists under their parent link — there's no hover on touch. */
+  /* Hover-flyout dropdowns (Use Cases / Resources) become tap-to-expand
+     accordions on the panel — there's no hover on touch, and showing all
+     6 use-case + 9 article links open by default buried the top-level
+     nav items. A second, per-item checkbox (.nav-sub-toggle, same
+     checkbox-hack technique as the main panel toggle) gates each list;
+     collapsed is the default, only the chevron button and parent link
+     are visible until tapped. */
   .nav-toggle-input:checked ~ .site-nav .nav-dropdown {
     position: static;
-    display: flex;
+    display: none;
     width: 100%;
     max-width: none;
     margin: 0 0 8px;
     padding: 0 0 0 16px;
     border: none;
     box-shadow: none;
+    background: none;
+    border-radius: 0;
     opacity: 1;
     visibility: visible;
     transform: none;
     pointer-events: auto;
   }
 
+  /* Fully qualified (not just .nav-sub-toggle:checked ~ .nav-dropdown) on
+     purpose — that shorter form has lower specificity than the collapse
+     rule above and would lose to it, so the accordion would never open. */
+  .nav-toggle-input:checked ~ .site-nav .nav-sub-toggle:checked ~ .nav-dropdown {
+    display: flex;
+    flex-direction: column;
+  }
+
   .nav-toggle-input:checked ~ .site-nav .nav-dropdown a {
     padding: 10px 0;
     border-bottom: none;
     font-size: 15px;
+  }
+
+  /* Chevron toggle button, one per dropdown-bearing nav item. Sits to the
+     right of the parent link (Use Cases / Resources), same row. */
+  .nav-toggle-input:checked ~ .site-nav .nav-sub-toggle-btn {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
+
+  .nav-toggle-input:checked ~ .site-nav .nav-sub-toggle-btn::before {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    transform: rotate(45deg);
+    transition: transform 200ms ease;
+  }
+
+  /* Same fully-qualified-selector requirement as the .nav-dropdown reveal
+     rule above — the short form loses the specificity race. */
+  .nav-toggle-input:checked ~ .site-nav .nav-sub-toggle:checked ~ .nav-sub-toggle-btn::before {
+    transform: rotate(-135deg);
   }
 
   /* These three outer sections carry huge fixed heights (500dvh/1300dvh/
