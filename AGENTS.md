@@ -155,17 +155,27 @@ Floor-plan SVGs in proof-tour deliberately **shrink to fit** on mobile (`width: 
 
 `assets/v0.mp4`, `v1.mp4`, `v0-clean.mp4`, `rack-open-01-untrimmed-buggy.mp4`, `chapter4-clip2.mp4`, `chapter5.mp4` (watermarked originals — clean versions are what's actually used), `frame-1.jpg`, `frame-2.jpg`, `frame-1.1.jpeg`, `frame-2.1.jpeg` (early v1.mp4 exploration keyframes). None of these are referenced by the live site. Safe to ignore; not worth deleting unless the user asks.
 
+## File layout: `pages/` folder (reorganized this session)
+
+At the user's request, every page except the homepage now lives under `pages/`. **`index.html` stays at the repo root — this is required, not a style choice.** Amplify's app has a custom rule (`/<*>` → `/index.html`, status `404-200`) that depends on `index.html` existing at the literal root; moving it would risk the entire site's root URL. `assets/`, `styles.css`, `main.js`, `world-timeline.js`, and all other page-scripts (`solutions.js`, `why-racktrack.js`, etc.) also stay at the root — only the 22 `.html` pages moved.
+
+What changed in every moved file: `href="index.html"` → `href="../index.html"`, every `href="assets/…"`/`src="assets/…"` → `../assets/…`, `href="styles.css?v=…"` → `../styles.css?v=…`, and each page's own `<script src="theirfile.js?v=…">` → `../theirfile.js?v=…`. Links between the 22 moved pages (nav, footer, in-body cross-links) needed **no change** — they're still siblings inside `pages/`. `index.html`'s own links to those 22 pages were rewritten the other direction, `href="foo.html"` → `href="pages/foo.html"`; its links to itself and its own asset/script/style refs are untouched since it didn't move.
+
+Verified after the move (not just assumed): wrote a one-off script that parsed every `href`/`src` in all 23 files, resolved each local (non-`http`, non-`mailto`, non-`#`) reference against the actual file layout, and HEAD-requested it against the local dev server — 989 local references checked, all 200. `use-case-detail.js` (already-dead code per the Use Cases section above) and `main.js`/`world-timeline.js` (index-only, via a relative ES module import that resolves against the *script's* location, not the page's, so untouched by any page moving) were confirmed to have zero relative asset-path strings that could break from this move.
+
+**If you add a new page:** put it in `pages/`, not the root, and give it `../`-prefixed asset/style/script/index links plus bare-filename links to its `pages/` siblings — copy an existing moved page's `<head>`/header/footer block as the template, not `index.html`'s (index.html's paths are one level shallower than everything else's).
+
 ## Current Local Preview
 
 - `http://127.0.0.1:5174/`
-- `http://127.0.0.1:5174/why-racktrack.html`
-- `http://127.0.0.1:5174/solutions.html`
-- `http://127.0.0.1:5174/contact.html`
-- `http://127.0.0.1:5174/trust-security.html`
-- `http://127.0.0.1:5174/about-us.html`
-- `http://127.0.0.1:5174/use-cases.html` — see "Use Cases page (current state, mid-iteration)" above before changing this one.
-- `http://127.0.0.1:5174/use-case-infrastructure-data-center-leaders.html`, `use-case-network-architects-engineers.html`, `use-case-security-vulnerability-teams.html`, `use-case-compliance-audit-owners.html`, `use-case-incident-responders-on-call.html`, `use-case-m-a-migration-teams.html` — the six Use Cases detail pages.
-- Server may not be running in a fresh session — restart with: `python3 -m http.server 5174` from the `P-A` folder.
+- `http://127.0.0.1:5174/pages/why-racktrack.html`
+- `http://127.0.0.1:5174/pages/solutions.html`
+- `http://127.0.0.1:5174/pages/contact.html`
+- `http://127.0.0.1:5174/pages/trust-security.html`
+- `http://127.0.0.1:5174/pages/about-us.html`
+- `http://127.0.0.1:5174/pages/use-cases.html` — see "Use Cases page (current state, mid-iteration)" above before changing this one.
+- `http://127.0.0.1:5174/pages/use-case-infrastructure-data-center-leaders.html`, `use-case-network-architects-engineers.html`, `use-case-security-vulnerability-teams.html`, `use-case-compliance-audit-owners.html`, `use-case-incident-responders-on-call.html`, `use-case-m-a-migration-teams.html` — the six Use Cases detail pages, all under `pages/`.
+- Server may not be running in a fresh session — restart with: `python3 -m http.server 5174` from the `P-A` folder (the root, even though most pages now live under `pages/`).
 - `feat/continuous-world` is stale/behind `main` (see "Current Phase") — stay on `main`.
 - `index.html`, `why-racktrack.html`, `solutions.html`, `contact.html`, and `use-cases.html` use `?v=` cache-busting query strings on their styles/scripts; the six `use-case-*.html` pages use `?v=clarity-N` on `styles.css`. When editing those files further, bump the relevant version string (or ask the user to hard-refresh / Cmd+Shift+R) — a plain reload can silently serve stale CSS/JS and make a real change look like it did nothing.
 - Live/deployed version: `https://main.d1qibxn0njvfa1.amplifyapp.com` — auto-deploys on push to `main` (see "Live deployment" above). Verifiable via `aws amplify list-jobs --app-id d1qibxn0njvfa1 --branch-name main --profile personal --region us-east-1` if you need to confirm a push actually built successfully rather than assuming.
