@@ -78,6 +78,21 @@ Two long-standing bugs, both hit at once when the user said the nav "moves left 
 
 Every page's footer now inherits one light look from the base `.site-footer`/`.footer-*` rules — background `var(--cloud)` (`#f7faff`), body/link text `#30445d`, footer-label `var(--blue)`, hover `var(--ink)`, hairline borders `rgba(16,32,51,.15)`. This exactly matches what Why RackTrack, Solutions, and Contact already had as page-specific overrides (their overrides are now redundant duplicates — harmless, not cleaned up, low priority). The gap this fixed: the homepage, `use-cases.html`, and all six `use-case-*.html` pages had **no** footer override at all, so they were silently still rendering the old dark-ink footer while the other three pages were light. Also fixed a real legibility bug found in the process: none of the three existing page overrides included `.footer-bottom p` (the copyright line), so on all three light-footer pages that line was rendering in a near-white color left over from the dark-theme default — nearly invisible on a light background. If a future page needs a footer that intentionally differs from this, override `.site-footer`/`.footer-*` scoped to that page's body class rather than touching the shared base rule.
 
+## Trust & Security and About Us get their own exclusive photography (this session)
+
+Per the note above about neither page having its own asset folder — that changed. User generated 6 images from prompts I wrote (grounded in each page's actual copy) and dropped them into new `assets/trust-security/` and `assets/about-us/` folders. All 6 now wired into the `<img src>` that used to point at reused `why-racktrack/`/`solutions/` photos:
+
+- `assets/trust-security/hero-facility-aisle.jpeg` — hero figure (was `solutions/posture.jpg`)
+- `assets/trust-security/tenant-processing-rack.jpeg` — Data Handling figure (was `why-racktrack/timestamped-change.jpeg`)
+- `assets/trust-security/patent-documentation-desk.jpeg` — Defensible Innovation figure (was `why-racktrack/audit-evidence.jpeg`)
+- `assets/about-us/hero-data-center-aisle.jpeg` — hero figure (was `why-racktrack/hero-data-center-aisle.jpeg`, different file despite the same name — this one's in the about-us folder now)
+- `assets/about-us/rack-audit-moment.jpeg` — "The moment" founder-narrative beat (was `why-racktrack/cable-port-mapping.jpeg`)
+- `assets/about-us/founding-team-discussion.jpeg` — "The team" founder-narrative beat (was `why-racktrack/physical-rack-capture.jpeg`)
+
+**Deliberate exception to the fixed color rule, on 2 of the 6 — do not "fix" this back.** `hero-facility-aisle.jpeg` and `tenant-processing-rack.jpeg` are dark, near-black-background, neon-blue-glow photography — the exact look this project's "no dark background as dominant theme" rule bans, and one that's been reverted multiple times already on other pages (Use Cases hero, Solutions CTA, case-page CTAs). Flagged this explicitly to the user before wiring them in; they chose to keep the dark look on this page anyway. **This is a one-off, confirmed choice, not an oversight** — don't swap these back to lighter alternatives without asking first, the way the earlier dark-background instances were legitimately bugs that needed fixing. The other 4 images (the desk flat-lay + all 3 About Us photos) are bright and fully on-brand, no exception involved.
+
+Verified after wiring in: same link-audit sweep, 989/989 still green.
+
 ## `assets/` sorted into per-page subfolders (this session)
 
 `assets/` already had most of the page subfolders it needed (`contact/`, `resources/`, `solutions/`, `use-cases/`, `use-case-details/`, `why-racktrack/`) — the user's complaint was six loose files sitting directly in `assets/` root, unsorted, next to those folders. Sorted each by where it's actually used:
