@@ -1788,7 +1788,18 @@ h1 span {
 @media (max-width: 980px) {
   .site-header {
     width: calc(100% - 36px);
-    grid-template-columns: 1fr auto auto;
+    /* Back to the original 2-column layout (brand | cta) — the toggle
+       button is pulled OUT of grid flow below (position: absolute) and
+       pinned to the header's own right edge instead of sharing a grid
+       track with .nav-cta. A 3rd "auto" track for the toggle looked
+       fine closed, but once .nav-cta visually disappears behind the
+       open fixed panel (it has no z-index above the panel's 65) the
+       grid still reserved its column, so the toggle-turned-X landed in
+       the middle track instead of flush right. padding-right reserves
+       the room the absolute toggle needs so it never overlaps the CTA
+       pill. */
+    grid-template-columns: 1fr auto;
+    padding-right: 52px;
   }
 
   .brand {
@@ -1803,6 +1814,10 @@ h1 span {
      acceptable ceiling for a link-only menu; add a JS controller only if
      an accessibility pass calls for it. */
   .nav-toggle-btn {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1888,15 +1903,32 @@ h1 span {
     pointer-events: auto;
   }
 
+  /* Every top-level row (plain links AND the two dropdown-bearing
+     .nav-item wrappers) gets its padding/border from ONE shared rule so
+     the vertical rhythm can't drift between the two kinds of item. The
+     .nav-item's own inner <a> is stripped of its own padding/border
+     right below — without that, Use Cases/Resources doubled up (the
+     wrapper's row treatment plus the anchor's own) and read as tighter,
+     misaligned spacing next to the plain links. */
+  .nav-toggle-input:checked ~ .site-nav > a,
   .nav-toggle-input:checked ~ .site-nav .nav-item {
-    position: relative;
-    width: 100%;
-  }
-
-  .nav-toggle-input:checked ~ .site-nav a {
     width: 100%;
     padding: 14px 0;
     border-bottom: 1px solid rgba(16, 32, 51, 0.12);
+  }
+
+  .nav-toggle-input:checked ~ .site-nav .nav-item {
+    position: relative;
+    padding-right: 44px;
+  }
+
+  .nav-toggle-input:checked ~ .site-nav .nav-item > a {
+    padding: 0;
+    border-bottom: none;
+  }
+
+  .nav-toggle-input:checked ~ .site-nav a {
+    display: block;
     font-size: 21px;
     /* Reasserts ink text over page-specific overrides like
        .use-cases-page .site-nav a's white-on-dark-hero color — the panel
@@ -1957,8 +1989,9 @@ h1 span {
      right of the parent link (Use Cases / Resources), same row. */
   .nav-toggle-input:checked ~ .site-nav .nav-sub-toggle-btn {
     position: absolute;
-    top: 8px;
+    top: 50%;
     right: 0;
+    transform: translateY(-50%);
     display: flex;
     align-items: center;
     justify-content: center;
