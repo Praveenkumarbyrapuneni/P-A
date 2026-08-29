@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {
   clamp, buildBoundaries, beatLocal, frameFor, resolveWorld,
-} from "../world-timeline.js";
+} from "../js/world-timeline.js";
 
 const weights = [131, 76, 52, 54, 57];        // frame counts per beat
 const frameCounts = weights;
