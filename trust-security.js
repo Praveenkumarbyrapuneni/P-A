@@ -47,6 +47,12 @@ if (reduceMotion || !("IntersectionObserver" in window)) {
     { threshold: 0.08, rootMargin: "0px 0px -22% 0px" }
   );
   revealTargets.forEach((el) => revealObserver.observe(el));
+
+  // Safety net: force-reveal anything the observer hasn't caught a few
+  // seconds after load, so nothing can stay permanently blank.
+  window.setTimeout(() => {
+    revealTargets.forEach((el) => el.classList.add("is-in"));
+  }, 2500);
 }
 
 // ---- Left-rail scrollspy: which section is active right now. Also

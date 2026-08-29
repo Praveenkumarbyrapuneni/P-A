@@ -148,6 +148,14 @@ if (revealTargets.length && wantsMotion && "IntersectionObserver" in window) {
   );
 
   revealTargets.forEach((el) => observer.observe(el));
+
+  // Safety net: force-reveal anything the observer hasn't caught a few
+  // seconds after load, so nothing can stay permanently blank.
+  window.setTimeout(() => {
+    revealTargets.forEach((el) => {
+      if (!el.classList.contains("is-visible")) el.classList.add("is-visible");
+    });
+  }, 2500);
 } else {
   // No IntersectionObserver, or the visitor asked for reduced motion:
   // show everything immediately rather than leaving it hidden forever.

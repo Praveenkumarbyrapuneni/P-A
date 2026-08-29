@@ -38,6 +38,16 @@ if ("IntersectionObserver" in window) {
   );
   document.querySelectorAll("[data-reveal]").forEach((el) => revealObserver.observe(el));
 
+  // Safety net: an article this long-form has several [data-reveal] blocks
+  // stacked in sequence, and if the observer ever misses one (a timing
+  // quirk, a very short viewport, anything), it should not stay blank
+  // forever — force-reveal anything still hidden a few seconds after load.
+  window.setTimeout(() => {
+    document.querySelectorAll("[data-reveal]:not(.is-visible)").forEach((el) => {
+      el.classList.add("is-visible");
+    });
+  }, 2500);
+
   const tocLinks = document.querySelectorAll(".ap-toc a");
   if (tocLinks.length) {
     const linkFor = (id) => document.querySelector(`.ap-toc a[href="#${id}"]`);
