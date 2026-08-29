@@ -62,6 +62,12 @@ Every page's footer now inherits one light look from the base `.site-footer`/`.f
 
 `.solutions-cta` ("Request a platform brief," just above the footer) already had the correct full-bleed blue background (`#dfeafa` — same value used by Why RackTrack's `.why-cta`), but the section also carried the generic `.section-frame` utility class, which caps width to 1440px and centers it — so the color was boxed into a contained rectangle instead of bleeding edge-to-edge like Why RackTrack's version. Fixed by removing `section-frame` from that one section's class list in `solutions.html` (copy/text untouched). If any other full-bleed-background section on Solutions looks boxed, check for the same `section-frame` class before assuming a CSS rewrite is needed.
 
+## Use-case detail pages' shared CTA and heading font (fixed this session)
+
+`.case-cta` ("Get a demo," shared by all six `use-case-*.html` pages, just above the footer) had `background: var(--ink)` — the same dark-background rule violation already fixed on the hero sections, just missed on this shared section. Changed to the same light `#dfeafa` blue used by Solutions/Why RackTrack's CTAs, text to `var(--ink)`, button to blue-on-white. Since `.case-cta` sits nested inside `.case-article` (width-capped at 1180px, unlike Solutions' CTA which is a direct child of `<main>`), it needed the full-bleed breakout technique (`margin-inline: calc(50% - 50vw); width: 100vw;`) rather than just removing a class — check for this pattern (already used elsewhere in this codebase) before assuming any width-capped section can't go full-bleed.
+
+Separately: none of the four shared `<h2>` rules on these six pages (`.case-simple h2`, `.case-intro h2`/`.case-proof h2`, `.case-evidence h2`/`.case-decision h2`, `.case-cta h2`) ever declared `font-family` explicitly, so they were silently falling back to the body's `--font-ui` stack (Satoshi-first) instead of `--font-display` (Geist-first) used by every `<h1>` and headline elsewhere on the site — both stacks list the same fonts in different priority order, so this read as a subtle but real typeface mismatch rather than a totally different font. Fixed on all four. If a new heading is added to a `.case-page`, give it an explicit `font-family: var(--font-display)` rather than assuming it inherits correctly — it won't.
+
 ## Build Progress (current `main`)
 
 Actual section order in `index.html`: `.hero-shell` → scan (`data-frame-sequence`) → `.story-bridge` → `.world-story` → `.proof-tour` → `.site-footer`. No Chapter 9 section exists yet.
