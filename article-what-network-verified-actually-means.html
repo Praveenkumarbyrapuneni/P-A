@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A record only earns trust when what's physically there matches what the network reports. Here's how that check actually works." />
+    <title>What we mean when we say a record is “verified” | RackTrack</title>
+    <link rel="icon" href="assets/logo.jpg" />
+    <link rel="stylesheet" href="styles.css?v=article-2" />
+    <script type="module" src="article.js?v=2"></script>
+  </head>
+  <body class="article-page">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <div class="ap-progress" aria-hidden="true"><div class="ap-progress-fill" id="ap-progress-fill"></div></div>
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="RackTrack home"><span class="brand-mark"><img src="assets/logo.jpg" alt="" /></span><span class="brand-name">RackTrack</span></a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="why-racktrack.html">Why RackTrack</a>
+        <a href="solutions.html">Solutions</a>
+        <a href="use-cases.html">Use Cases</a>
+        <a class="is-current" href="resources.html" aria-current="page">Resources</a>
+        <a href="why-racktrack.html#evidence">Trust &amp; Security</a>
+      </nav>
+      <a class="nav-cta" href="contact.html">Get a demo</a>
+    </header>
+
+    <main id="main-content">
+      <article class="ap-article">
+        <header class="ap-header">
+          <div class="ap-frame">
+            <a class="ap-back" href="resources.html">&larr; Back to Resources</a>
+            <p class="ap-kicker"><span>INF·02</span><span>Infrastructure</span><span>5 min read</span></p>
+            <h1>What we mean when we say a record is “verified”</h1>
+            <p class="ap-dek">A record only earns trust when what's physically there matches what the network reports. Here's how that check actually works.</p>
+          </div>
+        </header>
+
+        <figure class="ap-hero-shot rs-treat-a"><img src="assets/resources/media-port-link-led.jpg" alt="" loading="lazy" decoding="async" /></figure>
+
+        <div class="ap-frame ap-layout">
+          <aside class="ap-toc" aria-label="On this page">
+            <p class="ap-toc-label">On this page</p>
+            <nav>
+              <a href="#two-truths">Two different kinds of truth</a>
+              <a href="#what-it-means">What “verified” should mean</a>
+              <a href="#why-both-matter">Why relying on one check breaks down</a>
+              <a href="#what-it-looks-like">What a verified record looks like</a>
+            </nav>
+          </aside>
+          <div class="ap-body">
+            <p class="ap-lead">“Verified” gets used loosely in infrastructure software — a word stamped on a record to make it sound more solid than it is. Here's what it should actually require.</p>
+              <section id="two-truths" data-reveal>
+                <h2>Two different kinds of truth</h2>
+                <p>There's what the network reports — which devices are talking, right now — and there's what's physically installed in the rack. Those are two different questions, and a record that only answers one of them isn't telling you the whole truth.</p>
+              </section>
+
+            <blockquote class="ap-pullquote" data-reveal>&ldquo;A record isn't verified because someone entered it. It's verified because two independent checks agree.&rdquo;</blockquote>
+
+              <section id="what-it-means" data-reveal>
+                <h2>What “network-verified” should actually mean</h2>
+                <p>It should mean a device is confirmed physically present in a specific location, and the network independently reports it live at that same location — two signals agreeing, not one signal being assumed to cover the other.</p>
+              </section>
+
+            <div class="rs-field-stat" data-reveal>
+              <span class="rs-stat-num">2 sources</span>
+              <p>is the minimum number of independent signals a record needs before it can honestly be called verified.</p>
+            </div>
+
+              <section id="why-both-matter" data-reveal>
+                <h2>Why relying on just one check breaks down</h2>
+                <p>A network-only check misses anything dormant, unplugged, or quietly misrouted. A physical-only check misses anything that changed logically without a cable ever moving. Either check alone leaves a real gap.</p>
+              </section>
+
+            <div class="ap-plain" data-reveal>
+              <p class="ap-plain-label">In plain terms</p>
+              <p>It's like verifying someone's identity with just a name, versus a name and a photo ID that actually matches — one check alone is easy to get wrong.</p>
+            </div>
+
+              <section id="what-it-looks-like" data-reveal>
+                <h2>What an actually verified record looks like</h2>
+                <p>It pairs a photographed physical sweep with the live network state, timestamped, for every single entry — so “verified” means something specific instead of just sounding reassuring.</p>
+              </section>
+          </div>
+        </div>
+
+        <div class="ap-frame ap-related">
+          <p class="ap-related-label">Keep reading</p>
+          <div class="ap-related-grid">
+          <a class="ap-related-card" href="article-physical-layer-the-missing-link-in-infrastructure-security.html">
+            <figure class="ap-related-shot rs-treat-c"><img src="assets/resources/media-access-badge.jpg" alt="" loading="lazy" decoding="async" /></figure>
+            <h3>The security gap your network tools can't see</h3>
+          </a>
+          <a class="ap-related-card" href="article-free-port-discovery-and-rack-capacity-planning.html">
+            <figure class="ap-related-shot rs-treat-b"><img src="assets/resources/media-server-ports-free.jpg" alt="" loading="lazy" decoding="async" /></figure>
+            <h3>Planning your next rack without guessing at free ports</h3>
+          </a>
+          </div>
+        </div>
+      </article>
+
+      <section class="rs-cta">
+        <div class="rs-frame rs-cta-inner">
+          <div>
+            <p class="eyebrow">PUT IT INTO PRACTICE</p>
+            <h2>Read the theory.<br /><em>Then verify your own rack.</em></h2>
+          </div>
+          <a class="button-primary" href="contact.html">Request a platform brief <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer"><div class="footer-top"><div class="footer-brand"><a class="footer-brand-logo" href="index.html" aria-label="RackTrack home"><img src="assets/logo.jpg" alt="RackTrack" /></a><p>Physical Infrastructure Intelligence for Data Centers.</p></div><nav class="footer-col" aria-label="Platform"><p class="footer-label">Platform</p><a href="why-racktrack.html">Why RackTrack</a><a href="solutions.html">Solutions</a><a href="use-cases.html">Use Cases</a><a href="why-racktrack.html#evidence">Trust &amp; Security</a></nav><nav class="footer-col" aria-label="Company"><p class="footer-label">Company</p><a href="resources.html" aria-current="page">Resources</a><a href="index.html#main">About Us</a><a href="contact.html">Contact Us</a></nav><div class="footer-col footer-contact"><p class="footer-label">Contact</p><a href="mailto:info@racktrack.ai">info@racktrack.ai</a><a href="tel:+18608782448">+1 (860) 878 2448</a><span>85 Felt Rd, Suite #604<br />South Windsor, CT 06074</span></div></div><div class="footer-bottom"><p>&copy; 2026 RackTrack Inc. &middot; Physical Infrastructure Intelligence for Data Centers &middot; Patent Pending</p><div class="footer-social"><a href="https://www.linkedin.com/company/racktrack/" target="_blank" rel="noopener">LinkedIn</a><a href="https://www.instagram.com/racktrack_inc/" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/share/18depF5xzA/" target="_blank" rel="noopener">Facebook</a></div></div></footer>
+  </body>
+</html>

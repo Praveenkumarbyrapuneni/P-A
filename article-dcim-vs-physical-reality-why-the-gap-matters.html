@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="DCIM tools model what should be there. Knowing where that model and the real rack disagree helps you fix the right problem." />
+    <title>Your DCIM platform shows a plan. The rack shows what's real. | RackTrack</title>
+    <link rel="icon" href="assets/logo.jpg" />
+    <link rel="stylesheet" href="styles.css?v=article-2" />
+    <script type="module" src="article.js?v=2"></script>
+  </head>
+  <body class="article-page">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <div class="ap-progress" aria-hidden="true"><div class="ap-progress-fill" id="ap-progress-fill"></div></div>
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="RackTrack home"><span class="brand-mark"><img src="assets/logo.jpg" alt="" /></span><span class="brand-name">RackTrack</span></a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="why-racktrack.html">Why RackTrack</a>
+        <a href="solutions.html">Solutions</a>
+        <a href="use-cases.html">Use Cases</a>
+        <a class="is-current" href="resources.html" aria-current="page">Resources</a>
+        <a href="why-racktrack.html#evidence">Trust &amp; Security</a>
+      </nav>
+      <a class="nav-cta" href="contact.html">Get a demo</a>
+    </header>
+
+    <main id="main-content">
+      <article class="ap-article">
+        <header class="ap-header">
+          <div class="ap-frame">
+            <a class="ap-back" href="resources.html">&larr; Back to Resources</a>
+            <p class="ap-kicker"><span>OPS·02</span><span>Operations</span><span>5 min read</span></p>
+            <h1>Your DCIM platform shows a plan. The rack shows what's real.</h1>
+            <p class="ap-dek">DCIM tools model what should be there. Knowing where that model and the real rack disagree helps you fix the right problem.</p>
+          </div>
+        </header>
+
+        <figure class="ap-hero-shot rs-treat-b"><img src="assets/resources/media-crash-cart-racks.jpg" alt="" loading="lazy" decoding="async" /></figure>
+
+        <div class="ap-frame ap-layout">
+          <aside class="ap-toc" aria-label="On this page">
+            <p class="ap-toc-label">On this page</p>
+            <nav>
+              <a href="#what-dcim-models">What DCIM actually models</a>
+              <a href="#why-it-drifts">Why the model and the room disagree</a>
+              <a href="#cost-of-trusting">The cost of trusting it blindly</a>
+              <a href="#using-both">Using both together</a>
+            </nav>
+          </aside>
+          <div class="ap-body">
+            <p class="ap-lead">A DCIM platform is a floor plan of your infrastructure. A floor plan is not the building. Both are useful — only one of them is true right now.</p>
+              <section id="what-dcim-models" data-reveal>
+                <h2>What DCIM is actually modeling</h2>
+                <p>DCIM (Data Center Infrastructure Management) tracks the intended layout: what's supposed to sit in each rack slot, how power and cooling are supposed to be allocated. As a planning tool, that's genuinely valuable — right up until “supposed to” quietly becomes “used to.”</p>
+              </section>
+
+            <blockquote class="ap-pullquote" data-reveal>&ldquo;DCIM tells you what the data center was designed to look like. It doesn't know what actually happened after installation day.&rdquo;</blockquote>
+
+              <section id="why-it-drifts" data-reveal>
+                <h2>Why the model and the room disagree</h2>
+                <p>None of it is malicious:</p>
+                <ul class="ap-beats" data-reveal>
+                  <li>A swap happens off-ticket during an emergency fix at 2 a.m.</li>
+                  <li>A vendor technician makes a change and doesn't touch the plan.</li>
+                  <li>A “temporary” cable run becomes permanent, and nobody circles back.</li>
+                </ul>
+              </section>
+
+            <div class="rs-field-stat" data-reveal>
+              <span class="rs-stat-num">2x</span>
+              <p>is a commonly reported gap between planned and actual rack utilization once teams check physically.</p>
+            </div>
+
+              <section id="cost-of-trusting" data-reveal>
+                <h2>What it costs to trust the model blindly</h2>
+                <p>Capacity planning built on the plan instead of the room tends to end one of two ways: buying more racks than necessary, or running out of power and space at the exact moment there's no time left to fix it.</p>
+              </section>
+
+            <div class="ap-plain" data-reveal>
+              <p class="ap-plain-label">In plain terms</p>
+              <p>DCIM is the map. The rack is the territory. When they disagree, the territory always wins — the only question is whether you find that out on a calm Tuesday or during an outage.</p>
+            </div>
+
+              <section id="using-both" data-reveal>
+                <h2>Using the model and the room together</h2>
+                <p>The fix isn't replacing DCIM. It's treating a physical sweep as the regular reconciliation step that keeps the map honest, instead of assuming it's accurate simply because nobody's said otherwise.</p>
+              </section>
+          </div>
+        </div>
+
+        <div class="ap-frame ap-related">
+          <p class="ap-related-label">Keep reading</p>
+          <div class="ap-related-grid">
+          <a class="ap-related-card" href="article-the-hidden-cost-of-unreconciled-infrastructure-a-framework-f.html">
+            <figure class="ap-related-shot rs-treat-a"><img src="assets/resources/media-tangled-cabling.jpg" alt="" loading="lazy" decoding="async" /></figure>
+            <h3>What it actually costs when nobody checks the rack</h3>
+          </a>
+          <a class="ap-related-card" href="article-what-network-verified-actually-means.html">
+            <figure class="ap-related-shot rs-treat-a"><img src="assets/resources/media-port-link-led.jpg" alt="" loading="lazy" decoding="async" /></figure>
+            <h3>What we mean when we say a record is “verified”</h3>
+          </a>
+          </div>
+        </div>
+      </article>
+
+      <section class="rs-cta">
+        <div class="rs-frame rs-cta-inner">
+          <div>
+            <p class="eyebrow">PUT IT INTO PRACTICE</p>
+            <h2>Read the theory.<br /><em>Then verify your own rack.</em></h2>
+          </div>
+          <a class="button-primary" href="contact.html">Request a platform brief <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer"><div class="footer-top"><div class="footer-brand"><a class="footer-brand-logo" href="index.html" aria-label="RackTrack home"><img src="assets/logo.jpg" alt="RackTrack" /></a><p>Physical Infrastructure Intelligence for Data Centers.</p></div><nav class="footer-col" aria-label="Platform"><p class="footer-label">Platform</p><a href="why-racktrack.html">Why RackTrack</a><a href="solutions.html">Solutions</a><a href="use-cases.html">Use Cases</a><a href="why-racktrack.html#evidence">Trust &amp; Security</a></nav><nav class="footer-col" aria-label="Company"><p class="footer-label">Company</p><a href="resources.html" aria-current="page">Resources</a><a href="index.html#main">About Us</a><a href="contact.html">Contact Us</a></nav><div class="footer-col footer-contact"><p class="footer-label">Contact</p><a href="mailto:info@racktrack.ai">info@racktrack.ai</a><a href="tel:+18608782448">+1 (860) 878 2448</a><span>85 Felt Rd, Suite #604<br />South Windsor, CT 06074</span></div></div><div class="footer-bottom"><p>&copy; 2026 RackTrack Inc. &middot; Physical Infrastructure Intelligence for Data Centers &middot; Patent Pending</p><div class="footer-social"><a href="https://www.linkedin.com/company/racktrack/" target="_blank" rel="noopener">LinkedIn</a><a href="https://www.instagram.com/racktrack_inc/" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/share/18depF5xzA/" target="_blank" rel="noopener">Facebook</a></div></div></footer>
+  </body>
+</html>
