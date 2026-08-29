@@ -2098,9 +2098,14 @@ h1 span {
 
 
 /* Footer */
+/* Light footer, matching Why RackTrack's exact recipe — the standard for
+   every page now. Was dark ink by default; only Why RackTrack, Solutions,
+   and Contact had light overrides, so the homepage, Use Cases, and all six
+   use-case-*.html detail pages were quietly still on the old dark footer. */
 .site-footer {
-  background: var(--ink);
-  color: rgba(255, 255, 255, 0.68);
+  background: var(--cloud);
+  color: #30445d;
+  border-top: 1px solid rgba(16, 32, 51, 0.15);
   padding: 72px 6vw 28px;
 }
 
@@ -2130,7 +2135,7 @@ h1 span {
   max-width: 30ch;
   font-size: 14px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.56);
+  color: #30445d;
 }
 
 .footer-col {
@@ -2141,7 +2146,7 @@ h1 span {
 
 .footer-label {
   margin: 0 0 4px;
-  color: var(--scan);
+  color: var(--blue);
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
@@ -2151,14 +2156,14 @@ h1 span {
 
 .footer-col a,
 .footer-col span {
-  color: rgba(255, 255, 255, 0.68);
+  color: #30445d;
   font-size: 14.5px;
   line-height: 1.5;
   text-decoration: none;
 }
 
 .footer-col a:hover {
-  color: var(--white);
+  color: var(--ink);
 }
 
 .footer-bottom {
@@ -2170,7 +2175,7 @@ h1 span {
   max-width: 1280px;
   margin: 0 auto;
   padding-top: 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(16, 32, 51, 0.15);
 }
 
 .footer-bottom p {
@@ -2178,7 +2183,7 @@ h1 span {
   font-family: var(--font-mono);
   font-size: 11.5px;
   letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.44);
+  color: rgba(48, 68, 93, 0.65);
 }
 
 .footer-social {
@@ -2187,13 +2192,13 @@ h1 span {
 }
 
 .footer-social a {
-  color: rgba(255, 255, 255, 0.68);
+  color: #30445d;
   font-size: 13.5px;
   text-decoration: none;
 }
 
 .footer-social a:hover {
-  color: var(--white);
+  color: var(--ink);
 }
 
 @media (max-width: 900px) {
@@ -4487,7 +4492,14 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 @media (max-width: 980px) { .uc-opening { padding:130px 24px 66px; } .uc-opening h1 { max-width:13ch; } .uc-close { width:calc(100% - 60px); } .uc-filmstrip-head { width: calc(100% - 60px); } .uc-close { padding:100px 0 118px; } }
 @media (max-width:640px) { .uc-opening h1 { font-size:clamp(48px,14vw,68px); } .uc-opening-credit { font-size: 8px; left: 16px; right: 16px; } .uc-close { width:calc(100% - 44px); } .uc-filmstrip-head { width: calc(100% - 44px); } .uc-reel { flex-basis: 88vw; } .uc-close h2 { font-size:48px; } }
 
-.case-method{display:grid;grid-template-columns:1fr 1fr;gap:7vw;align-items:start;padding:140px 0 105px}.case-method-head h2{margin:18px 0 0;font-size:clamp(38px,4.4vw,68px);line-height:.92;letter-spacing:-.055em}.case-method ol{margin:0;padding:0;list-style:none;border-top:1px solid #b8c5d6}.case-method li{display:grid;grid-template-columns:70px 1fr;gap:18px;padding:27px 0;border-bottom:1px solid #b8c5d6}.case-method li span{color:#2457d6;font:700 12px var(--font-mono);letter-spacing:.1em}.case-method li p{margin:0;color:#32445c;font-size:18px;line-height:1.4}.case-band{position:relative;margin:0;min-height:430px;overflow:hidden;background:#102033}.case-band img{display:block;width:100%;height:100%;min-height:430px;object-fit:cover;filter:saturate(.72)}.case-band::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(9,23,44,.75),transparent 70%)}.case-band figcaption{position:absolute;z-index:1;left:7%;bottom:12%;max-width:15ch;color:#fff;font-size:clamp(35px,4.5vw,70px);font-weight:650;letter-spacing:-.06em;line-height:.9}.case-impact{display:grid;grid-template-columns:.65fr 1.35fr;gap:7vw;padding:125px 0 0}.case-impact div{border-top:1px solid #b8c5d6}.case-impact p:not(.case-kicker){margin:0;padding:25px 0;border-bottom:1px solid #b8c5d6;color:#15273d;font-size:clamp(20px,2vw,31px);line-height:1.1;letter-spacing:-.035em}.case-page[data-case="network"] .case-hero{background:#eef4f4}.case-page[data-case="security"] .case-hero{background:#f2f3f7}.case-page[data-case="compliance"] .case-hero{background:#f6f1ea}.case-page[data-case="incident"] .case-hero{background:#edf1f8}.case-page[data-case="migration"] .case-hero{background:#f2f4ef}@media(max-width:800px){.case-method,.case-impact{grid-template-columns:1fr;gap:34px;padding:80px 0}.case-band,.case-band img{min-height:300px}.case-band figcaption{left:8%;bottom:10%}}
+/* .case-method/.case-band/.case-impact were dead code from an abandoned
+   data-driven templating script (use-case-detail.js — not linked from any
+   page). This line also carried [data-case="X"] .case-hero{background:...}
+   overrides that were NOT dead: an attribute-selector + class beats a
+   single class regardless of source order, so these were silently winning
+   over .case-hero-network/.case-hero-incident's dark background further
+   down this file, leaving white text on a near-white section. Removed
+   entirely — each hero's own modifier class now owns its background. */
 
 /* Role-detail pages: one shared information architecture, six deliberately
    different evidence scenes selected by the role's operating pressure. */
@@ -5649,27 +5661,15 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 .case-page .case-hero-visual img { filter: saturate(.9) contrast(1.02); }
 .case-page[data-scene="cards"].is-live .case-scene i:first-child { transform: translate(-25px,15px) perspective(900px) rotateY(-15deg) rotateX(5deg); }
 .case-page[data-scene="ledger"].is-live .case-scene i { animation: stamp .55s ease forwards; }
-.case-metrics { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; margin-top: 110px; background: #b8c5d6; border: 1px solid #b8c5d6; }
-.case-metrics div { display: grid; gap: 28px; min-height: 180px; padding: 28px; background: #f5f7fa; }
-.case-metrics span { max-width: 12ch; color: #4d5c70; font-size: clamp(18px,1.6vw,26px); line-height: 1.08; letter-spacing: -.035em; }
-.case-metrics b { align-self: end; color: #2457d6; font: 700 11px var(--font-mono); letter-spacing: .12em; }
-.case-page[data-case="leaders"] .case-hero { grid-template-columns: .9fr 1.1fr; }
-.case-page[data-case="leaders"] .case-hero-visual img { border-radius: 8px; object-fit: contain; background: #e8f0fb; }
-.case-page[data-case="network"] .case-proof { grid-template-columns: 1.15fr .85fr; }
-.case-page[data-case="network"] .case-hero-visual { justify-self: center; transform: rotate(-2deg); }
-.case-page[data-case="network"] .case-hero-visual img { border-radius: 8px 80px 8px 8px; object-fit: contain; background: #e6f0f2; }
-.case-page[data-case="security"] .case-hero { background: #f7f9fe; }
-.case-page[data-case="security"] .case-hero-visual img { border-radius: 50% 50% 8px 50%; object-fit: contain; background: #edf3ff; }
-.case-page[data-case="security"] .case-metrics div:nth-child(2) { background: #102033; }
-.case-page[data-case="security"] .case-metrics div:nth-child(2) span { color: #f8fbff; }
-.case-page[data-case="compliance"] .case-hero { grid-template-columns: 1.15fr .85fr; }
-.case-page[data-case="compliance"] .case-hero-visual img { border-radius: 8px; object-fit: contain; background: #f3f0eb; box-shadow: 0 0 0 1px #c9bfae, 18px 18px 0 #d9e7f6, 0 28px 70px rgba(23,55,101,.16); }
-.case-page[data-case="incident"] .case-hero { grid-template-columns: .78fr 1.22fr; background: #f2f6fc; }
-.case-page[data-case="incident"] .case-hero-visual { justify-self: stretch; max-width: none; aspect-ratio: 1.45; }
-.case-page[data-case="incident"] .case-hero-visual img { inset: 0; width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
-.case-page[data-case="migration"] .case-hero-visual img { border-radius: 8px 8px 90px 8px; object-fit: contain; background: #eef4ef; }
-.case-page[data-case="migration"] .case-band figcaption { max-width: 18ch; }
-@media(max-width:800px){.case-metrics{grid-template-columns:1fr;margin-top:74px}.case-metrics div{min-height:130px}.case-page[data-case] .case-hero{grid-template-columns:1fr}.case-page[data-case="incident"] .case-hero-visual{aspect-ratio:1}}
+.case-metrics { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; margin-top: 110px; background: rgba(16,32,51,.16); border: 1px solid rgba(16,32,51,.16); }
+.case-metrics div { display: grid; gap: 28px; min-height: 180px; padding: 28px; background: var(--cloud); }
+.case-metrics span { max-width: 12ch; color: var(--copy-strong); font-size: clamp(18px,1.6vw,26px); line-height: 1.08; letter-spacing: -.035em; }
+.case-metrics b { align-self: end; color: var(--case); font: 700 11px var(--font-mono); letter-spacing: .12em; }
+/* The six per-role heroes below (.case-hero-leaders/-network/-security/
+   -compliance/-incident/-migration) replace what used to be one shared
+   hero with only a border-radius tweak per role — see the dedicated block
+   near the end of this file for each page's actual distinct design. */
+@media(max-width:800px){.case-metrics{grid-template-columns:1fr;margin-top:74px}.case-metrics div{min-height:130px}}
 
 /* Clarity pass for the direct use-case pages: each page now teaches the
    same simple story before showing role-specific detail. */
@@ -5946,3 +5946,88 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
     aspect-ratio: 1.18;
   }
 }
+
+/* ==========================================================================
+   Six distinct use-case detail page heroes.
+   Each role's hero visualizes their actual problem instead of reusing one
+   template with a border-radius swapped — see AGENTS.md "Hard rule — no
+   repeated card styles" and the Use Cases section. Base .case-hero still
+   supplies shared typography (kicker/back-link/h1/p rhythm); each of these
+   modifier classes drives the actual layout, media, and mood.
+   ========================================================================== */
+
+/* --case is the page's accent token, used by .case-kicker and .case-metrics
+   b — semantic colors only where they mean something real: verified green
+   for the compliance/audit page, drift amber for the incident page. */
+.case-page[data-case="compliance"] { --case: var(--verified); }
+.case-page[data-case="incident"] { --case: var(--amber); }
+.case-page[data-case="security"] { --case: var(--scan); }
+
+/* 1. Leaders — "The Rollup": proof numbers sit inline with the headline,
+   photo is a small contained frame, not the dominant element. An exec
+   wants the number, not a mood photo. */
+.case-hero-leaders { grid-template-columns: 1.05fr .95fr; align-items: end; padding-bottom: 0; }
+.case-hero-stats { display: flex; flex-wrap: wrap; gap: 0; margin-top: 44px; border-top: 1px solid rgba(16,32,51,.16); }
+.case-hero-stats div { flex: 1 1 140px; padding: 22px 22px 0 0; }
+.case-hero-stats b { display: block; font-family: var(--font-display); font-size: 42px; color: var(--case); letter-spacing: -.03em; }
+.case-hero-stats span { display: block; margin-top: 6px; max-width: 18ch; color: var(--muted); font-size: 13px; line-height: 1.35; }
+.case-hero-frame { margin: 0; justify-self: end; align-self: end; width: min(100%, 420px); border-radius: 8px; overflow: hidden; border: 1px solid rgba(16,32,51,.14); box-shadow: 0 30px 70px rgba(16,32,51,.12); }
+.case-hero-frame img { display: block; width: 100%; aspect-ratio: .82; object-fit: cover; }
+@media (max-width: 900px) { .case-hero-leaders { grid-template-columns: 1fr; } .case-hero-frame { justify-self: start; margin-top: 30px; } }
+
+/* 2. Network — "The Wiring Check": light blueprint hero (grid-paper feel
+   like the Solutions schematic), a real port/uplink diagram in brand blue
+   instead of a portrait photo. Was a dark hero — reverted per the standing
+   rule against dark/black as a dominant background. */
+.case-hero-network { position: relative; grid-template-columns: 1.1fr .9fr; background: var(--mist); overflow: hidden; }
+.case-hero-network::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(36,87,214,.08) 1px,transparent 1px), linear-gradient(90deg, rgba(36,87,214,.08) 1px,transparent 1px); background-size: 56px 56px; }
+.case-hero-diagram { position: relative; justify-self: center; width: min(100%, 560px); }
+.case-hero-diagram svg { display: block; width: 100%; height: auto; }
+.case-hero-diagram .cd-line { fill: none; stroke: var(--blue); stroke-width: 2; opacity: .6; }
+.case-hero-diagram .cd-node { fill: var(--white); stroke: var(--blue); stroke-width: 2.2; }
+.case-hero-diagram .cd-label { fill: var(--copy-strong); font: 400 13px var(--font-mono); letter-spacing: .05em; }
+@media (max-width: 900px) { .case-hero-network { grid-template-columns: 1fr; } .case-hero-diagram { justify-self: start; margin-top: 24px; } }
+
+/* 3. Security — "The Spotlight": kept light overall (the page background
+   stays --cloud); the dark-and-reveal effect is contained inside the photo
+   frame itself, not the section, so "dark" is photo content, not the page
+   theme. A cursor-following hole in a dark scrim reveals equipment inside
+   that frame — standing in for finding what scanners can't see. */
+.case-hero-security { grid-template-columns: 1.05fr .95fr; --mx: 50%; --my: 42%; }
+.case-hero-frame-spotlight { position: relative; margin: 0; justify-self: end; width: min(100%, 440px); aspect-ratio: .95; border-radius: 8px; overflow: hidden; border: 1px solid rgba(16,32,51,.14); box-shadow: 0 30px 70px rgba(16,32,51,.14); }
+.case-hero-frame-spotlight img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.6) saturate(.85); }
+.case-spotlight-mask { position: absolute; inset: 0; background: rgba(6,14,26,.85); -webkit-mask-image: radial-gradient(circle 130px at var(--mx) var(--my), transparent 0%, transparent 55%, black 100%); mask-image: radial-gradient(circle 130px at var(--mx) var(--my), transparent 0%, transparent 55%, black 100%); }
+.case-spotlight-hint { margin-top: 26px; color: var(--muted); font: 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+@media (max-width: 900px) { .case-hero-security { grid-template-columns: 1fr; } .case-hero-frame-spotlight { justify-self: start; margin-top: 30px; } .case-spotlight-mask { -webkit-mask-image: radial-gradient(circle 150px at 50% 40%, transparent 0%, transparent 55%, black 100%); mask-image: radial-gradient(circle 150px at 50% 40%, transparent 0%, transparent 55%, black 100%); } }
+
+/* 4. Compliance — "The Case File": light, a real verified stamp (rotated
+   circular badge, verified green) overlapping the evidence photo. */
+.case-hero-compliance { grid-template-columns: 1fr .95fr; background: var(--mist); }
+.case-hero-compliance .case-kicker, .case-hero-compliance .case-back { color: var(--verified); }
+.case-hero-file { position: relative; margin: 0; justify-self: end; width: min(100%, 420px); }
+.case-hero-file img { display: block; width: 100%; aspect-ratio: .85; object-fit: cover; border-radius: 6px; border: 1px solid rgba(16,32,51,.14); box-shadow: 0 30px 70px rgba(16,32,51,.14); }
+.case-stamp { position: absolute; top: 18px; right: -14px; display: grid; place-items: center; width: 94px; height: 94px; border: 2px solid var(--verified); border-radius: 50%; transform: rotate(-14deg); background: rgba(255,255,255,.88); color: var(--verified); font: 700 12px var(--font-mono); letter-spacing: .07em; text-align: center; }
+@media (max-width: 900px) { .case-hero-compliance { grid-template-columns: 1fr; } .case-hero-file { justify-self: start; margin-top: 30px; } .case-stamp { right: 8px; } }
+
+/* 5. Incident — "The Dispatch": light hero; the amber pulsing alert badge
+   (a real warning-state semantic) is what signals urgency, not a dark
+   theme. Was a dark ink hero — reverted per the standing rule against
+   dark/black as a dominant background. */
+.case-hero-incident { grid-template-columns: 1.05fr .95fr; background: var(--mist); }
+.case-alert-badge { display: inline-flex; align-items: center; gap: 9px; margin-bottom: 20px; padding: 7px 13px; border: 1px solid rgba(217,154,43,.4); border-radius: 999px; background: rgba(217,154,43,.08); color: var(--amber); font: 700 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+.case-alert-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); animation: case-alert-pulse 1.4s ease-in-out infinite; }
+@keyframes case-alert-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(217,154,43,.5); } 50% { box-shadow: 0 0 0 7px rgba(217,154,43,0); } }
+.case-hero-incident .case-hero-frame { margin: 0; justify-self: end; width: min(100%, 440px); border: 1px solid rgba(16,32,51,.14); box-shadow: 0 30px 70px rgba(16,32,51,.12); }
+.case-hero-incident .case-hero-frame img { filter: saturate(.9); }
+@media (max-width: 900px) { .case-hero-incident { grid-template-columns: 1fr; } .case-hero-incident .case-hero-frame { justify-self: start; margin-top: 24px; } }
+
+/* 6. Migration — "The Baseline": inherited-vs-verified side by side,
+   static (not a slider — Why RackTrack already owns that mechanic). */
+.case-hero-migration { grid-template-columns: 1fr; padding-bottom: 0; }
+.case-split { margin: 34px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: rgba(16,32,51,.16); border: 1px solid rgba(16,32,51,.16); }
+.case-split figure { position: relative; margin: 0; overflow: hidden; background: var(--cloud); }
+.case-split img { display: block; width: 100%; aspect-ratio: 1.5; object-fit: cover; }
+.case-split-before img { filter: grayscale(1) brightness(.75) contrast(1.05); }
+.case-split figcaption { position: absolute; left: 16px; bottom: 14px; padding: 5px 11px; border-radius: 999px; background: rgba(6,14,26,.72); color: #fff; font: 700 10px var(--font-mono); letter-spacing: .08em; }
+.case-split-after figcaption { background: var(--blue); }
+@media (max-width: 900px) { .case-split { grid-template-columns: 1fr; } }

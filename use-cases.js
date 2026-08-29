@@ -49,6 +49,11 @@ if (track) {
   );
 
   // Mouse drag-to-scroll. Touch and trackpad already scroll natively.
+  // Deliberately NOT using setPointerCapture here — capturing the pointer
+  // re-targets the eventual pointerup (and the click it produces) to the
+  // track itself instead of the link the user's cursor is actually over,
+  // which silently ate every "See their case" click. Tracking the drag via
+  // window-level listeners gets the same robustness without that trade-off.
   let dragging = false;
   let dragMoved = false;
   let startX = 0;
@@ -61,25 +66,29 @@ if (track) {
     startX = event.clientX;
     startScroll = track.scrollLeft;
     track.classList.add('is-dragging');
-    track.setPointerCapture(event.pointerId);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
   });
 
-  track.addEventListener('pointermove', (event) => {
+  function onPointerMove(event) {
     if (!dragging) return;
     const delta = event.clientX - startX;
     if (Math.abs(delta) > 4) dragMoved = true;
     track.scrollLeft = startScroll - delta;
-  });
+  }
 
-  const endDrag = () => {
+  function endDrag() {
     dragging = false;
     track.classList.remove('is-dragging');
-  };
-  track.addEventListener('pointerup', endDrag);
-  track.addEventListener('pointercancel', endDrag);
-  track.addEventListener('pointerleave', endDrag);
+    window.removeEventListener('pointermove', onPointerMove);
+    window.removeEventListener('pointerup', endDrag);
+    window.removeEventListener('pointercancel', endDrag);
+  }
 
-  // Suppress the "Read the case" click that fires right after a drag.
+  // Suppress the "See their case" click that fires right after an actual
+  // drag (so a drag-release doesn't accidentally follow the link), while
+  // leaving normal clicks untouched.
   track.addEventListener(
     'click',
     (event) => {
