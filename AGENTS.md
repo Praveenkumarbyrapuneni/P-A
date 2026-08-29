@@ -4,7 +4,7 @@
 
 We are rebuilding RackTrack page by page inside this `P-A` folder, entirely on `main` now.
 
-**Chapters 1-3, the continuous-world rack story (4-8), the floor-plan proof-tour walkthrough, the site footer, the Why RackTrack page, and the Contact page are built on `main`.** `feat/continuous-world` is stale and nothing lives only on it. `.worktrees/legacy-sections-port` (branch `worktree-legacy-sections-port`) is also stale and should not be used for new work. Chapter 9 (Final CTA) is the only homepage piece **not yet built** — static bookend reusing the hero image, same pattern as Chapter 1, no video needed.
+**Chapters 1-3, the continuous-world rack story (4-8), the floor-plan proof-tour walkthrough, the site footer, the Why RackTrack page, and the Contact page are built on `main`.** `feat/continuous-world` is stale and nothing lives only on it. `.worktrees/legacy-sections-port` (branch `worktree-legacy-sections-port`) is also stale and should not be used for new work. **The homepage is done as-is — no Chapter 9/Final CTA section will be built, and no further homepage changes are planned.**
 
 **Live deployment:** the site is deployed via AWS Amplify Hosting, connected to the private GitHub repo `Praveenkumarbyrapuneni/P-A`, auto-building on every push to `main`. Amplify app details: app id `d1qibxn0njvfa1`, URL `https://main.d1qibxn0njvfa1.amplifyapp.com`, AWS account `984126996103` ("Vsoln" — this is Praveen's **personal** AWS account, not a client account, see `[[reference_vsoln_aws_account]]` in memory). Build settings: no build command (static site), output directory `/`. `enableAutoBuild` had to be manually turned on after the first console-connected deploy — it defaulted off, so the merge didn't auto-deploy until that was fixed and a manual `start-job` was triggered.
 
@@ -70,7 +70,7 @@ Separately: none of the four shared `<h2>` rules on these six pages (`.case-simp
 
 ## Build Progress (current `main`)
 
-Actual section order in `index.html`: `.hero-shell` → scan (`data-frame-sequence`) → `.story-bridge` → `.world-story` → `.proof-tour` → `.site-footer`. No Chapter 9 section exists yet.
+Actual section order in `index.html`: `.hero-shell` → scan (`data-frame-sequence`) → `.story-bridge` → `.world-story` → `.proof-tour` → `.site-footer`. This is final — no Chapter 9 section will be added.
 
 | # | Chapter | Status |
 |---|---|---|
@@ -79,7 +79,7 @@ Actual section order in `index.html`: `.hero-shell` → scan (`data-frame-sequen
 | 3 | Post-Scan Bridge | Built & accepted. Three evidence cards. |
 | 4-8 | Rack story (Perceive → Outcomes) | Built & accepted, merged to `main`. One continuous `.world-story` section — see "Continuous-World Rebuild" above. Note labels are plain text now too. |
 | — | Floor-plan proof tour | Built & accepted. `.proof-tour` — see "Proof Tour" section below. |
-| 9 | Final CTA | **Not built.** Next real work item. No video needed — reuse `assets/Verified Rack Object.jpeg`, static like the hero, CTA as live HTML/CSS. |
+| 9 | Final CTA | **Cancelled — will not be built.** Homepage ends at the footer. |
 | — | Why RackTrack | Built. `why-racktrack.html` uses local generated imagery, a three-layer explanation, interactive verification steps, and sticky evidence cards. |
 | — | Solutions | Built. `solutions.html` uses the original local schematic artwork, original cabinet-reader movement and interactions, local assets, and the six intelligence surfaces. Hero-rail card (top-right of the hero) rebuilt as a dark "manifest plate" — see "Hard rule — no repeated card styles" above. System schematic (Sheet 02) narrowed from 1560px to 1360px to match Sheet 01/03 scale. |
 | — | Use Cases | Built and actively being iterated — see "Use Cases page" section below for current state and open items. `use-cases.html` links out to six standalone detail pages (`use-case-*.html`), all built. |
@@ -246,4 +246,4 @@ For generated video beats:
 - keep explanatory text as editable HTML/CSS, not baked into the video
 - chain chapters for continuity where it helps: chapter N's actual last extracted frame becomes chapter N+1's start-frame reference (used for 4→5→6→7→8)
 
-Chapter 9 is next: no asset brief needed, just build the static CTA section directly (hero-style, no video).
+Chapter 9 was cancelled — do not build it.
