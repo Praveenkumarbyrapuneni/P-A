@@ -3869,6 +3869,12 @@ h1 span {
   background: var(--contact-surface);
 }
 
+.contact-details > .contact-kicker {
+  width: min(1280px, 100%);
+  margin: 0 auto;
+  padding-top: 28px;
+}
+
 .contact-details dl {
   width: min(1280px, 100%);
   margin: 0 auto;
@@ -6006,7 +6012,8 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 .case-page .case-hero-visual img { filter: saturate(.9) contrast(1.02); }
 .case-page[data-scene="cards"].is-live .case-scene i:first-child { transform: translate(-25px,15px) perspective(900px) rotateY(-15deg) rotateX(5deg); }
 .case-page[data-scene="ledger"].is-live .case-scene i { animation: stamp .55s ease forwards; }
-.case-metrics { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; margin-top: 110px; background: rgba(16,32,51,.16); border: 1px solid rgba(16,32,51,.16); }
+.case-metrics { margin-top: 110px; }
+.case-metrics-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; background: rgba(16,32,51,.16); border: 1px solid rgba(16,32,51,.16); }
 .case-metrics div { display: grid; gap: 28px; min-height: 180px; padding: 28px; background: var(--cloud); }
 .case-metrics span { max-width: 12ch; color: var(--copy-strong); font-size: clamp(18px,1.6vw,26px); line-height: 1.08; letter-spacing: -.035em; }
 .case-metrics b { align-self: end; color: var(--case); font: 700 11px var(--font-mono); letter-spacing: .12em; }
@@ -6033,7 +6040,9 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
    anchor it to. Every role had a third use-case-detail image sitting unused
    on disk; pairing it with the before/during/after beats gives the story a
    real place to point at instead of asking the reader to picture it. */
-.case-story { display: grid; grid-template-columns: minmax(260px,.8fr) minmax(0,2.2fr); gap: clamp(28px,4vw,56px); margin: 95px 0; align-items: stretch; }
+.case-story { margin: 95px 0; }
+.case-story-grid { display: grid; grid-template-columns: minmax(260px,.8fr) minmax(0,2.2fr); gap: clamp(28px,4vw,56px); align-items: stretch; }
+.case-story > .case-kicker { margin-bottom: 24px; }
 .case-story-photo { margin: 0; overflow: hidden; border-radius: var(--radius-md); box-shadow: 0 24px 60px rgba(16,32,51,.12); }
 .case-story-photo img { display: block; width: 100%; height: 100%; min-height: 320px; object-fit: cover; filter: saturate(.9) contrast(1.02); }
 .case-story-beats { display: grid; gap: 1px; background: rgba(16,32,51,.16); border: 1px solid rgba(16,32,51,.16); }
@@ -6041,7 +6050,7 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 .case-story span { color: var(--blue); font: 700 11px var(--font-mono); letter-spacing: .12em; }
 .case-story h3 { margin: 8px 0 8px; font-size: clamp(20px,1.9vw,26px); line-height: 1.02; letter-spacing: -.03em; }
 .case-story p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.48; }
-@media (max-width: 900px) { .case-story { grid-template-columns: 1fr; } .case-story-photo img { min-height: 220px; } }
+@media (max-width: 900px) { .case-story-grid { grid-template-columns: 1fr; } .case-story-photo img { min-height: 220px; } }
 .case-evidence,.case-decision { display: grid; grid-template-columns: 1fr 1fr; gap: 7vw; align-items: center; margin: 112px 0; }
 .case-evidence figure,.case-decision figure { margin: 0; overflow: hidden; background: #eef5ff; }
 .case-evidence img,.case-decision img { display: block; width: 100%; aspect-ratio: 1.18; object-fit: cover; filter: saturate(.86) contrast(1.02); }
@@ -6058,7 +6067,7 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 .case-page-clear[data-case="compliance"] .case-simple,.case-page-clear[data-case="migration"] .case-simple { grid-template-columns: .72fr 1.28fr; }
 .case-page-clear[data-case="security"] .case-story article:nth-child(2) { background: #102033; }
 .case-page-clear[data-case="security"] .case-story article:nth-child(2) h3,.case-page-clear[data-case="security"] .case-story article:nth-child(2) p { color: #f7faff; }
-@media(max-width:900px){.case-page-clear .case-clear-hero,.case-simple,.case-story,.case-evidence,.case-decision{grid-template-columns:1fr}.case-page-clear .case-clear-hero{padding-top:115px}.case-story article{min-height:0}.case-page-clear[data-case] .case-evidence figure{order:0}.case-simple > p:last-child{font-size:24px}.case-evidence,.case-decision{gap:34px;margin:78px 0}}
+@media(max-width:900px){.case-page-clear .case-clear-hero,.case-simple,.case-story-grid,.case-evidence,.case-decision{grid-template-columns:1fr}.case-page-clear .case-clear-hero{padding-top:115px}.case-story article{min-height:0}.case-page-clear[data-case] .case-evidence figure{order:0}.case-simple > p:last-child{font-size:24px}.case-evidence,.case-decision{gap:34px;margin:78px 0}}
 
 /* Replaced by .uc-fanout — the old Capture/Verify/Use 3-box grid duplicated
    Solutions' hero-rail almost word for word (Capture/Check/Use). See
