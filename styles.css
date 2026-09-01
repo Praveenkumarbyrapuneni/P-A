@@ -136,16 +136,17 @@ a {
 }
 
 .site-header {
-  position: absolute;
-  top: 24px;
+  position: fixed;
+  top: 0;
   left: 0;
   right: 0;
   z-index: 60;
   display: grid;
-  width: calc(100% - 72px);
+  width: 100%;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 18px;
+  padding: 24px 36px;
   margin: 0 auto;
   pointer-events: none;
   transition: opacity 320ms ease, transform 320ms ease;
@@ -202,6 +203,30 @@ body.is-sequencing .site-header {
    visitor can jump straight in without landing on the hub page first. */
 .nav-item {
   position: relative;
+}
+
+/* ponytail: invisible hover bridge — closes the 10px gap between the nav
+   link and .nav-dropdown below it, scoped to exactly the trigger's own
+   width (not the dropdown's, which is much wider). Without this bridge,
+   moving the pointer from the link down into that gap leaves .nav-item's
+   hover box and the menu closes before the click lands — the "works
+   once, not the next" bug from review. Sizing it to the dropdown's width
+   instead of the trigger's was tried and reverted: a bridge that wide is
+   present at all times (not just while a menu is open) and physically
+   sat under the *neighboring* nav links, so merely hovering Why RackTrack
+   or Solutions silently opened the Use Cases menu next to them. Keeping
+   the bridge exactly under its own trigger avoids that entirely — the
+   open dropdown itself, once you're inside it, is already a descendant of
+   .nav-item (and painted above any neighbor via z-index), so it keeps
+   supplying hover the rest of the way with no bridge needed there. */
+.nav-item:has(.nav-dropdown)::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  height: 10px;
 }
 
 .nav-dropdown {
@@ -2277,8 +2302,8 @@ h1 span {
 
 @media (max-width: 640px) {
   .site-header {
-    width: calc(100% - 22px);
-    top: 11px;
+    width: 100%;
+    padding: 11px 11px;
   }
 
   .brand span:last-child {
@@ -2490,13 +2515,15 @@ h1 span {
 
 .footer-social {
   display: flex;
-  gap: 24px;
+  align-items: center;
+  gap: 18px;
 }
 
 .footer-social a {
+  display: flex;
   color: #30445d;
-  font-size: 13.5px;
   text-decoration: none;
+  transition: color 150ms ease;
 }
 
 .footer-social a:hover {
@@ -2541,9 +2568,6 @@ h1 span {
   opacity: 0.1;
 }
 
-.why-page .site-header {
-  top: 22px;
-}
 
 .why-page .site-nav a.is-current {
   color: var(--ink);
@@ -3642,9 +3666,6 @@ h1 span {
   color: var(--ink);
 }
 
-.contact-page .site-header {
-  top: 22px;
-}
 
 .contact-page .site-nav a[aria-current="page"] {
   color: var(--ink);
@@ -4173,7 +4194,6 @@ h1 span {
   overflow-x: hidden;
 }
 .solutions-page .site-header {
-  top: 22px;
   background: rgba(247, 250, 255, .84);
   border-bottom-color: rgba(16, 32, 51, .1);
 }
