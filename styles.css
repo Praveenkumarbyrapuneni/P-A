@@ -607,6 +607,19 @@ h1 span {
   font-weight: 500;
 }
 
+/* Item 13: metrics moved out of the hero into the bridge copy column —
+   reset the hero's overlay positioning to a normal static block. */
+.bridge-copy .proof-panel {
+  grid-area: auto;
+  position: static;
+  align-self: auto;
+  justify-self: auto;
+  width: 100%;
+  max-width: 100%;
+  margin: 28px 0 0;
+  opacity: 1;
+}
+
 .sequence-progress {
   grid-area: 1 / 1;
   z-index: 5;
@@ -718,7 +731,7 @@ h1 span {
   grid-template-columns: minmax(330px, 0.82fr) minmax(520px, 1.18fr);
   align-items: center;
   gap: clamp(38px, 6vw, 108px);
-  padding: 82px clamp(22px, 5vw, 78px) 66px;
+  padding: 60px clamp(22px, 5vw, 78px) 48px;
 }
 
 .bridge-copy {
@@ -1251,13 +1264,13 @@ h1 span {
 
 /* Proof tour — ported from the old site's floor-plan walkthrough. */
 .proof-tour {
-  padding: 96px 6vw 120px;
+  padding: 64px 6vw 84px;
   background: var(--cloud);
 }
 
 .proof-tour-head {
   max-width: 900px;
-  margin: 0 auto 44px;
+  margin: 0 auto 32px;
   text-align: center;
 }
 
@@ -1373,6 +1386,13 @@ h1 span {
 
 .tour-view {
   display: none;
+}
+
+/* .hot-zone rects mark the clickable region per step but were never given
+   a fill — SVG defaults an unset fill to solid black, which is the "black
+   highlighting" covering the diagram on every step that has one. */
+.hot-zone {
+  fill: none;
 }
 
 .tour-view.is-active {
@@ -1597,6 +1617,32 @@ h1 span {
 
 .proof-tour-foot p:last-child {
   color: var(--blue);
+}
+
+/* Item 14: homepage closing CTA — same full-bleed light-blue recipe as
+   Solutions'/Why RackTrack's/case pages' CTA bands. */
+.home-cta {
+  padding: 90px 6vw;
+  background: #dfeafa;
+  color: var(--ink);
+  text-align: center;
+}
+
+.home-cta h2 {
+  margin: 0 auto;
+  max-width: 16ch;
+  font-family: var(--font-display);
+  font-size: clamp(38px, 4.5vw, 64px);
+  font-weight: 720;
+  line-height: 0.98;
+}
+
+.home-cta p {
+  margin: 18px auto 32px;
+  max-width: 46ch;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.5;
 }
 
 @media (max-width: 900px) {
