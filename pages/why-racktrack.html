@@ -9,8 +9,8 @@
       content="See how RackTrack perceives, reconciles, and reasons about physical infrastructure through visual rack intelligence, cable-to-port mapping, and continuous reconciliation."
     >
     <link rel="icon" href="../assets/logo.jpg">
-    <link rel="stylesheet" href="../styles.css?v=why-racktrack-23-nav-navmenubcd">
-    <script type="module" src="../js/why-racktrack.js?v=why-racktrack-5"></script>
+    <link rel="stylesheet" href="../styles.css?v=why-racktrack-25-images">
+    <script type="module" src="../js/why-racktrack.js?v=why-racktrack-6"></script>
   </head>
   <body class="why-page">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -45,28 +45,6 @@
               <a class="button-primary" href="contact.html">See it in action</a>
               <span class="why-hero-action-note">From a phone scan to a verified answer</span>
             </div>
-            <ul class="why-hero-signals" aria-label="What RackTrack covers">
-              <li>Data center inventory</li>
-              <li>Live network validation</li>
-              <li>Audit-ready evidence</li>
-            </ul>
-          </div>
-          <div class="why-hero-manifest" data-manifest data-tilt aria-label="How RackTrack checks a rack, three steps">
-            <div class="why-manifest-head"><span>THE CHECK</span><b data-manifest-count aria-live="polite">01 / 03</b></div>
-            <div class="why-manifest-row is-active" data-manifest-row="0"><span>What's really there</span><strong>Scanned</strong></div>
-            <div class="why-manifest-row" data-manifest-row="1"><span>What your systems say</span><strong>Compared</strong></div>
-            <div class="why-manifest-row" data-manifest-row="2"><span>The difference</span><strong>Shown to you</strong></div>
-            <div class="why-manifest-rule" aria-hidden="true"></div>
-            <p data-manifest-copy aria-live="polite">See exactly what's physically installed in the rack right now.</p>
-            <div class="why-manifest-controls" aria-label="View verification record steps">
-              <button type="button" data-manifest-prev aria-label="Previous record step">&#8592;</button>
-              <div class="why-manifest-steps" role="tablist" aria-label="Verification record steps">
-                <button type="button" role="tab" aria-selected="true" data-manifest-step="0">01</button>
-                <button type="button" role="tab" aria-selected="false" data-manifest-step="1">02</button>
-                <button type="button" role="tab" aria-selected="false" data-manifest-step="2">03</button>
-              </div>
-              <button type="button" data-manifest-next aria-label="Next record step">&#8594;</button>
-            </div>
           </div>
         </div>
       </section>
@@ -80,13 +58,13 @@
         <div class="why-steps">
           <article class="why-step-card" data-tilt data-reveal data-reveal-delay="0">
             <span class="why-step-number">01</span>
-            <figure class="why-step-media"><img src="../assets/why-racktrack/physical-rack-capture.jpeg" alt="A server rack with labelled patch panels and switch ports, ready to be scanned"></figure>
+            <figure class="why-step-media"><img src="../assets/why-racktrack/why-step-scan-app.jpg" alt="A phone running the RackTrack app, scanning a rack aisle and identifying cables and ports in real time"></figure>
             <h3>Walk the aisle, scan the rack</h3>
             <p>Open the app and walk down the row. RackTrack photographs every rack, cable, and port as you pass: no special hardware, no downtime.</p>
           </article>
           <article class="why-step-card" data-tilt data-reveal data-reveal-delay="1">
             <span class="why-step-number">02</span>
-            <figure class="why-step-media"><img src="../assets/why-racktrack/network-verified.jpeg" alt="Network switch with active ports and illuminated link lights"></figure>
+            <figure class="why-step-media"><img src="../assets/why-racktrack/why-step-compare-diagram.jpg" alt="Diagram showing scan data compared against CMDB, spreadsheets, and network tools, identifying matches, missing, moved, and changed items"></figure>
             <h3>We check it against your records</h3>
             <p>RackTrack compares what it just saw with your existing systems (your CMDB, spreadsheets, and network tools) automatically, in the background.</p>
           </article>
@@ -115,21 +93,16 @@
               <span class="why-compare-tag why-compare-tag-before">Unverified</span>
             </div>
             <div class="why-compare-handle" aria-hidden="true"><span>&#8596;</span></div>
+            <input class="why-compare-range" type="range" min="0" max="100" value="50" aria-label="Drag left for unverified, right for verified">
           </div>
-          <input class="why-compare-range" type="range" min="0" max="100" value="50" aria-label="Drag left for unverified, right for verified">
-        </div>
-
-        <div class="why-proof-strip" data-reveal aria-label="RackTrack proof statements">
-          <div><strong>Every asset record</strong><span>Traceable to its source</span></div>
-          <div><strong>Every device</strong><span>Verified against the live network</span></div>
-          <div><strong>Every infrastructure change</strong><span>Timestamped and defensible</span></div>
+          <p class="why-compare-caption">One photo, reconciled. Every card below traces back the same way.</p>
         </div>
 
         <div class="why-deck" data-deck data-reveal aria-label="RackTrack evidence, five cards">
           <p class="why-deck-hint">Click through, or use the arrows: each card is one thing RackTrack proves.</p>
           <div class="why-deck-stage">
             <article class="why-deck-card" data-deck-card>
-              <figure class="why-deck-media"><img src="../assets/why-racktrack/physical-rack-capture.jpeg" alt="A labelled patch panel and switch ports installed in a server rack"></figure>
+              <figure class="why-deck-media"><img src="../assets/why-racktrack/why-deck-source-linked.jpg" alt="Close-up of labelled patch cables running into a switch, each cable tagged with its own identifier"></figure>
               <div class="why-deck-copy">
                 <span class="why-card-label">Source-linked</span>
                 <h3>See exactly where each record came from.</h3>
@@ -137,7 +110,7 @@
               </div>
             </article>
             <article class="why-deck-card" data-deck-card>
-              <figure class="why-deck-media"><img src="../assets/why-racktrack/network-verified.jpeg" alt="Network equipment with active ports and illuminated link indicators"></figure>
+              <figure class="why-deck-media"><img src="../assets/why-racktrack/why-deck-network-verified.jpg" alt="Teal SFP+ transceivers plugged into a switch with active green link lights"></figure>
               <div class="why-deck-copy">
                 <span class="why-card-label">Network-verified</span>
                 <h3>Know if it's actually plugged in and running.</h3>
@@ -145,7 +118,7 @@
               </div>
             </article>
             <article class="why-deck-card" data-deck-card>
-              <figure class="why-deck-media"><img src="../assets/why-racktrack/timestamped-change.jpeg" alt="A technician documenting a rack change with a tablet beside live equipment"></figure>
+              <figure class="why-deck-media"><img src="../assets/why-racktrack/why-deck-timestamped.jpg" alt="A technician marking a change on a rack panel while holding a tablet, with a bright data center aisle behind them"></figure>
               <div class="why-deck-copy">
                 <span class="why-card-label">Timestamped</span>
                 <h3>Know exactly when something changed.</h3>
@@ -153,7 +126,7 @@
               </div>
             </article>
             <article class="why-deck-card" data-deck-card>
-              <figure class="why-deck-media"><img src="../assets/why-racktrack/audit-evidence.jpeg" alt="Rack diagrams and infrastructure records arranged beside network equipment"></figure>
+              <figure class="why-deck-media"><img src="../assets/why-racktrack/why-deck-audit-ready.jpg" alt="A desk with rack floor plans, elevation diagrams, and a laptop laid out for an audit review"></figure>
               <div class="why-deck-copy">
                 <span class="why-card-label">Audit-ready</span>
                 <h3>Walk into an audit with proof, not guesses.</h3>
@@ -161,7 +134,7 @@
               </div>
             </article>
             <article class="why-deck-card" data-deck-card>
-              <figure class="why-deck-media"><img src="../assets/why-racktrack/cable-port-mapping.jpeg" alt="Organized cable paths connected across network ports in a server cabinet"></figure>
+              <figure class="why-deck-media"><img src="../assets/why-racktrack/why-deck-cable-mapping.jpg" alt="Copper patch cables tracing a physical path between two switch ports labelled Aisle 4, Rack 2"></figure>
               <div class="why-deck-copy">
                 <span class="why-card-label">Patent-pending cable mapping</span>
                 <h3>See which cable actually goes where.</h3>
