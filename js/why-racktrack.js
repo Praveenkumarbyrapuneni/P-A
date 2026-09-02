@@ -23,8 +23,10 @@ if (wantsTilt) {
   });
 }
 
-// Evidence deck: five cards held in a physical stack, front card raised and
+// Evidence deck: cards held in a physical stack, front card raised and
 // legible, the rest fanned out behind it in real depth (translateZ).
+// Card count is read from the DOM (querySelectorAll), not hardcoded, so
+// trimming or adding a card here needs no change to this file.
 const deck = document.querySelector("[data-deck]");
 
 if (deck) {
