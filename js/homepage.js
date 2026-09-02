@@ -7,7 +7,7 @@ const WORLD_BEATS = [
   { key: "scale",      frames: 54,  dir: "scale-frames-webp" },
   { key: "outcomes",   frames: 57,  dir: "outcomes-frames-webp" },
 ];
-const WORLD_FRAME_ROOT = "homepage-lower-animation";
+const WORLD_FRAME_ROOT = "assets/homepage/lower-animation";
 const worldFramePath = (dir, i) =>
   `${WORLD_FRAME_ROOT}/${dir}/frame-${String(i).padStart(4, "0")}.webp`;
 
@@ -24,7 +24,7 @@ const totalFrames = 240;
 const startFrame = 5;
 const introEnd = 0.12;
 const framePath = (index) =>
-  `homepage-hero-animation/frame-${String(index).padStart(4, "0")}.webp`;
+  `assets/homepage/hero-animation/frame-${String(index).padStart(4, "0")}.webp`;
 
 const frames = new Array(totalFrames + 1);
 const loaded = new Set();
