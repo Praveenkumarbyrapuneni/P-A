@@ -4078,7 +4078,7 @@ h1 span {
 .solutions-page .section-lede { color: var(--copy-strong); font-size: clamp(18px, 1.65vw, 25px); line-height: 1.34; max-width: 39rem; }
 .solutions-page .button-primary { display: inline-flex; align-items: center; gap: 18px; }
 .solutions-page .button-primary span { font-size: 18px; }
-.solutions-hero { min-height: calc(100dvh - 80px); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(360px, .9fr); align-items: center; gap: 10vw; padding-block: 110px 90px; position: relative; }
+.solutions-hero { min-height: calc(100dvh - 80px); display: grid; grid-template-columns: 1fr; align-items: center; padding-block: 110px 90px; position: relative; }
 .solutions-hero::before { /* ponytail: grid overlay removed — item 10 */ display: none; }
 .solutions-hero-copy { max-width: 800px; padding-left: clamp(0px, 5vw, 90px); }
 .solutions-hero h1 { margin-bottom: 34px; max-width: 850px; font-size: clamp(52px, 5.1vw, 84px); font-weight: 700; line-height: .91; letter-spacing: -.05em; }
@@ -4086,80 +4086,6 @@ h1 span {
 .solutions-hero-actions { display: flex; align-items: center; gap: 30px; flex-wrap: wrap; }
 .solutions-hero .text-link { color: var(--ink); font-weight: 700; }
 .solutions-hero .text-link span { color: var(--blue); margin-left: 8px; }
-/* Hero rail: a static preview of Capture -> Check -> Use. Replaces the old
-   orbiting-dots readout widget — the real, scroll-driven version of this
-   same idea lives in the process rail below (.process-rail). */
-/* Hero rail — a dark "manifest plate" card. Deliberately not another
-   light/white bordered box (that's the site default: .original-schematic,
-   process-station media, principle rows, evidence cards all use it) — see
-   the hard rule in AGENTS.md against repeating a card style. Ledger rows
-   with a lit top seam replace the earlier dot-and-line timeline entirely;
-   no circles, no connecting rail. */
-.hero-rail {
-  position: relative;
-  align-self: center;
-  justify-self: end;
-  width: min(100%, 420px);
-  padding: 8px 32px 14px;
-  border-radius: 6px;
-  background: linear-gradient(172deg, #132844, #0c1c30);
-  box-shadow: 0 40px 90px rgba(8, 20, 38, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.04);
-}
-
-.hero-rail::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 20px;
-  right: 20px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--scan), transparent);
-}
-
-.hero-rail-label {
-  margin: 26px 0 6px;
-  color: var(--scan);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  opacity: 0.9;
-}
-
-.hero-rail-station {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  padding: 18px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.09);
-}
-
-.hero-rail-num {
-  flex: none;
-  font-family: var(--font-mono);
-  font-size: 21px;
-  font-weight: 700;
-  color: var(--scan);
-  opacity: 0.65;
-}
-
-.hero-rail-copy {
-  display: block;
-}
-
-.hero-rail-station strong {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 17px;
-  color: var(--white);
-}
-
-.hero-rail-station span {
-  display: block;
-  color: rgba(230, 238, 250, 0.6);
-  font-size: 13px;
-}
-
 /* Sheet tags: small "engineering document" index marks reused across the
    technical sections (process rail, schematic, cabinet reader) — the page's
    own device for telling sections apart, distinct from Why RackTrack's. */
@@ -4305,6 +4231,15 @@ h1 span {
   .process-station-media {
     height: 200px;
   }
+
+  .solutions-cta {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .solutions-cta > div:last-child {
+    max-width: none;
+  }
 }
 
 .schematic-section {
@@ -4370,13 +4305,30 @@ h1 span {
 .surface-grid { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid rgba(16,32,51,.18); border-left: 1px solid rgba(16,32,51,.18); } .surface-grid article { min-height: 260px; padding: 30px 34px; border-right: 1px solid rgba(16,32,51,.18); border-bottom: 1px solid rgba(16,32,51,.18); opacity: 0; transform: translateY(20px); transition: opacity .55s ease, transform .55s ease; } .surface-grid article.is-visible { opacity: 1; transform: none; } .surface-grid article:nth-child(even) { transition-delay: .08s; } .surface-grid article > span { color: var(--blue); font-size: 11px; font-weight: 700; } .surface-grid h3 { font-size: clamp(24px, 2.5vw, 36px); letter-spacing: -.04em; line-height: 1; margin: 54px 0 14px; } .surface-grid p { color: var(--copy-strong); font-size: 16px; line-height: 1.45; max-width: 510px; margin: 0; }
 /* Was a dark (--ink) full-bleed panel — broke the site's "no dark dominant
    background" rule. Rebuilt light, matching the rest of the site's CTAs. */
-.solutions-cta { margin-top: 0; margin-bottom: 0; padding: 90px clamp(30px, 8vw, 140px); background: #dfeafa; border-top: 1px solid rgba(16, 32, 51, 0.18); position: relative; overflow: hidden; }
+/* Matches .why-cta's layout exactly: a 2-column grid (heading | copy +
+   button) instead of one stacked column, so this CTA sits at the same
+   height as the site's other CTAs instead of running taller for no
+   reason other than a different internal layout. */
+.solutions-cta {
+  margin-top: 0;
+  margin-bottom: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+  align-items: center;
+  gap: 48px;
+  padding: 90px clamp(28px, 7vw, 112px);
+  background: #dfeafa;
+  border-top: 1px solid rgba(16, 32, 51, 0.18);
+  position: relative;
+  overflow: hidden;
+}
 .solutions-cta::before { /* ponytail: grid overlay removed — item 10 */ display: none; }
 .solutions-cta > * { position: relative; }
+.solutions-cta > div:last-child { max-width: 510px; }
 .solutions-cta .eyebrow { color: var(--blue); }
-.solutions-cta h2 { margin-bottom: 28px; color: var(--ink); }
+.solutions-cta h2 { color: var(--ink); }
 .solutions-cta h2 em { color: var(--blue); font-style: normal; }
-.solutions-cta p:not(.eyebrow) { max-width: 580px; color: var(--copy-strong); font-size: 19px; line-height: 1.45; margin-bottom: 34px; }
+.solutions-cta p:not(.eyebrow) { color: var(--copy-strong); font-size: 19px; line-height: 1.45; margin: 0 0 26px; }
 .solutions-cta .button-primary { background: var(--blue); color: white; }
 .solutions-page .site-footer {
   margin-top: 0;
@@ -4438,7 +4390,7 @@ html:not(.solutions-motion) .principle-row,
 html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none; }
 @media (max-width: 980px) {
   .solutions-page .section-frame { width: min(100% - 42px, 720px); }
-  .solutions-hero { min-height: auto; grid-template-columns: 1fr; gap: 70px; padding-block: 100px 80px; } .solutions-hero-copy { padding-left: 0; } .hero-rail { justify-self: start; width: min(100%, 500px); }
+  .solutions-hero { min-height: auto; grid-template-columns: 1fr; gap: 70px; padding-block: 100px 80px; } .solutions-hero-copy { padding-left: 0; }
   .solutions-intro, .workflow-heading { grid-template-columns: 1fr; gap: 30px; padding-block: 100px 50px; }
   .principle-row, .principle-row-reverse { grid-template-columns: 1fr; gap: 22px; } .principle-row img { grid-column: auto; height: 180px; }
   .schematic-section { margin-top: 100px; } .schematic-section > * { padding-inline: 26px; } .schematic-heading { display: block; } .drawing-meta { text-align: left; margin-top: 25px; } .schematic-labels { display: none; } .schematic-grid { grid-template-columns: 1fr; gap: 16px; } .source-stack, .record-stack { gap: 12px; } .source-stack { grid-template-columns: 1fr 30px 1fr; align-items: center; } .source-stack .flow-arrow { display: grid; justify-items: center; gap: 0; } .source-stack .flow-arrow b { transform: rotate(90deg); } .source-stack .flow-arrow:last-child { display: none; } .engine-node { margin: 10px 0; } .record-stack { grid-template-columns: repeat(3, 1fr); margin-left: 0; } .record-node { min-height: 100px; padding: 14px; } .record-node span { font-size: 9px; }
@@ -4448,7 +4400,7 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
   .solutions-page .footer-links { margin-top: 0; }
 }
 @media (max-width: 640px) {
-  .solutions-page .section-frame { width: calc(100% - 30px); } .solutions-hero h1 { font-size: clamp(48px, 13vw, 68px); } .solutions-hero .hero-lede { font-size: 18px; } .solutions-hero-actions { gap: 20px; } .hero-rail { width: 100%; } .process-intro h2, .workflow-heading h2 { font-size: 52px; }
+  .solutions-page .section-frame { width: calc(100% - 30px); } .solutions-hero h1 { font-size: clamp(48px, 13vw, 68px); } .solutions-hero .hero-lede { font-size: 18px; } .solutions-hero-actions { gap: 20px; } .process-intro h2, .workflow-heading h2 { font-size: 52px; }
   .principle-row, .principle-row-reverse { grid-template-columns: 1fr; } .principle-row img { grid-column: auto; height: 150px; } .principle-copy p { font-size: 16px; } .row-tag { font-size: 9px; line-height: 1.5; display: block; }
   .schematic-section { padding-top: 28px; } .schematic-section > * { padding-inline: 17px; } .schematic-heading h2 { font-size: 45px; } .source-stack { grid-template-columns: 1fr; } .source-stack .flow-arrow { justify-content: flex-start; } .source-stack .flow-arrow b { transform: none; } .record-stack { grid-template-columns: 1fr; } .record-node { min-height: 78px; } .schematic-key { display: grid; gap: 15px; padding-top: 22px; } .schematic-key strong { margin-left: 0; }
   .reader-label, .reader-tabs { padding-left: 17px; padding-right: 17px; } .reader-tabs button { min-height: 55px; font-size: 16px; } .rack-stage { min-height: 480px; } .cabinet { width: 74%; min-height: 410px; height: 82%; } .rack-slot { padding: 8px; } .rack-slot strong { font-size: 10px; } .rack-slot span, .rack-slot em { font-size: 8px; } .scan-beam { animation-name: rack-scan-mobile; } @keyframes rack-scan-mobile { 0%,100% { transform: translateY(0); } 50% { transform: translateY(300px); } }
