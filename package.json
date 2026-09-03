@@ -1,5 +1,11 @@
 {
   "name": "racktrack-homepage",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "jsdom": "^30.0.1"
+  }
 }
