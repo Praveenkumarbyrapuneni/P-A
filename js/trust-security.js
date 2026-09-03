@@ -94,7 +94,11 @@ if (spectrum) {
       detail.classList.toggle("is-active", Number(detail.dataset.spectrumDetail) === index);
     });
     if (fill) {
-      const pct = `${(index / (stops.length - 1)) * 100}%`;
+      // ponytail: fill sits at left:12.5% on a track whose visible line
+      // (styles.css .tsec-spectrum-track::before) spans left:12.5% to
+      // right:12.5% — a 75%-wide span, not the full container. Scaling to
+      // 100% overshot past the last stop; scale to 75% to land exactly on it.
+      const pct = `${(index / (stops.length - 1)) * 75}%`;
       if (gsapReady) window.gsap.to(fill, { width: pct, duration: 0.5, ease: "power3.out" });
       else fill.style.width = pct;
     }
