@@ -4493,12 +4493,22 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 /* The hero photo behind the header is dark, so the default ink-colored
    brand/nav text disappears into it — flip header text to white/near-white
    just on this page. */
-.use-cases-page .brand-mark { background: var(--white); }
-.use-cases-page .brand-name { color: var(--white); }
+.use-cases-page .brand-mark { background: var(--white); transition: background 150ms ease; }
+.use-cases-page .brand-name { color: var(--white); transition: color 150ms ease; }
 .use-cases-page .site-nav a { color: rgba(255, 255, 255, 0.78); }
 .use-cases-page .site-nav a:hover,
 .use-cases-page .site-nav a:focus-visible,
 .use-cases-page .site-nav a.is-current { color: var(--white); }
+
+/* Once the hero scrolls past (js/use-cases.js toggles this on <body> via
+   IntersectionObserver), the fixed nav is sitting on the light --uc-paper
+   body instead — flip it back to dark so it doesn't wash out. */
+.use-cases-page.is-past-hero .brand-mark { background: var(--uc-ink); }
+.use-cases-page.is-past-hero .brand-name { color: var(--uc-ink); }
+.use-cases-page.is-past-hero .site-nav a { color: rgba(16, 32, 51, 0.68); }
+.use-cases-page.is-past-hero .site-nav a:hover,
+.use-cases-page.is-past-hero .site-nav a:focus-visible,
+.use-cases-page.is-past-hero .site-nav a.is-current { color: var(--uc-ink); }
 /* Full-bleed photo behind centered text, like the homepage hero — replaces
    the earlier split layout (text pinned left, photo boxed on the right),
    which read as off-balance/"tilted" rather than a deliberate composition. */
@@ -4561,46 +4571,56 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 .uc-filmstrip-head { width: min(1440px, calc(100% - 128px)); margin: 0 auto 50px; }
 .uc-filmstrip-head h2 { margin: 18px 0 20px; max-width: 14ch; font-size: clamp(38px, 4.6vw, 70px); line-height: .95; letter-spacing: -.055em; }
 .uc-filmstrip-head > p:last-child { max-width: 56ch; margin: 0; color: var(--muted); font-size: clamp(17px, 1.35vw, 21px); line-height: 1.5; }
-.uc-reel-track {
-  display: flex;
-  gap: 26px;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  padding: 6px clamp(24px, 6vw, 80px) 20px;
-  cursor: grab;
-  scrollbar-width: none;
-}
-.uc-reel-track::-webkit-scrollbar { display: none; }
-.uc-reel-track:active,
-.uc-reel-track.is-dragging { cursor: grabbing; }
-.uc-reel {
-  flex: 0 0 min(500px, 82vw);
-  scroll-snap-align: start;
+.uc-team-list {
   display: flex;
   flex-direction: column;
-  background: var(--white);
-  border: 1px solid rgba(16, 32, 51, .12);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  box-shadow: 0 24px 60px rgba(16, 32, 51, .08);
-  transition: box-shadow .25s ease, transform .25s ease;
+  width: min(1440px, calc(100% - 128px));
+  margin: 0 auto;
 }
-.uc-reel:hover { transform: translateY(-4px); box-shadow: 0 34px 80px rgba(16, 32, 51, .12); }
-.uc-reel figure { margin: 0; aspect-ratio: 4 / 3; overflow: hidden; }
-.uc-reel figure img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-.uc-reel-copy { display: grid; gap: 10px; padding: 26px 28px 30px; }
+.uc-team-row {
+  display: flex;
+  align-items: center;
+  gap: min(96px, 6vw);
+  padding: 72px 0;
+  border-top: 1px solid var(--uc-line);
+}
+.uc-team-row:first-child { border-top: none; }
+.uc-team-row:nth-child(even) { flex-direction: row-reverse; }
+.uc-team-row figure { flex: 0 0 34%; max-width: 380px; margin: 0; aspect-ratio: 1 / 1; overflow: hidden; border-radius: var(--radius-md); }
+.uc-team-row figure img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.uc-team-row .uc-reel-copy { flex: 1; }
+.uc-reel-copy { display: grid; gap: 14px; }
 .uc-reel-role { margin: 0; color: var(--blue); font: 700 11px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
-.uc-reel-quote { margin: 0; color: var(--ink); font-family: var(--font-display); font-size: clamp(20px, 1.7vw, 24px); font-weight: 700; line-height: 1.2; letter-spacing: -.02em; }
-.uc-reel-plain { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
-.uc-reel-copy a { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; color: var(--ink); font: 700 13px var(--font-ui); text-decoration: none; }
+.uc-reel-quote { margin: 0; color: var(--ink); font-family: var(--font-display); font-size: clamp(24px, 2.4vw, 34px); font-weight: 700; line-height: 1.15; letter-spacing: -.02em; }
+.uc-reel-plain { margin: 0; max-width: 42ch; color: var(--muted); font-size: 17px; line-height: 1.6; }
+.uc-reel-copy a { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; color: var(--ink); font: 700 13px var(--font-ui); text-decoration: none; }
 .uc-reel-copy a span { color: var(--blue); font-size: 16px; transition: transform .2s ease; }
 .uc-reel-copy a:hover span { transform: translateX(4px); }
-.uc-reel-dots { display: flex; justify-content: center; gap: 10px; margin-top: 32px; }
-.uc-reel-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 5px; background: rgba(16, 32, 51, .18); cursor: pointer; transition: width .25s ease, background .25s ease; }
-.uc-reel-dots button.is-active { width: 26px; background: var(--blue); }
-.uc-close { width:min(1440px,calc(100% - 128px));margin:0 auto;padding:90px 0; }.uc-close h2 { max-width:14ch;font-size:clamp(44px,5.4vw,84px); }.uc-close > p:not(.eyebrow) { max-width:45ch;margin:-4px 0 36px;color:#536277;font-size:18px;line-height:1.5; }.uc-close .button-primary { background:var(--uc-ink); }.use-cases-page .site-footer { margin-top:0; }
-@media (max-width: 980px) { .uc-opening { padding:130px 24px 66px; } .uc-opening h1 { max-width:13ch; } .uc-close { width:calc(100% - 60px); } .uc-filmstrip-head { width: calc(100% - 60px); } .uc-close { padding:100px 0 118px; } }
-@media (max-width:640px) { .uc-opening h1 { font-size:clamp(48px,14vw,68px); } .uc-opening-credit { font-size: 8px; left: 16px; right: 16px; } .uc-close { width:calc(100% - 44px); } .uc-filmstrip-head { width: calc(100% - 44px); } .uc-reel { flex-basis: 88vw; } .uc-close h2 { font-size:48px; } }
+.uc-close {
+  /* ponytail: matches the why-cta/solutions-cta grid recipe (item 08/23) —
+     heading | copy+button side by side, instead of one flat stacked
+     column running taller and wider than it needs to. */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+  align-items: center;
+  gap: 48px;
+  padding: 90px clamp(28px, 7vw, 112px);
+  border-top: 1px solid var(--uc-line);
+}
+.uc-close h2 {
+  /* ponytail: the shared .89 line-height above was tuned for the 2-line
+     hero H1, not this 3-line CTA headline — at this font-size it made the
+     italic third line collide with "you own." above it. */
+  margin: 0;
+  max-width: 14ch;
+  font-size: clamp(44px, 5.4vw, 84px);
+  line-height: 1.05;
+}
+.uc-close > div:last-child { max-width: 510px; }
+.uc-close > div:last-child > p { margin: 0 0 26px; max-width: 45ch; color: #536277; font-size: 18px; line-height: 1.5; }
+.uc-close .button-primary { background: var(--uc-ink); }.use-cases-page .site-footer { margin-top:0; }
+@media (max-width: 980px) { .uc-opening { padding:130px 24px 66px; } .uc-opening h1 { max-width:13ch; } .uc-close { width:calc(100% - 60px); } .uc-filmstrip-head { width: calc(100% - 60px); } .uc-close { padding:100px 0 118px; } .uc-team-list { width: calc(100% - 60px); } .uc-team-row { gap: 48px; padding: 56px 0; } }
+@media (max-width:640px) { .uc-opening h1 { font-size:clamp(48px,14vw,68px); } .uc-opening-credit { font-size: 8px; left: 16px; right: 16px; } .uc-close { grid-template-columns: 1fr; gap: 28px; padding: 70px 24px; } .uc-close > div:last-child { max-width: none; } .uc-filmstrip-head { width: calc(100% - 44px); } .uc-close h2 { font-size:48px; } .uc-team-list { width: calc(100% - 44px); } .uc-team-row, .uc-team-row:nth-child(even) { flex-direction: column; align-items: flex-start; gap: 24px; padding: 40px 0; } .uc-team-row figure { flex-basis: auto; max-width: 220px; width: 100%; } }
 
 /* .case-method/.case-band/.case-impact were dead code from an abandoned
    data-driven templating script (use-case-detail.js — not linked from any
@@ -4618,7 +4638,7 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
    #8db2ff, #9ab8ef, #2b559a) instead of the fixed palette tokens — a real
    drift from the documented brand colors. Remapped to --blue/--scan/
    --royal/--ink/--cloud/--mist/--muted/--white throughout. */
-.case-page{--case:var(--blue);background:var(--cloud);color:var(--ink)}.case-page .site-nav a.is-current::after{transform:scaleX(1)}.case-hero{min-height:92dvh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:8vw;padding:130px max(6vw,36px) 70px;overflow:hidden;background:var(--mist)}.case-hero-copy{max-width:730px}.case-kicker{color:var(--case);font:700 11px var(--font-mono);letter-spacing:.13em}.case-hero h1{margin:19px 0 24px;font-size:clamp(52px,6vw,94px);line-height:.89;letter-spacing:-.065em}.case-hero p:not(.case-kicker){max-width:46ch;color:var(--muted);font-size:19px;line-height:1.5}.case-back{color:var(--ink);font:700 11px var(--font-mono);letter-spacing:.08em;text-decoration:none}.case-hero-visual{position:relative;max-width:650px;aspect-ratio:1;justify-self:end}.case-hero-visual img{position:absolute;inset:9%;width:82%;height:82%;object-fit:cover;border-radius:50%;box-shadow:0 0 0 1px rgba(36,87,214,.45),0 0 0 22px rgba(36,87,214,.08),0 28px 70px rgba(16,32,51,.2)}.case-hero-visual::before{display:none}.case-article{width:min(1180px,calc(100% - 70px));margin:0 auto;padding:130px 0}.case-intro{display:grid;grid-template-columns:.75fr 1.25fr;gap:9vw;margin-bottom:120px}.case-intro h2,.case-proof h2{font-family:var(--font-display);font-size:clamp(40px,4.5vw,68px);line-height:.93;letter-spacing:-.055em}.case-intro p,.case-proof p{color:var(--muted);font-size:18px;line-height:1.55;max-width:48ch}.case-scene{position:relative;min-height:500px;display:grid;place-items:center;margin:0 0 120px;overflow:hidden;background:var(--ink);color:rgba(255,255,255,.86)}.case-scene::before{display:none}.case-scene>*{position:relative}.case-proof{display:grid;grid-template-columns:1fr 1fr;gap:8vw;align-items:center}.case-proof img{width:100%;aspect-ratio:1.15;object-fit:cover}.case-cta{margin-top:120px;margin-inline:calc(50% - 50vw);width:100vw;padding:90px 9%;background:#dfeafa;color:var(--ink)}.case-cta h2{font-family:var(--font-display);max-width:15ch;font-size:clamp(42px,5vw,78px);letter-spacing:-.06em;line-height:.9}.case-cta .button-primary{background:var(--blue);color:var(--white)}.case-page[data-scene="cards"] .case-scene i{position:absolute;width:42%;height:55%;border:1px solid rgba(125,189,255,.55);background:linear-gradient(145deg,var(--royal),var(--ink));transform:perspective(900px) rotateY(-28deg) rotateX(13deg);transition:transform .7s}.case-page[data-scene="cards"] .case-scene i:nth-child(2){transform:translate(18px,-22px) perspective(900px) rotateY(-28deg) rotateX(13deg);opacity:.7}.case-page[data-scene="cards"] .case-scene i:nth-child(3){transform:translate(36px,-44px) perspective(900px) rotateY(-28deg) rotateX(13deg);opacity:.4}.case-page[data-scene="cards"] .case-scene.is-live i:first-child{transform:translate(-25px,15px) perspective(900px) rotateY(-15deg) rotateX(5deg)}.case-page[data-scene="topology"] .case-scene svg{width:min(82%,700px);fill:none;stroke:var(--scan);stroke-width:2}.case-page[data-scene="topology"] .case-scene path{stroke-dasharray:520;stroke-dashoffset:520}.case-page[data-scene="topology"].is-live .case-scene path{animation:draw 1.4s ease forwards}.case-page[data-scene="topology"].is-live .case-scene path:nth-child(2){animation-delay:.35s}@keyframes draw{to{stroke-dashoffset:0}}.case-page[data-scene="radar"] .case-scene b{width:280px;height:280px;border:1px solid rgba(125,189,255,.55);border-radius:50%;background:conic-gradient(transparent,rgba(36,87,214,.45),transparent 30%);animation:spin 4s linear infinite}@keyframes spin{to{transform:rotate(1turn)}}.case-page[data-scene="radar"] .case-scene i{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--scan);box-shadow:0 0 20px rgba(125,189,255,.85)}.case-page[data-scene="radar"] .case-scene i:nth-of-type(1){transform:translate(70px,-40px)}.case-page[data-scene="radar"] .case-scene i:nth-of-type(2){transform:translate(-82px,60px)}.case-page[data-scene="radar"] .case-scene i:nth-of-type(3){transform:translate(94px,92px)}.case-page[data-scene="ledger"] .case-scene{align-content:center;gap:18px}.case-page[data-scene="ledger"] .case-scene i{padding:18px 26px;border:2px solid var(--scan);color:var(--scan);font:700 22px var(--font-mono);transform:rotate(-8deg);opacity:0}.case-page[data-scene="ledger"].is-live .case-scene i{animation:stamp .55s ease forwards}@keyframes stamp{to{opacity:1}}.case-page[data-scene="ledger"] .case-scene b{width:min(520px,70vw);height:1px;background:rgba(125,189,255,.27)}.case-page[data-scene="timeline"] .case-scene{grid-template-columns:repeat(3,1fr);gap:4vw;padding:0 10%}.case-page[data-scene="timeline"] .case-scene::after{content:"";position:absolute;left:18%;right:18%;height:1px;background:rgba(125,189,255,.6)}.case-page[data-scene="timeline"] .case-scene b{z-index:1;display:grid;place-items:center;width:112px;height:112px;border:1px solid rgba(125,189,255,.55);border-radius:50%;background:var(--ink);font:700 12px var(--font-mono);letter-spacing:.08em}.case-page[data-scene="baseline"] .case-scene{grid-template-columns:1fr auto 1fr;gap:45px;font:700 clamp(24px,3vw,48px) var(--font-mono)}.case-page[data-scene="baseline"] .case-scene i{padding:34px;border:1px solid rgba(125,189,255,.55);font-style:normal}.case-page[data-scene="baseline"] .case-scene i:first-child{opacity:.4;border-style:dashed}.case-page[data-scene="baseline"] .case-scene b{color:var(--scan)}@media(max-width:800px){.case-hero{grid-template-columns:1fr;padding:115px 24px 58px}.case-hero-visual{justify-self:start;width:min(520px,100%)}.case-article{width:calc(100% - 44px);padding:82px 0}.case-intro,.case-proof{grid-template-columns:1fr;gap:34px;margin-bottom:78px}.case-scene{min-height:330px;margin-bottom:78px}.case-cta{margin-top:80px}.case-page[data-scene="timeline"] .case-scene b{width:72px;height:72px;font-size:9px}}
+.case-page{--case:var(--blue);background:var(--cloud);color:var(--ink)}.case-page .site-nav a.is-current::after{transform:scaleX(1)}.case-hero{min-height:92dvh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:8vw;padding:130px max(6vw,36px) 70px;overflow:hidden;background:var(--mist)}.case-hero-copy{max-width:730px}.case-kicker{color:var(--case);font:700 11px var(--font-mono);letter-spacing:.13em}.case-hero h1{margin:19px 0 24px;font-size:clamp(38px,4.2vw,64px);line-height:.98;letter-spacing:-.045em}.case-hero p:not(.case-kicker){max-width:46ch;color:var(--muted);font-size:19px;line-height:1.5}.case-back{color:var(--ink);font:700 11px var(--font-mono);letter-spacing:.08em;text-decoration:none}.case-hero-visual{position:relative;max-width:650px;aspect-ratio:1;justify-self:end}.case-hero-visual img{position:absolute;inset:9%;width:82%;height:82%;object-fit:cover;border-radius:50%;box-shadow:0 0 0 1px rgba(36,87,214,.45),0 0 0 22px rgba(36,87,214,.08),0 28px 70px rgba(16,32,51,.2)}.case-hero-visual::before{display:none}.case-article{width:min(1180px,calc(100% - 70px));margin:0 auto;padding:130px 0}.case-intro{display:grid;grid-template-columns:.75fr 1.25fr;gap:9vw;margin-bottom:120px}.case-intro h2,.case-proof h2{font-family:var(--font-display);font-size:clamp(40px,4.5vw,68px);line-height:.93;letter-spacing:-.055em}.case-intro p,.case-proof p{color:var(--muted);font-size:18px;line-height:1.55;max-width:48ch}.case-scene{position:relative;min-height:500px;display:grid;place-items:center;margin:0 0 120px;overflow:hidden;background:var(--ink);color:rgba(255,255,255,.86)}.case-scene::before{display:none}.case-scene>*{position:relative}.case-proof{display:grid;grid-template-columns:1fr 1fr;gap:8vw;align-items:center}.case-proof img{width:100%;aspect-ratio:1.15;object-fit:cover}.case-cta{margin-top:120px;margin-inline:calc(50% - 50vw);width:100vw;display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.5fr);align-items:center;gap:40px;padding:90px clamp(28px,7vw,112px);background:#dfeafa;color:var(--ink)}.case-cta h2{font-family:var(--font-display);max-width:14ch;font-size:clamp(36px,4vw,62px);letter-spacing:-.05em;line-height:1.05;margin:0}.case-cta > div:last-child{justify-self:start}.case-cta .button-primary{background:var(--blue);color:var(--white)}.case-article > .case-cta:last-child{margin-bottom:-130px}.case-page[data-scene="cards"] .case-scene i{position:absolute;width:42%;height:55%;border:1px solid rgba(125,189,255,.55);background:linear-gradient(145deg,var(--royal),var(--ink));transform:perspective(900px) rotateY(-28deg) rotateX(13deg);transition:transform .7s}.case-page[data-scene="cards"] .case-scene i:nth-child(2){transform:translate(18px,-22px) perspective(900px) rotateY(-28deg) rotateX(13deg);opacity:.7}.case-page[data-scene="cards"] .case-scene i:nth-child(3){transform:translate(36px,-44px) perspective(900px) rotateY(-28deg) rotateX(13deg);opacity:.4}.case-page[data-scene="cards"] .case-scene.is-live i:first-child{transform:translate(-25px,15px) perspective(900px) rotateY(-15deg) rotateX(5deg)}.case-page[data-scene="topology"] .case-scene svg{width:min(82%,700px);fill:none;stroke:var(--scan);stroke-width:2}.case-page[data-scene="topology"] .case-scene path{stroke-dasharray:520;stroke-dashoffset:520}.case-page[data-scene="topology"].is-live .case-scene path{animation:draw 1.4s ease forwards}.case-page[data-scene="topology"].is-live .case-scene path:nth-child(2){animation-delay:.35s}@keyframes draw{to{stroke-dashoffset:0}}.case-page[data-scene="radar"] .case-scene b{width:280px;height:280px;border:1px solid rgba(125,189,255,.55);border-radius:50%;background:conic-gradient(transparent,rgba(36,87,214,.45),transparent 30%);animation:spin 4s linear infinite}@keyframes spin{to{transform:rotate(1turn)}}.case-page[data-scene="radar"] .case-scene i{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--scan);box-shadow:0 0 20px rgba(125,189,255,.85)}.case-page[data-scene="radar"] .case-scene i:nth-of-type(1){transform:translate(70px,-40px)}.case-page[data-scene="radar"] .case-scene i:nth-of-type(2){transform:translate(-82px,60px)}.case-page[data-scene="radar"] .case-scene i:nth-of-type(3){transform:translate(94px,92px)}.case-page[data-scene="ledger"] .case-scene{align-content:center;gap:18px}.case-page[data-scene="ledger"] .case-scene i{padding:18px 26px;border:2px solid var(--scan);color:var(--scan);font:700 22px var(--font-mono);transform:rotate(-8deg);opacity:0}.case-page[data-scene="ledger"].is-live .case-scene i{animation:stamp .55s ease forwards}@keyframes stamp{to{opacity:1}}.case-page[data-scene="ledger"] .case-scene b{width:min(520px,70vw);height:1px;background:rgba(125,189,255,.27)}.case-page[data-scene="timeline"] .case-scene{grid-template-columns:repeat(3,1fr);gap:4vw;padding:0 10%}.case-page[data-scene="timeline"] .case-scene::after{content:"";position:absolute;left:18%;right:18%;height:1px;background:rgba(125,189,255,.6)}.case-page[data-scene="timeline"] .case-scene b{z-index:1;display:grid;place-items:center;width:112px;height:112px;border:1px solid rgba(125,189,255,.55);border-radius:50%;background:var(--ink);font:700 12px var(--font-mono);letter-spacing:.08em}.case-page[data-scene="baseline"] .case-scene{grid-template-columns:1fr auto 1fr;gap:45px;font:700 clamp(24px,3vw,48px) var(--font-mono)}.case-page[data-scene="baseline"] .case-scene i{padding:34px;border:1px solid rgba(125,189,255,.55);font-style:normal}.case-page[data-scene="baseline"] .case-scene i:first-child{opacity:.4;border-style:dashed}.case-page[data-scene="baseline"] .case-scene b{color:var(--scan)}@media(max-width:800px){.case-hero{grid-template-columns:1fr;padding:115px 24px 58px}.case-hero-visual{justify-self:start;width:min(520px,100%)}.case-article{width:calc(100% - 44px);padding:82px 0}.case-intro,.case-proof{grid-template-columns:1fr;gap:34px;margin-bottom:78px}.case-scene{min-height:330px;margin-bottom:78px}.case-cta{margin-top:80px;grid-template-columns:1fr;gap:24px;padding:70px 24px}.case-article > .case-cta:last-child{margin-bottom:-82px}.case-page[data-scene="timeline"] .case-scene b{width:72px;height:72px;font-size:9px}}
 
 .contact-page .footer-brand p,
 .contact-page .footer-col a,
@@ -5781,8 +5801,8 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 .case-page-clear .case-hero-visual img { inset: 0; width: 100%; height: 100%; border-radius: 8px; object-fit: cover; background: #eef5ff; box-shadow: 0 30px 90px rgba(49,93,148,.18); }
 .case-clear-article { padding-top: 95px; }
 .case-simple { display: grid; grid-template-columns: minmax(190px,.45fr) minmax(0,1.55fr); gap: 8vw; padding-bottom: 95px; border-bottom: 1px solid rgba(16,32,51,.14); }
-.case-simple h2 { margin: 0; max-width: 11ch; font-family: var(--font-display); font-size: clamp(38px,4.2vw,64px); line-height: .95; letter-spacing: -.055em; }
-.case-simple > p:last-child { margin: 0; max-width: 58ch; color: #263a52; font-size: clamp(22px,2.3vw,34px); line-height: 1.14; letter-spacing: -.04em; }
+.case-simple h2 { margin: 0; max-width: 11ch; font-family: var(--font-display); font-size: clamp(28px,3vw,44px); line-height: 1.05; letter-spacing: -.03em; }
+.case-simple > p:last-child { margin: 0; max-width: 58ch; color: #263a52; font-size: clamp(18px,1.5vw,21px); line-height: 1.5; letter-spacing: -.01em; }
 /* Was three text-only cards with no photo — a wall of copy with nothing to
    anchor it to. Every role had a third use-case-detail image sitting unused
    on disk; pairing it with the before/during/after beats gives the story a
@@ -5798,7 +5818,7 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 .case-story h3 { margin: 8px 0 8px; font-size: clamp(20px,1.9vw,26px); line-height: 1.02; letter-spacing: -.03em; }
 .case-story p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.48; }
 @media (max-width: 900px) { .case-story-grid { grid-template-columns: 1fr; } .case-story-photo img { min-height: 220px; } }
-.case-evidence,.case-decision { display: grid; grid-template-columns: 1fr 1fr; gap: 7vw; align-items: center; margin: 112px 0; }
+.case-evidence,.case-decision { display: grid; grid-template-columns: 1fr 1fr; gap: 7vw; align-items: start; margin: 112px 0; }
 .case-evidence figure,.case-decision figure { margin: 0; overflow: hidden; background: #eef5ff; }
 .case-evidence img,.case-decision img { display: block; width: 100%; aspect-ratio: 1.18; object-fit: cover; filter: saturate(.86) contrast(1.02); }
 .case-evidence h2,.case-decision h2 { margin: 18px 0 22px; max-width: 13ch; font-family: var(--font-display); font-size: clamp(38px,4.2vw,66px); line-height: .93; letter-spacing: -.055em; }
@@ -6061,7 +6081,7 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 /* 1. Leaders — "The Rollup": proof numbers sit inline with the headline,
    photo is a small contained frame, not the dominant element. An exec
    wants the number, not a mood photo. */
-.case-hero-leaders { grid-template-columns: 1.05fr .95fr; align-items: end; padding-bottom: 0; }
+.case-hero-leaders { grid-template-columns: 1fr; align-items: end; padding-bottom: 0; }
 .case-hero-stats { display: flex; flex-wrap: wrap; gap: 0; margin-top: 44px; border-top: 1px solid rgba(16,32,51,.16); }
 .case-hero-stats div { flex: 1 1 140px; padding: 22px 22px 0 0; }
 .case-hero-stats b { display: block; font-family: var(--font-display); font-size: 42px; color: var(--case); letter-spacing: -.03em; }
@@ -6069,40 +6089,33 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 .case-hero-frame { margin: 0; justify-self: end; align-self: end; width: min(100%, 420px); border-radius: 8px; overflow: hidden; border: 1px solid rgba(16,32,51,.14); box-shadow: 0 30px 70px rgba(16,32,51,.12); }
 .case-hero-frame img { display: block; width: 100%; aspect-ratio: .82; object-fit: cover; }
 @media (max-width: 900px) { .case-hero-leaders { grid-template-columns: 1fr; } .case-hero-frame { justify-self: start; margin-top: 30px; } }
+/* Leaders and Network heroes: three straight invented-graphic attempts
+   (hub-and-spoke diagram, status ledger, hardware motif) all read as
+   generic/AI-ish — removed rather than keep guessing blind. Both heroes
+   are text-only single-column until real photography is available. */
 
 /* 2. Network — "The Wiring Check": light blueprint hero (grid-paper feel
-   like the Solutions schematic), a real port/uplink diagram in brand blue
-   instead of a portrait photo. Was a dark hero — reverted per the standing
-   rule against dark/black as a dominant background. */
-.case-hero-network { position: relative; grid-template-columns: 1.1fr .9fr; background: var(--mist); overflow: hidden; }
+   like the Solutions schematic). Was a hub-and-spoke SVG diagram (switch
+   fanning out to 4 ports) — replaced with the same ledger language as
+   Leaders below, one row flagged, since the fan-out chart read as generic
+   AI-diagram iconography once seen next to the rest of the redesign. */
+.case-hero-network { position: relative; grid-template-columns: 1fr; background: var(--mist); overflow: hidden; }
 .case-hero-network::before { /* ponytail: grid overlay removed — item 10 */ display: none; }
-.case-hero-diagram { position: relative; justify-self: center; width: min(100%, 560px); }
-.case-hero-diagram svg { display: block; width: 100%; height: auto; }
-.case-hero-diagram .cd-line { fill: none; stroke: var(--blue); stroke-width: 2; opacity: .6; }
-.case-hero-diagram .cd-node { fill: var(--white); stroke: var(--blue); stroke-width: 2.2; }
-.case-hero-diagram .cd-label { fill: var(--copy-strong); font: 400 13px var(--font-mono); letter-spacing: .05em; }
-@media (max-width: 900px) { .case-hero-network { grid-template-columns: 1fr; } .case-hero-diagram { justify-self: start; margin-top: 24px; } }
+@media (max-width: 900px) { .case-hero-network { grid-template-columns: 1fr; } }
 
 /* 3. Security — "The Spotlight": kept light overall (the page background
    stays --cloud); the dark-and-reveal effect is contained inside the photo
    frame itself, not the section, so "dark" is photo content, not the page
    theme. A cursor-following hole in a dark scrim reveals equipment inside
    that frame — standing in for finding what scanners can't see. */
-.case-hero-security { grid-template-columns: 1.05fr .95fr; --mx: 50%; --my: 42%; }
-.case-hero-frame-spotlight { position: relative; margin: 0; justify-self: end; width: min(100%, 440px); aspect-ratio: .95; border-radius: 8px; overflow: hidden; border: 1px solid rgba(16,32,51,.14); box-shadow: 0 30px 70px rgba(16,32,51,.14); }
-.case-hero-frame-spotlight img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.6) saturate(.85); }
-.case-spotlight-mask { position: absolute; inset: 0; background: rgba(6,14,26,.85); -webkit-mask-image: radial-gradient(circle 130px at var(--mx) var(--my), transparent 0%, transparent 55%, black 100%); mask-image: radial-gradient(circle 130px at var(--mx) var(--my), transparent 0%, transparent 55%, black 100%); }
-.case-spotlight-hint { margin-top: 26px; color: var(--muted); font: 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
-@media (max-width: 900px) { .case-hero-security { grid-template-columns: 1fr; } .case-hero-frame-spotlight { justify-self: start; margin-top: 30px; } .case-spotlight-mask { -webkit-mask-image: radial-gradient(circle 150px at 50% 40%, transparent 0%, transparent 55%, black 100%); mask-image: radial-gradient(circle 150px at 50% 40%, transparent 0%, transparent 55%, black 100%); } }
-
-/* 4. Compliance — "The Case File": light, a real verified stamp (rotated
-   circular badge, verified green) overlapping the evidence photo. */
-.case-hero-compliance { grid-template-columns: 1fr .95fr; background: var(--mist); }
+/* Security and Compliance heroes: the invented graphics (coverage grid
+   under a spotlight mask; evidence-card stack under a verified stamp)
+   went the same way as Leaders/Network — removed rather than keep
+   guessing blind. Both heroes are text-only single-column until real
+   photography is available. */
+.case-hero-security { grid-template-columns: 1fr; }
+.case-hero-compliance { grid-template-columns: 1fr; background: var(--mist); }
 .case-hero-compliance .case-kicker, .case-hero-compliance .case-back { color: var(--verified); }
-.case-hero-file { position: relative; margin: 0; justify-self: end; width: min(100%, 420px); }
-.case-hero-file img { display: block; width: 100%; aspect-ratio: .85; object-fit: cover; border-radius: 6px; border: 1px solid rgba(16,32,51,.14); box-shadow: 0 30px 70px rgba(16,32,51,.14); }
-.case-stamp { position: absolute; top: 18px; right: -14px; display: grid; place-items: center; width: 94px; height: 94px; border: 2px solid var(--verified); border-radius: 50%; transform: rotate(-14deg); background: rgba(255,255,255,.88); color: var(--verified); font: 700 12px var(--font-mono); letter-spacing: .07em; text-align: center; }
-@media (max-width: 900px) { .case-hero-compliance { grid-template-columns: 1fr; } .case-hero-file { justify-self: start; margin-top: 30px; } .case-stamp { right: 8px; } }
 
 /* 5. Incident — "The Dispatch": light hero; the amber pulsing alert badge
    (a real warning-state semantic) is what signals urgency, not a dark
@@ -6114,6 +6127,15 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 @keyframes case-alert-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(217,154,43,.5); } 50% { box-shadow: 0 0 0 7px rgba(217,154,43,0); } }
 .case-hero-incident .case-hero-frame { margin: 0; justify-self: end; width: min(100%, 440px); border: 1px solid rgba(16,32,51,.14); box-shadow: 0 30px 70px rgba(16,32,51,.12); }
 .case-hero-incident .case-hero-frame img { filter: saturate(.9); }
+/* Trace line — alert to exact port, one straight path with stops lighting
+   up in sequence. Replaces a reused photo (was the hub's team thumbnail). */
+.case-hero-trace { aspect-ratio: .82; padding: 30px 20px; box-sizing: border-box; display: flex; align-items: center; background: var(--white); }
+.case-hero-trace svg { display: block; width: 100%; height: auto; }
+.case-hero-trace .ci-track { stroke: rgba(16,32,51,.18); stroke-width: 2; }
+.case-hero-trace .ci-stop { fill: var(--white); stroke: var(--muted); stroke-width: 2; }
+.case-hero-trace .ci-stop-alert, .case-hero-trace .ci-stop-final { fill: var(--case); stroke: none; }
+.case-hero-trace .ci-label { fill: var(--muted); font: 400 11px var(--font-mono); letter-spacing: .05em; }
+.case-hero-trace .ci-label-final { fill: var(--case); font-weight: 700; }
 @media (max-width: 900px) { .case-hero-incident { grid-template-columns: 1fr; } .case-hero-incident .case-hero-frame { justify-self: start; margin-top: 24px; } }
 
 /* 6. Migration — "The Baseline": inherited-vs-verified side by side,
@@ -6126,8 +6148,16 @@ html:not(.solutions-motion) .surface-grid article { opacity: 1; transform: none;
 .case-hero-migration { grid-template-columns: 1fr; padding-bottom: 0; min-height: 0; row-gap: 56px; align-items: start; }
 .case-split { margin: 34px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: rgba(16,32,51,.16); border: 1px solid rgba(16,32,51,.16); }
 .case-split figure { position: relative; margin: 0; overflow: hidden; background: var(--cloud); }
-.case-split img { display: block; width: 100%; aspect-ratio: 1.5; object-fit: cover; }
-.case-split-before img { filter: grayscale(1) brightness(.75) contrast(1.05); }
+/* Rack-elevation graphic, same 6-slot layout on both sides so the
+   before/after contrast is real: unknown/dashed vs. verified/solid,
+   not two copies of the same photo captioned differently. */
+.case-split-graphic { aspect-ratio: 1.5; display: flex; align-items: center; justify-content: center; }
+.case-split-graphic svg { display: block; width: 80%; height: auto; }
+.case-split-graphic .cm-slot { fill: var(--white); stroke: rgba(16,32,51,.22); stroke-width: 1.2; }
+.case-split-graphic .cm-slot-unknown { fill: var(--cloud); stroke: rgba(16,32,51,.38); stroke-dasharray: 4 3; }
+.case-split-graphic .cm-mark { fill: rgba(16,32,51,.4); font: 700 13px var(--font-mono); }
+.case-split-graphic .cm-slot-verified { fill: rgba(36,87,214,.08); stroke: var(--blue); }
+.case-split-graphic .cm-check { fill: var(--blue); font: 700 13px var(--font-mono); }
 .case-split figcaption { position: absolute; left: 16px; bottom: 14px; padding: 5px 11px; border-radius: 999px; background: rgba(6,14,26,.72); color: #fff; font: 700 10px var(--font-mono); letter-spacing: .08em; }
 .case-split-after figcaption { background: var(--blue); }
 @media (max-width: 900px) { .case-split { grid-template-columns: 1fr; } }
